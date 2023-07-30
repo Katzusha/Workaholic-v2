@@ -1,0 +1,128 @@
+﻿<Window x:Class="StartStopWork.ErrorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:StartStopWork"
+        mc:Ignorable="d"
+        Title="ERROR"
+        Height="315"
+        Width="539"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        BorderThickness="2"
+        AllowsTransparency="True"
+        Background="Transparent"
+        Topmost="True">
+    <Window.Resources>
+
+    </Window.Resources>
+
+    <Grid Background="Transparent"
+          Visibility="Visible">
+        <Border Background="{DynamicResource BackgroundColor}"
+                BorderBrush="{DynamicResource RedColor}"
+                BorderThickness="2"
+                CornerRadius="5">
+
+            <!--ERROR MESSAGE-->
+            <Grid>
+                <TextBox x:Name="ErrorMessageOutput"
+                         HorizontalAlignment="Center"
+                         TextWrapping="Wrap"
+                         Text="error description"
+                         Background="{x:Null}"
+                         BorderBrush="{x:Null}"
+                         Foreground="{DynamicResource ForegroundColor}"
+                         SelectionBrush="{x:Null}"
+                         SelectionTextBrush="{x:Null}"
+                         Margin="10,90,10,70"
+                         FontSize="24"
+                         FontFamily="Arial"
+                         TextAlignment="Center"
+                         VerticalContentAlignment="Top"
+                         FontWeight="Normal"
+                         IsReadOnly="True">
+                    <TextBox.Resources>
+                        <Style x:Key="{x:Type TextBox}"
+                               TargetType="{x:Type TextBox}">
+                            <Setter Property="SnapsToDevicePixels"
+                                    Value="true" />
+                            <Setter Property="OverridesDefaultStyle"
+                                    Value="true" />
+                            <Setter Property="KeyboardNavigation.TabNavigation"
+                                    Value="None" />
+                            <Setter Property="FocusVisualStyle"
+                                    Value="{x:Null}" />
+                            <Setter Property="FontFamily"
+                                    Value="Verdana" />
+                            <Setter Property="MinWidth"
+                                    Value="120" />
+                            <Setter Property="MinHeight"
+                                    Value="20" />
+                            <Setter Property="AllowDrop"
+                                    Value="true" />
+                            <Setter Property="Foreground"
+                                    Value="{DynamicResource ForegroundColor}" />
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type TextBox}">
+                                        <Border x:Name="Border"
+                                                CornerRadius="10"
+                                                Padding="2"
+                                                BorderThickness="1"
+                                                Background="Transparent">
+                                            <Border.BorderBrush>
+                                                <SolidColorBrush Color="Transparent" />
+                                            </Border.BorderBrush>
+                                            <VisualStateManager.VisualStateGroups>
+                                                <VisualStateGroup x:Name="CommonStates">
+                                                    <VisualState x:Name="Normal" />
+                                                    <VisualState x:Name="Disabled" />
+                                                    <VisualState x:Name="MouseOver" />
+                                                </VisualStateGroup>
+                                            </VisualStateManager.VisualStateGroups>
+                                            <ScrollViewer x:Name="PART_ContentHost" />
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver"
+                                                     Value="True">
+                                                <Setter Property="Cursor"
+                                                        Value="Arrow" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
+                <!--ERROR BUTTON-->
+                <!--ERROR IMAGE LABEL-->
+                <Label x:Name="ErrorHeader"
+                       Content="!ERROR!"
+                       FontSize="48px"
+                       Foreground="{DynamicResource RedColor}"
+                       FontWeight="ExtraBold"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Top"
+                       Margin="0, 10, 0, 0" />
+                <Grid VerticalAlignment="Bottom"
+                      HorizontalAlignment="Right"
+                      Width="180"
+                      Height="70">
+                    <Button x:Name="okbutton"
+                            Width="150"
+                            Height="50"
+                            Content="OK"
+                            Click="okbutton_Click"
+                            Style="{DynamicResource BlueButton}" />
+
+                </Grid>
+            </Grid>
+            <!--ERROR IMAGE-->
+            <!--<Image Stretch="Fill" Source="cross.png" Width="80" Height="80" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-132,0,0"/>-->
+        </Border>
+    </Grid>
+</Window>

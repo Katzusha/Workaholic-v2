@@ -7,13 +7,11 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" MaxWidth="80" Width="80">
     <UserControl.Resources>
-        <Style x:Key="Border"
+        <Style x:Key="DailyBar"
                TargetType="Grid">
             <Setter Property="ContextMenu">
                 <Setter.Value>
                     <ContextMenu>
-                        <MenuItem Header="Edit" />
-                        <Separator/>
                         <MenuItem Header="Details" />
                     </ContextMenu>
                 </Setter.Value>
@@ -25,7 +23,7 @@
     <Grid SizeChanged="Grid_SizeChanged"
           Margin="2.5, 30, 2.5, 0"
           x:Name="BarSize"
-          Style="{DynamicResource Border}">
+          Style="{DynamicResource DailyBar}">
         <Border x:Name="Work"
                 Background="{DynamicResource BorderColor}"
                 CornerRadius="5"

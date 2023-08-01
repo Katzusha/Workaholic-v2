@@ -119,7 +119,8 @@
             </Style.Triggers>
         </Style>
 
-        <Style TargetType='{x:Type Separator}'>
+        <Style x:Key="Separator" 
+               TargetType='{x:Type Separator}'>
             <Setter Property="Background"
                     Value="{DynamicResource PlateColor}" />
             <Setter Property="Margin"

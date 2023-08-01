@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -149,7 +150,7 @@ namespace StartStopWork
                     int column = 0;
                     while (reader.Read())
                     {
-                        Bar bar = new Bar();
+                        DailyBar bar = new DailyBar();
                         ColumnDefinition col = new ColumnDefinition();
                         Label date = new Label();
                         col.Width = new GridLength(80);
@@ -176,6 +177,15 @@ namespace StartStopWork
                         {
                             bar.ToolTip = $"Start: {TimeSpan.FromHours(reader.GetDouble(0)).ToString(@"hh\:mm")}" +
                             $"\nEnd: {TimeSpan.FromHours(reader.GetDouble(1)).ToString(@"hh\:mm")}";
+                        }
+
+                        try
+                        {
+                            bar.Style
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message);
                         }
 
                         Grid.SetColumn(bar, column);
@@ -231,7 +241,7 @@ namespace StartStopWork
                             col.Width = new GridLength(80);
                             settingsWindow.DailyHistory.ColumnDefinitions.Add(col);
 
-                            Bar bar = new Bar();
+                            MonthlyBar bar = new MonthlyBar();
                             bar.ThisValue = TimeSpan.FromHours(reader.GetDouble(0)).ToString(@"hh\:mm");
                             bar.MaxValue = 160;
                             bar.WorkMargin = 0;

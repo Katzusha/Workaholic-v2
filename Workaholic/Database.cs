@@ -111,12 +111,7 @@ namespace StartStopWork
                         $"VALUES('{StampType}', '{DateTime.Now.ToString("HH:mm:ss")}', '{PublicEntitys.Encryption(User)}', (SELECT Max(Id) FROM PrimaryStamps WHERE User_id = '{PublicEntitys.Encryption(User)}'), '{PublicEntitys.Encryption(ModifiedBy)}');", conn);
                         cmd.ExecuteNonQuery();
                         break;
-                }
-
-                if (FirstStamp)
-                {
-                    
-                }                
+                }              
 
                 conn.Close();
                 return true;
@@ -147,7 +142,7 @@ namespace StartStopWork
                 settingsWindow.DailyHistory.Children.Clear();
                 settingsWindow.DailyHistory.ColumnDefinitions.Clear();
 
-                var cmd = new MySqlCommand($"SELECT * FROM DailyHours LIMIT 60", conn);
+                var cmd = new MySqlCommand($"SELECT * FROM DailyHours LIMIT 30", conn);
 
                 using (MySqlDataReader reader = cmd.ExecuteReader())
                 {
@@ -160,15 +155,18 @@ namespace StartStopWork
                         col.Width = new GridLength(80);
                         settingsWindow.DailyHistory.ColumnDefinitions.Add(col);
                         date.Content = reader.GetDateTime(7).ToString("dd. ") + Months[Int32.Parse(reader.GetDateTime(7).ToString("MM")) - 1];
+                        date.IsHitTestVisible = true;
 
-                        bar.ThisValue = TimeSpan.FromHours(reader.GetDouble(2)).ToString(@"hh\:mm");
+                        bar.ThisValue = TimeSpan.FromHours(double.Parse(reader.GetDouble(2).ToString()) - double.Parse(reader.GetDouble(5).ToString())).ToString(@"hh\:mm") ;
                         bar.MaxValue = 24;
                         bar.WorkMargin = reader.GetDouble(0);
                         bar.WorkHeight = reader.GetDouble(2);
                         bar.BreakMargin = reader.GetDouble(3);
                         bar.BreakHeight = reader.GetDouble(5);
 
-                        if (reader.GetDouble(3).ToString(@"hh\:mm") != reader.GetDouble(4).ToString(@"hh\:mm"))
+                        bar.ContextMenu = new ContextMenu();
+
+                        if (reader.GetDouble(5) != 0)
                         {
                             bar.ToolTip = $"Start: {TimeSpan.FromHours(reader.GetDouble(0)).ToString(@"hh\:mm")}" +
                             $"\nBreak: {TimeSpan.FromHours(reader.GetDouble(3)).ToString(@"hh\:mm")} - {TimeSpan.FromHours(reader.GetDouble(4)).ToString(@"hh\:mm")}" +
@@ -243,6 +241,22 @@ namespace StartStopWork
 
                             bar.ToolTip = $"Monthly hours made: {TimeSpan.FromHours(reader.GetDouble(0)).ToString(@"hh\:mm")}" +
                                 $"\nOf that breaks: {TimeSpan.FromHours(reader.GetDouble(1)).ToString(@"hh\:mm")}";
+
+                            double breakoverdue = reader.GetDouble(0) * 0.0625;
+
+                            if (reader.GetDouble(1) > breakoverdue)
+                            {
+                                bar.ToolTip = $"Monthly hours made: {TimeSpan.FromHours(reader.GetDouble(0)).ToString(@"hh\:mm")}" +
+                                $"\nOf that breaks: {TimeSpan.FromHours(reader.GetDouble(1)).ToString(@"hh\:mm")} " +
+                                $"\nOf that overdue breaks {TimeSpan.FromHours(reader.GetDouble(1) - breakoverdue).ToString(@"hh\:mm")}";
+
+                                bar.ThisValue = TimeSpan.FromHours(reader.GetDouble(0) - (reader.GetDouble(1) - breakoverdue)).ToString(@"hh\:mm");
+                            }
+                            else
+                            {
+                                bar.ToolTip = $"Monthly hours made: {TimeSpan.FromHours(reader.GetDouble(0)).ToString(@"hh\:mm")}" +
+                                $"\nOf that breaks: {TimeSpan.FromHours(reader.GetDouble(1)).ToString(@"hh\:mm")}";
+                            }
 
                             Grid.SetColumn(bar, column);
 

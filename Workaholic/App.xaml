@@ -6,8 +6,10 @@
     <Application.Resources>
         <SolidColorBrush x:Key="BackgroundColor"
                          Color="#3e3e4e" />
+        <Color x:Key="BackgroundColor1">#3e3e4e</Color>
         <SolidColorBrush x:Key="BorderColor"
                          Color="#7878ff" />
+        <Color x:Key="BorderColor1">#7878ff</Color>
         <SolidColorBrush x:Key="ForegroundColor"
                          Color="#FFFFFF" />
         <Color x:Key="ForegroundColor1">#FFFFFF</Color>
@@ -20,6 +22,111 @@
                          Color="#4a944a" />
         <SolidColorBrush x:Key="BreakColor"
                          Color="#b27548" />
+
+        <Style TargetType="{x:Type ContextMenu}">
+            <Setter Property="SnapsToDevicePixels"
+                    Value="True" />
+            <Setter Property="OverridesDefaultStyle"
+                    Value="True" />
+            <Setter Property="Grid.IsSharedSizeScope"
+                    Value="true" />
+            <Setter Property="HasDropShadow"
+                    Value="True" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ContextMenu}">
+                        <Border x:Name="Border"
+                                Background="{StaticResource BackgroundColor}"
+                                BorderThickness="1"
+                                CornerRadius="5">
+                            <Border.BorderBrush>
+                                <SolidColorBrush Color="{StaticResource BackgroundColor1}" />
+                            </Border.BorderBrush>
+                            <StackPanel IsItemsHost="True"
+                                        KeyboardNavigation.DirectionalNavigation="Cycle" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="HasDropShadow"
+                                     Value="true">
+                                <Setter TargetName="Border"
+                                        Property="Padding"
+                                        Value="0,3,0,3" />
+                                <Setter TargetName="Border"
+                                        Property="CornerRadius"
+                                        Value="4" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="{x:Type MenuItem}">
+            <!--<EventSetter Event="Click"-->
+                         <!--Handler="MenuItem_Click" />-->
+            <Setter Property="Background"
+                    Value="{DynamicResource BackgroundColor}" />
+            <Setter Property="FontSize"
+                    Value="14" />
+            <Setter Property="Foreground"
+                    Value="{DynamicResource ForegroundColor}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type MenuItem}">
+                        <Border x:Name="Bd"
+                                Padding="25,0,25,0"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="0"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="5"
+                                SnapsToDevicePixels="True">
+                            <ContentPresenter x:Name="ContentPresenter"
+                                              Content="{TemplateBinding Header}"
+                                              Grid.Column="1"
+                                              ContentSource="Header"
+                                              Margin="{TemplateBinding Padding}"
+                                              RecognizesAccessKey="True"
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                              Uid="ContentPresenter_33" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsHighlighted"
+                                     Value="True">
+                                <Setter Property="Background">
+                                    <Setter.Value>
+                                        <SolidColorBrush Color="{DynamicResource PlateColor1}"
+                                                         Opacity="1" />
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="Cursor"
+                                        Value="Hand" />
+                                <Setter Property="BorderBrush"
+                                        TargetName="Bd"
+                                        Value="{DynamicResource BorderColor}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="MenuItem.IsMouseOver"
+                         Value="true">
+                    <Setter Property="FontSize"
+                            Value="14" />
+                    <Setter Property="Foreground"
+                            Value="{DynamicResource ForegroundColor}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType='{x:Type Separator}'>
+            <Setter Property="Background"
+                    Value="{DynamicResource PlateColor}" />
+            <Setter Property="Margin"
+                    Value="-25, 2.5, 5, 2.5" />
+            <Setter Property="Height"
+                    Value="2" />
+        </Style>
 
         <!--Scrollbar Thumbs-->
         <Style x:Key="ScrollThumbs"

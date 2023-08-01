@@ -8,83 +8,25 @@
              d:DesignHeight="450" MaxWidth="80" Width="80">
     <UserControl.Resources>
         <Style x:Key="Border"
-               TargetType="Border">
-            <Setter Property="Background"
-                    Value="{DynamicResource BackgroundColor}" />
+               TargetType="Grid">
             <Setter Property="ContextMenu">
                 <Setter.Value>
                     <ContextMenu>
-                        <MenuItem Style="{DynamicResource ContextMenu}"
-                                  Header="Edit" />
+                        <MenuItem Header="Edit" />
+                        <Separator/>
+                        <MenuItem Header="Details" />
                     </ContextMenu>
                 </Setter.Value>
             </Setter>
-        </Style>
-
-        <Style x:Key="ContextMenu"
-               TargetType="{x:Type MenuItem}">
-            <EventSetter Event="Click"
-                         Handler="MenuItem_Click" />
-            <Setter Property="Background"
-                    Value="{DynamicResource BackgroundColor}" />
-            <Setter Property="Foreground"
-                    Value="{DynamicResource ForegroundColor}" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type MenuItem}">
-                        <Border x:Name="Bd"
-                                Padding="17,0,17,0"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="0"
-                                Background="{TemplateBinding Background}"
-                                CornerRadius="5"
-                                SnapsToDevicePixels="True">
-                            <ContentPresenter x:Name="ContentPresenter"
-                                              Content="{TemplateBinding Header}"
-                                              Grid.Column="1"
-                                              ContentSource="Header"
-                                              Margin="{TemplateBinding Padding}"
-                                              RecognizesAccessKey="True"
-                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-                                              Uid="ContentPresenter_33" />
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsHighlighted"
-                                     Value="True">
-                                <Setter Property="Background">
-                                    <Setter.Value>
-                                        <SolidColorBrush Color="{DynamicResource PlateColor1}"
-                                                         Opacity="1" />
-                                    </Setter.Value>
-                                </Setter>
-                                <Setter Property="Cursor"
-                                        Value="Hand" />
-                                <Setter Property="BorderBrush"
-                                        TargetName="Bd"
-                                        Value="{DynamicResource PlateColor}" />
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <Trigger Property="MenuItem.IsMouseOver"
-                         Value="true">
-                    <Setter Property="FontSize"
-                            Value="14" />
-                    <Setter Property="Foreground"
-                            Value="{DynamicResource ForegroundColor}" />
-                </Trigger>
-            </Style.Triggers>
         </Style>
     </UserControl.Resources>
     
     
     <Grid SizeChanged="Grid_SizeChanged"
           Margin="2.5, 30, 2.5, 0"
-          x:Name="BarSize">
+          x:Name="BarSize"
+          Style="{DynamicResource Border}">
         <Border x:Name="Work"
-                Style="{DynamicResource Border}"
                 Background="{DynamicResource BorderColor}"
                 CornerRadius="5"
                 VerticalAlignment="Bottom"

@@ -148,8 +148,20 @@ namespace StartStopWork
                 using (MySqlDataReader reader = cmd.ExecuteReader())
                 {
                     int column = 0;
+                    DateOnly coldate = DateOnly.Parse(DateTime.Now.AddDays(-30).ToString("dd.MM.yyyy"));
+
+
+                    
+
+
+
                     while (reader.Read())
                     {
+                        if (DateOnly.Parse(reader.GetDateTime(7).ToShortDateString()) == coldate)
+                        {
+                            column--;
+                        }
+
                         Bar bar = new Bar();
                         ColumnDefinition col = new ColumnDefinition();
                         Label date = new Label();
@@ -185,6 +197,9 @@ namespace StartStopWork
 
                         settingsWindow.DailyHistory.Children.Add(bar);
                         settingsWindow.DailyHistory.Children.Add(date);
+
+                        coldate = DateOnly.Parse(reader.GetDateTime(7).ToShortDateString());
+
                         column++;
                     }
                 }

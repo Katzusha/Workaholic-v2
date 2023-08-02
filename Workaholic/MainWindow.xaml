@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Workaholic"
         mc:Ignorable="d"
-        Title="MainWindow"
+        Title="Workaholic"
         Height="125"
         Topmost="True"
         AllowsTransparency="True"

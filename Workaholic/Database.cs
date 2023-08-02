@@ -150,16 +150,35 @@ namespace StartStopWork
                     int column = 0;
                     DateOnly coldate = DateOnly.Parse(DateTime.Now.AddDays(-30).ToString("dd.MM.yyyy"));
 
-
-                    
-
-
+                    Label time = new Label();
+                    time.VerticalAlignment = VerticalAlignment.Center;
+                    time.FontSize = 16;
+                    double worktime = 0;
+                    bool isFirst = true;
 
                     while (reader.Read())
                     {
                         if (DateOnly.Parse(reader.GetDateTime(7).ToShortDateString()) == coldate)
                         {
                             column--;
+                            worktime = worktime + (double.Parse(reader.GetDouble(2).ToString()) - double.Parse(reader.GetDouble(5).ToString()));
+                        }
+                        else
+                        {
+                            if (column != 0)
+                            {
+                                Grid.SetColumn(time, column - 1);
+                                settingsWindow.DailyHistory.Children.Add(time);
+
+                                time = new Label();
+                                time.FontSize = 16;
+                                time.VerticalAlignment = VerticalAlignment.Center;
+                                time.Content = "";
+
+                                worktime = 0;
+
+                                isFirst = true;
+                            }
                         }
 
                         Bar bar = new Bar();
@@ -170,7 +189,13 @@ namespace StartStopWork
                         date.Content = reader.GetDateTime(7).ToString("dd. ") + Months[Int32.Parse(reader.GetDateTime(7).ToString("MM")) - 1];
                         date.IsHitTestVisible = true;
 
-                        bar.ThisValue = TimeSpan.FromHours(double.Parse(reader.GetDouble(2).ToString()) - double.Parse(reader.GetDouble(5).ToString())).ToString(@"hh\:mm") ;
+                        if (isFirst)
+                        {
+                            isFirst = false;
+                            worktime = worktime + (double.Parse(reader.GetDouble(2).ToString()) - double.Parse(reader.GetDouble(5).ToString()));
+                        }
+
+                        time.Content = TimeSpan.FromHours(worktime).ToString(@"hh\:mm");
                         bar.MaxValue = 24;
                         bar.WorkMargin = reader.GetDouble(0);
                         bar.WorkHeight = reader.GetDouble(2);
@@ -190,7 +215,6 @@ namespace StartStopWork
                             bar.ToolTip = $"Start: {TimeSpan.FromHours(reader.GetDouble(0)).ToString(@"hh\:mm")}" +
                             $"\nEnd: {TimeSpan.FromHours(reader.GetDouble(1)).ToString(@"hh\:mm")}";
                         }
-
                         Grid.SetColumn(bar, column);
                         Grid.SetColumn(date, column);
                         Grid.SetRow(date, 1);

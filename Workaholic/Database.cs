@@ -150,7 +150,7 @@ namespace StartStopWork
                     int column = 0;
                     while (reader.Read())
                     {
-                        DailyBar bar = new DailyBar();
+                        Bar bar = new Bar();
                         ColumnDefinition col = new ColumnDefinition();
                         Label date = new Label();
                         col.Width = new GridLength(80);
@@ -177,15 +177,6 @@ namespace StartStopWork
                         {
                             bar.ToolTip = $"Start: {TimeSpan.FromHours(reader.GetDouble(0)).ToString(@"hh\:mm")}" +
                             $"\nEnd: {TimeSpan.FromHours(reader.GetDouble(1)).ToString(@"hh\:mm")}";
-                        }
-
-                        try
-                        {
-                            bar.Style
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show(ex.Message);
                         }
 
                         Grid.SetColumn(bar, column);
@@ -241,7 +232,7 @@ namespace StartStopWork
                             col.Width = new GridLength(80);
                             settingsWindow.DailyHistory.ColumnDefinitions.Add(col);
 
-                            MonthlyBar bar = new MonthlyBar();
+                            Bar bar = new Bar();
                             bar.ThisValue = TimeSpan.FromHours(reader.GetDouble(0)).ToString(@"hh\:mm");
                             bar.MaxValue = 160;
                             bar.WorkMargin = 0;

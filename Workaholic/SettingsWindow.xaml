@@ -6,13 +6,12 @@
         xmlns:local="clr-namespace:StartStopWork"
         mc:Ignorable="d"
         Title="SettingsWindow"
-        ResizeMode="CanResize"
         Topmost="True"
         WindowStyle="None"
         AllowsTransparency="True"
         Background="Transparent"
-        Height="629"
-        Width="1184"
+        Height="763"
+        Width="1396"
         WindowStartupLocation="CenterScreen">
     <Window.Resources>
 

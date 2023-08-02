@@ -152,7 +152,7 @@ namespace StartStopWork
 
                     Label time = new Label();
                     time.VerticalAlignment = VerticalAlignment.Center;
-                    time.FontSize = 16;
+                    time.FontSize = 20;
                     double worktime = 0;
                     bool isFirst = true;
 
@@ -171,17 +171,15 @@ namespace StartStopWork
                                 settingsWindow.DailyHistory.Children.Add(time);
 
                                 time = new Label();
-                                time.FontSize = 16;
+                                time.FontSize = 20;
                                 time.VerticalAlignment = VerticalAlignment.Center;
                                 time.Content = "";
-
                                 worktime = 0;
-
                                 isFirst = true;
                             }
                         }
 
-                        Bar bar = new Bar();
+                        ReadWriteBar bar = new ReadWriteBar();
                         ColumnDefinition col = new ColumnDefinition();
                         Label date = new Label();
                         col.Width = new GridLength(80);
@@ -202,8 +200,6 @@ namespace StartStopWork
                         bar.BreakMargin = reader.GetDouble(3);
                         bar.BreakHeight = reader.GetDouble(5);
 
-                        bar.ContextMenu = new ContextMenu();
-
                         if (reader.GetDouble(5) != 0)
                         {
                             bar.ToolTip = $"Start: {TimeSpan.FromHours(reader.GetDouble(0)).ToString(@"hh\:mm")}" +
@@ -215,6 +211,7 @@ namespace StartStopWork
                             bar.ToolTip = $"Start: {TimeSpan.FromHours(reader.GetDouble(0)).ToString(@"hh\:mm")}" +
                             $"\nEnd: {TimeSpan.FromHours(reader.GetDouble(1)).ToString(@"hh\:mm")}";
                         }
+
                         Grid.SetColumn(bar, column);
                         Grid.SetColumn(date, column);
                         Grid.SetRow(date, 1);
@@ -226,6 +223,10 @@ namespace StartStopWork
 
                         column++;
                     }
+
+
+                    Grid.SetColumn(time, column - 1);
+                    settingsWindow.DailyHistory.Children.Add(time);
                 }
 
                 conn.Close();
@@ -271,7 +272,7 @@ namespace StartStopWork
                             col.Width = new GridLength(80);
                             settingsWindow.DailyHistory.ColumnDefinitions.Add(col);
 
-                            Bar bar = new Bar();
+                            ReadOnlyBar bar = new ReadOnlyBar();
                             bar.ThisValue = TimeSpan.FromHours(reader.GetDouble(0)).ToString(@"hh\:mm");
                             bar.MaxValue = 160;
                             bar.WorkMargin = 0;

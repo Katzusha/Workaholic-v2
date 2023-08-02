@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -15,22 +14,21 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace StartStopWork
+namespace Workaholic
 {
     /// <summary>
-    /// Interaction logic for Bar.xaml
+    /// Interaction logic for ReadWriteBar.xaml
     /// </summary>
-    public partial class Bar : UserControl, INotifyPropertyChanged
+    public partial class ReadWriteBar : UserControl
     {
-        // Create a bar
-        public Bar()
+        public ReadWriteBar()
         {
             InitializeComponent();
             this.DataContext = this;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-        
+
         // I have no clue what this does but the tutorial made it sooooo.....
         private void NotifyPropertyChanged(string info)
         {

@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
 using System.Windows.Media;
+using StartStopWork;
 
 namespace Workaholic
 {
@@ -122,6 +123,38 @@ namespace Workaholic
             myColorAnimation.Duration = new Duration(TimeSpan.FromSeconds(0.2));
             myBrush.BeginAnimation(SolidColorBrush.ColorProperty, myColorAnimation);
             button.Background = myBrush;
+        }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if ((sender as MenuItem).Header.ToString() == "Edit")
+                {
+                    ReadWriteBar bar = (ReadWriteBar)((Grid)((ContextMenu)(sender as MenuItem).Parent).PlacementTarget).Parent;
+                    MessageBox.Show(bar.Id.ToString());
+                }
+                else if ((sender as MenuItem).Header.ToString() == "Details")
+                {
+                    ReadWriteBar _ReadWriteBar = new ReadWriteBar();
+                    ReadOnlyBar _ReadOnlyBar = new ReadOnlyBar();
+                    try
+                    {
+                        _ReadWriteBar = (ReadWriteBar)((Grid)((ContextMenu)(sender as MenuItem).Parent).PlacementTarget).Parent;
+                        MessageBox.Show(_ReadWriteBar.Id.ToString() + " ReadWrite");
+                    }
+                    catch
+                    {
+                        _ReadOnlyBar = (ReadOnlyBar)((Grid)((ContextMenu)(sender as MenuItem).Parent).PlacementTarget).Parent;
+                        MessageBox.Show(_ReadOnlyBar.Id.ToString() + " ReadOnly");
+                    }
+                    MessageBox.Show((sender as MenuItem).Header.ToString());
+                }
+            }
+            catch (Exception ex) 
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 }

@@ -36,6 +36,16 @@ namespace Workaholic
                 PropertyChanged(this, new PropertyChangedEventArgs(info));
         }
 
+        private int _id;
+        public int Id
+        {
+            get { return _id; }
+            set
+            {
+                _id = value;
+            }
+        }
+
         // For height of the "break" bar
         private double _breakheight;
         public double BreakHeight
@@ -227,11 +237,6 @@ namespace Workaholic
             UpdateWorkMargin();
             UpdateAbsenceHeight();
             UpdateAbsenceMargin();
-        }
-
-        private void MenuItem_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
+        }            
     }
 }

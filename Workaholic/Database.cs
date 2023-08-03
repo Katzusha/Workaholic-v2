@@ -200,6 +200,8 @@ namespace StartStopWork
                         bar.BreakMargin = reader.GetDouble(3);
                         bar.BreakHeight = reader.GetDouble(5);
 
+                        bar.Id = reader.GetInt16(6);
+
                         if (reader.GetDouble(5) != 0)
                         {
                             bar.ToolTip = $"Start: {TimeSpan.FromHours(reader.GetDouble(0)).ToString(@"hh\:mm")}" +

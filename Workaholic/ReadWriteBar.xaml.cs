@@ -10,6 +10,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -36,6 +37,38 @@ namespace Workaholic
                 PropertyChanged(this, new PropertyChangedEventArgs(info));
         }
 
+        private int _StampType;
+        public int StampType
+        {
+            get { return _StampType; }
+            set
+            {
+                _StampType = value;
+                if (_StampType == 1)
+                {
+                    //Animations for buttons background color to transforme it from transparrent to red
+                    SolidColorBrush myBrush = new SolidColorBrush();
+                    ColorAnimation myColorAnimation = new ColorAnimation();
+                    myColorAnimation.From = (Color)ColorConverter.ConvertFromString(FindResource("BorderColor").ToString());
+                    myColorAnimation.To = (Color)ColorConverter.ConvertFromString(FindResource("BorderColor").ToString());
+                    myColorAnimation.Duration = new Duration(TimeSpan.FromSeconds(0.2));
+                    myBrush.BeginAnimation(SolidColorBrush.ColorProperty, myColorAnimation);
+                    Work.Background = myBrush;
+                }
+                else if (_StampType == 2)
+                {
+                    //Animations for buttons background color to transforme it from transparrent to red
+                    SolidColorBrush myBrush = new SolidColorBrush();
+                    ColorAnimation myColorAnimation = new ColorAnimation();
+                    myColorAnimation.From = (Color)ColorConverter.ConvertFromString(FindResource("BreakColor").ToString());
+                    myColorAnimation.To = (Color)ColorConverter.ConvertFromString(FindResource("BreakColor").ToString());
+                    myColorAnimation.Duration = new Duration(TimeSpan.FromSeconds(0.2));
+                    myBrush.BeginAnimation(SolidColorBrush.ColorProperty, myColorAnimation);
+                    Work.Background = myBrush;
+                }
+            }
+        }
+
         private int _id;
         public int Id
         {
@@ -43,32 +76,6 @@ namespace Workaholic
             set
             {
                 _id = value;
-            }
-        }
-
-        // For height of the "break" bar
-        private double _breakheight;
-        public double BreakHeight
-        {
-            get { return _breakheight; }
-            set
-            {
-                _breakheight = value;
-                UpdateBreakHeight();
-                NotifyPropertyChanged("BreakHeight");
-            }
-        }
-
-        // For the bottom margin of the "break" bar
-        private double _breakmargin;
-        public double BreakMargin
-        {
-            get { return _breakheight; }
-            set
-            {
-                _breakmargin = value;
-                UpdateBreakMargin();
-                NotifyPropertyChanged("BreakMargin");
             }
         }
 
@@ -98,32 +105,6 @@ namespace Workaholic
             }
         }
 
-        // For height of the "break" bar
-        private double _absenceheight;
-        public double AbsenceHeight
-        {
-            get { return _absenceheight; }
-            set
-            {
-                _absenceheight = value;
-                UpdateAbsenceHeight();
-                NotifyPropertyChanged("AbsenceHeight");
-            }
-        }
-
-        // For the bottom margin of the "break" bar
-        private double _absencemargin;
-        public double AbsenceMargin
-        {
-            get { return _absencemargin; }
-            set
-            {
-                _absencemargin = value;
-                UpdateAbsenceMargin();
-                NotifyPropertyChanged("AbsenceMargin");
-            }
-        }
-
         // For the calculations of the heights of the bars
         private double maxValue;
         public double MaxValue
@@ -132,7 +113,6 @@ namespace Workaholic
             set
             {
                 maxValue = value;
-                UpdateBreakHeight();
                 UpdateWorkHeight();
                 NotifyPropertyChanged("MaxValue");
             }
@@ -145,31 +125,9 @@ namespace Workaholic
             set
             {
                 _thisvalue = value;
-                UpdateBreakHeight();
+                //UpdateBreakHeight();
                 UpdateWorkHeight();
                 NotifyPropertyChanged("Value");
-            }
-        }
-
-        // Update bar height
-        private void UpdateBreakHeight()
-        {
-            if (maxValue > 0)
-            {
-                var percent = (_breakheight / maxValue) * 100;
-
-                Break.Height = ((percent) * BarSize.ActualHeight) / 100;
-            }
-        }
-
-        // Update bottom margin of the bar
-        private void UpdateBreakMargin()
-        {
-            if (maxValue > 0)
-            {
-                var percent = _breakmargin / maxValue;
-
-                Break.Margin = new Thickness(0, 0, 0, ((percent) * BarSize.ActualHeight));
             }
         }
 
@@ -195,48 +153,18 @@ namespace Workaholic
             }
         }
 
-        // Update bar height
-        private void UpdateAbsenceHeight()
-        {
-            if (maxValue > 0)
-            {
-                var percent = (_absenceheight * 100) / maxValue;
-
-                Absence.Height = ((percent) * BarSize.ActualHeight) / 100;
-            }
-        }
-
-        // Update bottom margin of the bar
-        private void UpdateAbsenceMargin()
-        {
-            if (maxValue > 0)
-            {
-                var percent = _absencemargin / maxValue;
-
-                Absence.Margin = new Thickness(0, 0, 0, ((percent) * BarSize.ActualHeight));
-            }
-        }
-
         // Update the bar height every time the bar is loaded
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            UpdateBreakHeight();
-            UpdateBreakMargin();
             UpdateWorkHeight();
             UpdateWorkMargin();
-            UpdateAbsenceHeight();
-            UpdateAbsenceMargin();
         }
 
         // Update the bar height every time the grid is resized
         private void Grid_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            UpdateBreakHeight();
-            UpdateBreakMargin();
             UpdateWorkHeight();
             UpdateWorkMargin();
-            UpdateAbsenceHeight();
-            UpdateAbsenceMargin();
-        }            
+        }
     }
 }

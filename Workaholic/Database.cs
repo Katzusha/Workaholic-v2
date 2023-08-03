@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using Workaholic;
 
 namespace StartStopWork
@@ -143,7 +144,7 @@ namespace StartStopWork
                 settingsWindow.DailyHistory.Children.Clear();
                 settingsWindow.DailyHistory.ColumnDefinitions.Clear();
 
-                var cmd = new MySqlCommand($"SELECT * FROM DailyHours LIMIT 30", conn);
+                var cmd = new MySqlCommand($"SELECT * FROM DailyHours", conn);
 
                 using (MySqlDataReader reader = cmd.ExecuteReader())
                 {
@@ -154,19 +155,27 @@ namespace StartStopWork
                     time.VerticalAlignment = VerticalAlignment.Center;
                     time.FontSize = 20;
                     double worktime = 0;
-                    bool isFirst = true;
+                    double breaktime = 0;
 
                     while (reader.Read())
                     {
-                        if (DateOnly.Parse(reader.GetDateTime(7).ToShortDateString()) == coldate)
+                        if (DateOnly.Parse(reader.GetDateTime(5).ToShortDateString()) == coldate)
                         {
                             column--;
-                            worktime = worktime + (double.Parse(reader.GetDouble(2).ToString()) - double.Parse(reader.GetDouble(5).ToString()));
                         }
                         else
                         {
                             if (column != 0)
                             {
+                                if ((worktime * 0.0625) < breaktime)
+                                {
+                                    time.Content = TimeSpan.FromHours(worktime - (breaktime - (worktime * 0.0625))).ToString(@"hh\:mm");
+                                }
+                                else
+                                {
+                                    time.Content = TimeSpan.FromHours(worktime).ToString(@"hh\:mm");
+                                }
+                                
                                 Grid.SetColumn(time, column - 1);
                                 settingsWindow.DailyHistory.Children.Add(time);
 
@@ -175,57 +184,87 @@ namespace StartStopWork
                                 time.VerticalAlignment = VerticalAlignment.Center;
                                 time.Content = "";
                                 worktime = 0;
-                                isFirst = true;
+                                breaktime = 0;
                             }
                         }
 
-                        ReadWriteBar bar = new ReadWriteBar();
-                        ColumnDefinition col = new ColumnDefinition();
-                        Label date = new Label();
-                        col.Width = new GridLength(80);
-                        settingsWindow.DailyHistory.ColumnDefinitions.Add(col);
-                        date.Content = reader.GetDateTime(7).ToString("dd. ") + Months[Int32.Parse(reader.GetDateTime(7).ToString("MM")) - 1];
-                        date.IsHitTestVisible = true;
-
-                        if (isFirst)
+                        if (reader.GetInt16(1) == 1)
                         {
-                            isFirst = false;
-                            worktime = worktime + (double.Parse(reader.GetDouble(2).ToString()) - double.Parse(reader.GetDouble(5).ToString()));
+                            ReadWriteBar bar = new ReadWriteBar();
+                            ColumnDefinition col = new ColumnDefinition();
+                            Label date = new Label();
+                            col.Width = new GridLength(80);
+                            settingsWindow.DailyHistory.ColumnDefinitions.Add(col);
+                            date.Content = reader.GetDateTime(5).ToString("dd. ") + Months[Int32.Parse(reader.GetDateTime(5).ToString("MM")) - 1];
+                            date.IsHitTestVisible = true;
+
+                            worktime = worktime + double.Parse(reader.GetDouble(4).ToString());
+                            bar.MaxValue = 24;
+                            bar.WorkMargin = reader.GetDouble(2);
+                            bar.WorkHeight = reader.GetDouble(4);
+                            bar.StampType = 1;
+                            //bar.BreakMargin = reader.GetDouble(3);
+                            //bar.BreakHeight = reader.GetDouble(5);
+
+                            bar.Id = reader.GetInt16(0);
+
+                            bar.ToolTip = $"WORK" +
+                                $"\nStart: {TimeSpan.FromHours(reader.GetDouble(2)).ToString(@"hh\:mm")}" +
+                                $"\nEnd: {TimeSpan.FromHours(reader.GetDouble(3)).ToString(@"hh\:mm")}";
+
+                            Grid.SetColumn(bar, column);
+                            Grid.SetColumn(date, column);
+                            Grid.SetRow(date, 1);
+
+                            settingsWindow.DailyHistory.Children.Add(bar);
+                            settingsWindow.DailyHistory.Children.Add(date);
+
+                            coldate = DateOnly.Parse(reader.GetDateTime(5).ToShortDateString());
+
+                            column++;
                         }
-
-                        time.Content = TimeSpan.FromHours(worktime).ToString(@"hh\:mm");
-                        bar.MaxValue = 24;
-                        bar.WorkMargin = reader.GetDouble(0);
-                        bar.WorkHeight = reader.GetDouble(2);
-                        bar.BreakMargin = reader.GetDouble(3);
-                        bar.BreakHeight = reader.GetDouble(5);
-
-                        bar.Id = reader.GetInt16(6);
-
-                        if (reader.GetDouble(5) != 0)
+                        else if (reader.GetInt16(1) == 2)
                         {
-                            bar.ToolTip = $"Start: {TimeSpan.FromHours(reader.GetDouble(0)).ToString(@"hh\:mm")}" +
-                            $"\nBreak: {TimeSpan.FromHours(reader.GetDouble(3)).ToString(@"hh\:mm")} - {TimeSpan.FromHours(reader.GetDouble(4)).ToString(@"hh\:mm")}" +
-                            $"\nEnd: {TimeSpan.FromHours(reader.GetDouble(1)).ToString(@"hh\:mm")}";
+                            ReadWriteBar bar = new ReadWriteBar();
+                            ColumnDefinition col = new ColumnDefinition();
+                            Label date = new Label();
+                            col.Width = new GridLength(80);
+                            settingsWindow.DailyHistory.ColumnDefinitions.Add(col);
+                            date.Content = reader.GetDateTime(5).ToString("dd. ") + Months[Int32.Parse(reader.GetDateTime(5).ToString("MM")) - 1];
+                            date.IsHitTestVisible = true;
+
+                            breaktime = breaktime + double.Parse(reader.GetDouble(4).ToString());
+                            bar.MaxValue = 24;
+                            bar.WorkMargin = reader.GetDouble(2);
+                            bar.WorkHeight = reader.GetDouble(4);
+                            bar.StampType = 2;
+
+                            bar.Id = reader.GetInt16(0);
+
+                            bar.ToolTip = $"BREAK" +
+                                $"\nStart: {TimeSpan.FromHours(reader.GetDouble(2)).ToString(@"hh\:mm")}" +
+                                $"\nEnd: {TimeSpan.FromHours(reader.GetDouble(3)).ToString(@"hh\:mm")}";
+
+                            Grid.SetColumn(bar, column);
+                            Grid.SetColumn(date, column);
+                            Grid.SetRow(date, 1);
+
+                            settingsWindow.DailyHistory.Children.Add(bar);
+                            settingsWindow.DailyHistory.Children.Add(date);
+
+                            coldate = DateOnly.Parse(reader.GetDateTime(5).ToShortDateString());
+
+                            column++;
                         }
-                        else
-                        {
-                            bar.ToolTip = $"Start: {TimeSpan.FromHours(reader.GetDouble(0)).ToString(@"hh\:mm")}" +
-                            $"\nEnd: {TimeSpan.FromHours(reader.GetDouble(1)).ToString(@"hh\:mm")}";
-                        }
-
-                        Grid.SetColumn(bar, column);
-                        Grid.SetColumn(date, column);
-                        Grid.SetRow(date, 1);
-
-                        settingsWindow.DailyHistory.Children.Add(bar);
-                        settingsWindow.DailyHistory.Children.Add(date);
-
-                        coldate = DateOnly.Parse(reader.GetDateTime(7).ToShortDateString());
-
-                        column++;
                     }
-
+                    if ((worktime * 0.0625) < breaktime)
+                    {
+                        time.Content = TimeSpan.FromHours(worktime - (breaktime - (worktime * 0.0625))).ToString(@"hh\:mm");
+                    }
+                    else
+                    {
+                        time.Content = TimeSpan.FromHours(worktime).ToString(@"hh\:mm");
+                    }
 
                     Grid.SetColumn(time, column - 1);
                     settingsWindow.DailyHistory.Children.Add(time);
@@ -235,10 +274,11 @@ namespace StartStopWork
 
                 return settingsWindow;
             }
-            catch
+            catch (Exception ex)
             {
                 conn.Close();
                 PublicEntitys.ShowError(1);
+                MessageBox.Show(ex.Message);
                 return settingsWindow;
             }
         }
@@ -266,55 +306,131 @@ namespace StartStopWork
                 using (MySqlDataReader reader = cmd.ExecuteReader())
                 {
                     int column = 0;
+                    int coldate = 0;
+
+                    Label time = new Label();
+                    time.VerticalAlignment = VerticalAlignment.Center;
+                    time.FontSize = 20;
+                    double worktime = 0;
+                    double breaktime = 0;
+
                     while (reader.Read())
                     {
-                        try
+                        if (Int16.Parse(reader.GetInt16(3).ToString()) == coldate)
                         {
-                            ColumnDefinition col = new ColumnDefinition();
-                            col.Width = new GridLength(80);
-                            settingsWindow.DailyHistory.ColumnDefinitions.Add(col);
+                            column--;
+                        }
+                        else
+                        {
+                            if (column != 0)
+                            {
+                                if ((worktime * 0.0625) < breaktime)
+                                {
+                                    time.Content = TimeSpan.FromHours(worktime - (breaktime - (worktime * 0.0625))).ToString(@"hh\:mm");
+                                }
+                                else
+                                {
+                                    time.Content = TimeSpan.FromHours(worktime).ToString(@"hh\:mm");
+                                }
 
+                                Grid.SetColumn(time, column - 1);
+                                settingsWindow.DailyHistory.Children.Add(time);
+
+                                time = new Label();
+                                time.FontSize = 20;
+                                time.VerticalAlignment = VerticalAlignment.Center;
+                                time.Content = "";
+                                worktime = 0;
+                                breaktime = 0;
+                            }
+                        }
+
+                        if (reader.GetInt16(1) == 1)
+                        {
                             ReadOnlyBar bar = new ReadOnlyBar();
-                            bar.ThisValue = TimeSpan.FromHours(reader.GetDouble(0)).ToString(@"hh\:mm");
+                            ColumnDefinition col = new ColumnDefinition();
+                            Label date = new Label();
+                            col.Width = new GridLength(80);
+                            settingsWindow.MonthlyHistory.ColumnDefinitions.Add(col);
+                            date.Content = Months[Int32.Parse(reader.GetInt16(3).ToString()) - 1];
+                            date.IsHitTestVisible = true;
+
+                            worktime = worktime + double.Parse(reader.GetDouble(2).ToString());
                             bar.MaxValue = 160;
                             bar.WorkMargin = 0;
-                            bar.WorkHeight = reader.GetDouble(0);
-                            bar.BreakMargin = 0;
-                            bar.BreakHeight = reader.GetDouble(1);
+                            bar.WorkHeight = reader.GetDouble(2);
+                            bar.StampType = 1;
 
-                            bar.ToolTip = $"Monthly hours made: {TimeSpan.FromHours(reader.GetDouble(0)).ToString(@"hh\:mm")}" +
-                                $"\nOf that breaks: {TimeSpan.FromHours(reader.GetDouble(1)).ToString(@"hh\:mm")}";
+                            bar.Id = reader.GetInt16(0);
 
-                            double breakoverdue = reader.GetDouble(0) * 0.0625;
-
-                            if (reader.GetDouble(1) > breakoverdue)
-                            {
-                                bar.ToolTip = $"Monthly hours made: {TimeSpan.FromHours(reader.GetDouble(0)).ToString(@"hh\:mm")}" +
-                                $"\nOf that breaks: {TimeSpan.FromHours(reader.GetDouble(1)).ToString(@"hh\:mm")} " +
-                                $"\nOf that overdue breaks {TimeSpan.FromHours(reader.GetDouble(1) - breakoverdue).ToString(@"hh\:mm")}";
-
-                                bar.ThisValue = TimeSpan.FromHours(reader.GetDouble(0) - (reader.GetDouble(1) - breakoverdue)).ToString(@"hh\:mm");
-                            }
-                            else
-                            {
-                                bar.ToolTip = $"Monthly hours made: {TimeSpan.FromHours(reader.GetDouble(0)).ToString(@"hh\:mm")}" +
-                                $"\nOf that breaks: {TimeSpan.FromHours(reader.GetDouble(1)).ToString(@"hh\:mm")}";
-                            }
+                            bar.ToolTip = $"Of that working hours:" +
+                                $"\n{TimeSpan.FromHours(worktime).ToString(@"hh\:mm")}";
 
                             Grid.SetColumn(bar, column);
-
-                            Label date = new Label();
-                            date.Content = Months[Int32.Parse(reader.GetInt32(3).ToString()) - 1];
                             Grid.SetColumn(date, column);
                             Grid.SetRow(date, 1);
 
                             settingsWindow.MonthlyHistory.Children.Add(bar);
                             settingsWindow.MonthlyHistory.Children.Add(date);
 
+                            coldate = Int16.Parse(reader.GetInt16(3).ToString());
+
                             column++;
                         }
-                        catch { }
+                        else if (reader.GetInt16(1) == 2)
+                        {
+                            ReadOnlyBar bar = new ReadOnlyBar();
+                            ColumnDefinition col = new ColumnDefinition();
+                            Label date = new Label();
+                            col.Width = new GridLength(80);
+                            settingsWindow.MonthlyHistory.ColumnDefinitions.Add(col);
+                            date.Content = Months[Int32.Parse(reader.GetInt16(3).ToString()) - 1];
+                            date.IsHitTestVisible = true;
+
+                            breaktime = breaktime + double.Parse(reader.GetDouble(2).ToString());
+                            bar.MaxValue = 160;
+                            bar.WorkMargin = 0;
+                            bar.WorkHeight = reader.GetDouble(2);
+                            bar.StampType = 2;
+
+                            bar.Id = reader.GetInt16(0);
+
+                            if ((worktime * 0.0625) < breaktime)
+                            {
+                                bar.ToolTip = $"Of that breaks:" +
+                                $"\n{TimeSpan.FromHours(breaktime).ToString(@"hh\:mm")}" +
+                                $"\n\nOf that overdo breaks:" +
+                                $"\n{TimeSpan.FromHours((breaktime - (worktime * 0.0625))).ToString(@"hh\:mm")}";
+                            }
+                            else
+                            {
+                                bar.ToolTip = $"Of that breaks:" +
+                                $"\n{TimeSpan.FromHours(breaktime).ToString(@"hh\:mm")}";
+                            }
+
+                            Grid.SetColumn(bar, column);
+                            Grid.SetColumn(date, column);
+                            Grid.SetRow(date, 1);
+
+                            settingsWindow.MonthlyHistory.Children.Add(bar);
+                            settingsWindow.MonthlyHistory.Children.Add(date);
+
+                            coldate = Int16.Parse(reader.GetInt16(3).ToString());
+
+                            column++;
+                        }
                     }
+                    if ((worktime * 0.0625) < breaktime)
+                    {
+                        time.Content = TimeSpan.FromHours(worktime - (breaktime - (worktime * 0.0625))).ToString(@"hh\:mm");
+                    }
+                    else
+                    {
+                        time.Content = TimeSpan.FromHours(worktime).ToString(@"hh\:mm");
+                    }
+
+                    Grid.SetColumn(time, column - 1);
+                    settingsWindow.MonthlyHistory.Children.Add(time);
                 }
 
                 conn.Close();

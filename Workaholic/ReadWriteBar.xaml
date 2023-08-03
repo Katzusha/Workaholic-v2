@@ -9,7 +9,7 @@
              MaxWidth="80"
              Width="80">
     <UserControl.Resources>
-        <Style x:Key="DailyBar"
+        <Style x:Key="ReadWrite"
                TargetType="Grid">
             <Setter Property="ContextMenu">
                 <Setter.Value>
@@ -27,27 +27,13 @@
     <Grid SizeChanged="Grid_SizeChanged"
           Margin="2.5, 30, 2.5, 0"
           x:Name="BarSize"
-          Style="{DynamicResource DailyBar}">
+          Style="{DynamicResource ReadWrite}">
         <Border x:Name="Work"
                 Background="{DynamicResource BorderColor}"
                 CornerRadius="5"
                 VerticalAlignment="Bottom"
                 Margin="{Binding WorkMargin}"
                 Height="{Binding WorkHeight}" />
-        <Border x:Name="Break"
-                Background="{DynamicResource BreakColor}"
-                VerticalAlignment="Bottom"
-                CornerRadius="5"
-                Margin="{Binding BreakMargin}"
-                Height="{Binding BreakHeight}">
-        </Border>
-        <Border x:Name="Absence"
-                Background="{DynamicResource RedColor}"
-                VerticalAlignment="Bottom"
-                CornerRadius="5"
-                Margin="{Binding AbsenceMargin}"
-                Height="{Binding AbsenceHeight}">
-        </Border>
 
         <TextBlock VerticalAlignment="Top"
                    Margin="-30"
@@ -56,13 +42,6 @@
                    FontSize="20"
                    Foreground="{DynamicResource BorderColor}"
                    FontWeight="Bold" />
-
-        <TextBlock VerticalAlignment="Center"
-                   Margin="-30"
-                   HorizontalAlignment="Center"
-                   Text="{Binding ThisValue}"
-                   FontSize="20"
-                   Foreground="{DynamicResource ForegroundColor}" />
 
         <Border BorderBrush="{DynamicResource ForegroundColor}"
                 Opacity="0.2"

@@ -326,7 +326,7 @@
                               FlowDirection="LeftToRight">
                             <Grid.RowDefinitions>
                                 <RowDefinition />
-                                <RowDefinition Height="25" />
+                                <RowDefinition Height="30" />
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="80" />

@@ -6,7 +6,6 @@
         xmlns:local="clr-namespace:StartStopWork"
         mc:Ignorable="d"
         Title="Workaholic - Settings"
-        Topmost="True"
         WindowStyle="None"
         AllowsTransparency="True"
         Background="Transparent"

@@ -17,6 +17,8 @@ namespace StartStopWork
     {
         private static MySqlConnection conn = new MySql.Data.MySqlClient.MySqlConnection("server=152.89.234.190; uid=kerieri_WorkAholic ;pwd=WorkAholic123 ; database=kerieri_WorkAholic");
         private static string[] Months = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dec" };
+        public static int WorkStampId = 0;
+        public static int BreakStampId = 0;
 
         public static bool TryConnection()
         {            
@@ -75,7 +77,7 @@ namespace StartStopWork
             }
         }
 
-        public static bool PostStamp(int StampType, string User, bool FirstStamp, string ModifiedBy)
+        public static bool PostStamp(int StampType, string User, string ModifiedBy)
         {
             try
             {
@@ -95,22 +97,25 @@ namespace StartStopWork
                 switch (StampType)
                 {
                     case 1:
-                        cmd = new MySqlCommand($"INSERT INTO PrimaryStamps (Time, User_Id, ModifiedBy) VALUES('{DateTime.Now.ToString("HH:mm:ss")}', '{PublicEntitys.Encryption(User)}', '{PublicEntitys.Encryption(ModifiedBy)}');", conn);
+                        cmd = new MySqlCommand($"INSERT INTO Stamps (StampType, Start, Username, ModifiedBy) VALUES(1, '{DateTime.Now.ToString("HH:mm:ss")}', '{PublicEntitys.Encryption(User)}', '{PublicEntitys.Encryption(ModifiedBy)}');", conn);
                         cmd.ExecuteNonQuery();
+                        cmd = new MySqlCommand($"SELECT Max(Id) FROM Stamps WHERE Username = '{PublicEntitys.Encryption(User)}';", conn);
+                        WorkStampId = (Int32)cmd.ExecuteScalar();
                         break;
                     case 2:
-                        cmd = new MySqlCommand($"INSERT INTO SecondaryStamps (StampType_Id, EndWork, User_Id, FirstStamp_Id, ModifiedBy) " +
-                        $"VALUES('{StampType}', '{DateTime.Now.ToString("HH:mm:ss")}', '{PublicEntitys.Encryption(User)}', (SELECT Max(Id) FROM PrimaryStamps WHERE User_id = '{PublicEntitys.Encryption(User)}'), '{PublicEntitys.Encryption(ModifiedBy)}');", conn);
+                        cmd = new MySqlCommand($"INSERT INTO Stamps (StampType, Start, WorkStampId, Username, ModifiedBy) " +
+                        $"VALUES(2, '{DateTime.Now.ToString("HH:mm:ss")}', {WorkStampId.ToString()}, '{PublicEntitys.Encryption(User)}', '{PublicEntitys.Encryption(ModifiedBy)}');", conn);
+                        cmd.ExecuteNonQuery();
+                        cmd = new MySqlCommand($"SELECT Max(Id) FROM Stamps WHERE Username = '{PublicEntitys.Encryption(User)}';", conn);
+                        BreakStampId = (Int32)cmd.ExecuteScalar();
                         cmd.ExecuteNonQuery();
                         break;
                     case 3:
-                        cmd = new MySqlCommand($"INSERT INTO SecondaryStamps (StampType_Id, StartBreak, User_Id, FirstStamp_Id, ModifiedBy) " +
-                        $"VALUES('{StampType}', '{DateTime.Now.ToString("HH:mm:ss")}', '{PublicEntitys.Encryption(User)}', (SELECT Max(Id) FROM PrimaryStamps WHERE User_id = '{PublicEntitys.Encryption(User)}'), '{PublicEntitys.Encryption(ModifiedBy)}');", conn);
+                        cmd = new MySqlCommand($"UPDATE Stamps SET End = '{DateTime.Now.ToString("HH:mm:ss")}' WHERE Id = {BreakStampId}",conn);
                         cmd.ExecuteNonQuery();
                         break;
                     case 4:
-                        cmd = new MySqlCommand($"INSERT INTO SecondaryStamps (StampType_Id, EndBreak, User_Id, FirstStamp_Id, ModifiedBy) " +
-                        $"VALUES('{StampType}', '{DateTime.Now.ToString("HH:mm:ss")}', '{PublicEntitys.Encryption(User)}', (SELECT Max(Id) FROM PrimaryStamps WHERE User_id = '{PublicEntitys.Encryption(User)}'), '{PublicEntitys.Encryption(ModifiedBy)}');", conn);
+                        cmd = new MySqlCommand($"UPDATE Stamps SET End = '{DateTime.Now.ToString("HH:mm:ss")}' WHERE Id = {WorkStampId}", conn);
                         cmd.ExecuteNonQuery();
                         break;
                 }              
@@ -152,6 +157,7 @@ namespace StartStopWork
                     DateOnly coldate = DateOnly.Parse(DateTime.Now.AddDays(-30).ToString("dd.MM.yyyy"));
 
                     Label time = new Label();
+                    time.IsHitTestVisible = false;
                     time.VerticalAlignment = VerticalAlignment.Center;
                     time.FontSize = 20;
                     double worktime = 0;
@@ -180,6 +186,7 @@ namespace StartStopWork
                                 settingsWindow.DailyHistory.Children.Add(time);
 
                                 time = new Label();
+                                time.IsHitTestVisible = false;
                                 time.FontSize = 20;
                                 time.VerticalAlignment = VerticalAlignment.Center;
                                 time.Content = "";
@@ -334,7 +341,7 @@ namespace StartStopWork
                                 }
 
                                 Grid.SetColumn(time, column - 1);
-                                settingsWindow.DailyHistory.Children.Add(time);
+                                settingsWindow.MonthlyHistory.Children.Add(time);
 
                                 time = new Label();
                                 time.FontSize = 20;
@@ -364,7 +371,7 @@ namespace StartStopWork
                             bar.Id = reader.GetInt16(0);
 
                             bar.ToolTip = $"Of that working hours:" +
-                                $"\n{TimeSpan.FromHours(worktime).ToString(@"hh\:mm")}";
+                                $"\n{TimeSpan.FromHours(worktime).ToString(@"dd\.hh\:mm")}";
 
                             Grid.SetColumn(bar, column);
                             Grid.SetColumn(date, column);

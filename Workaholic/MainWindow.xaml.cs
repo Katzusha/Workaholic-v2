@@ -237,13 +237,7 @@ namespace Workaholic
                 WorkTime.Content = (elapsedTime);
                 WorkStopWatch.Stop();
 
-                if (BreakTime.Content == "00:00:00")
-                {
-                    Database.PostStamp(3, configuration.AppSettings.Settings["Username"].Value, true, configuration.AppSettings.Settings["Username"].Value);
-                    Database.PostStamp(4, configuration.AppSettings.Settings["Username"].Value, true, configuration.AppSettings.Settings["Username"].Value);
-                }
-
-                Database.PostStamp(2, configuration.AppSettings.Settings["Username"].Value, true, configuration.AppSettings.Settings["Username"].Value);
+                Database.PostStamp(1, configuration.AppSettings.Settings["Username"].Value, configuration.AppSettings.Settings["Username"].Value);
 
                 try
                 {
@@ -261,13 +255,7 @@ namespace Workaholic
             {
                 Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
 
-                if (BreakTime.Content == "00:00:00")
-                {
-                    Database.PostStamp(3, configuration.AppSettings.Settings["Username"].Value, true, configuration.AppSettings.Settings["Username"].Value);
-                    Database.PostStamp(4, configuration.AppSettings.Settings["Username"].Value, true, configuration.AppSettings.Settings["Username"].Value);
-                }
-
-                if (Database.PostStamp(2, configuration.AppSettings.Settings["Username"].Value, true, configuration.AppSettings.Settings["Username"].Value))
+                if (Database.PostStamp(4, configuration.AppSettings.Settings["Username"].Value, configuration.AppSettings.Settings["Username"].Value))
                 {
                     //Animations for buttons background color to transforme it from transparrent to red
                     SolidColorBrush myBrush = new SolidColorBrush();
@@ -309,7 +297,7 @@ namespace Workaholic
                     return;
                 }
 
-                if (Database.PostStamp(1, configuration.AppSettings.Settings["Username"].Value, false, configuration.AppSettings.Settings["Username"].Value))
+                if (Database.PostStamp(1, configuration.AppSettings.Settings["Username"].Value, configuration.AppSettings.Settings["Username"].Value))
                 {
                     //Animations for buttons background color to transforme it from transparrent to red
                     SolidColorBrush myBrush = new SolidColorBrush();
@@ -341,7 +329,7 @@ namespace Workaholic
         {
             if (isFirstBreakTime)
             {
-                if (Database.PostStamp(3, configuration.AppSettings.Settings["Username"].Value, true, configuration.AppSettings.Settings["Username"].Value))
+                if (Database.PostStamp(2, configuration.AppSettings.Settings["Username"].Value, configuration.AppSettings.Settings["Username"].Value))
                 {
                     isBreakTime = true;
                     isFirstBreakTime = false;
@@ -356,7 +344,7 @@ namespace Workaholic
             {
                 if (isBreakTime)
                 {
-                    if (Database.PostStamp(4, configuration.AppSettings.Settings["Username"].Value, true, configuration.AppSettings.Settings["Username"].Value))
+                    if (Database.PostStamp(3, configuration.AppSettings.Settings["Username"].Value, configuration.AppSettings.Settings["Username"].Value))
                     {
                         BreakStopWatch.Stop();
                         isBreakTime = false;
@@ -366,7 +354,7 @@ namespace Workaholic
                 }
                 else
                 {
-                    if (Database.PostStamp(3, configuration.AppSettings.Settings["Username"].Value, true, configuration.AppSettings.Settings["Username"].Value))
+                    if (Database.PostStamp(2, configuration.AppSettings.Settings["Username"].Value, configuration.AppSettings.Settings["Username"].Value))
                     {
                         BreakStopWatch.Start();
                         isBreakTime = true;

@@ -9,6 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Media.Animation;
 using System.Windows.Media;
 using StartStopWork;
+using Workaholic.Models;
 
 namespace Workaholic
 {
@@ -125,10 +126,40 @@ namespace Workaholic
             button.Background = myBrush;
         }
 
+        private void BreakButton_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            Button button = (Button)sender;
+
+            //Animations for buttons background color to transforme it from transparrent to red
+            SolidColorBrush myBrush = new SolidColorBrush();
+            ColorAnimation myColorAnimation = new ColorAnimation();
+            myColorAnimation.From = (Color)ColorConverter.ConvertFromString(FindResource("PlateColor").ToString());
+            myColorAnimation.To = (Color)ColorConverter.ConvertFromString(FindResource("BreakColor").ToString());
+            myColorAnimation.Duration = new Duration(TimeSpan.FromSeconds(0.2));
+            myBrush.BeginAnimation(SolidColorBrush.ColorProperty, myColorAnimation);
+            button.Background = myBrush;
+        }
+
+        private void BreakButton_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            Button button = (Button)sender;
+
+            //Animations for buttons background color to transforme it from transparrent to red
+            SolidColorBrush myBrush = new SolidColorBrush();
+            ColorAnimation myColorAnimation = new ColorAnimation();
+            myColorAnimation.From = (Color)ColorConverter.ConvertFromString(FindResource("BreakColor").ToString());
+            myColorAnimation.To = (Color)ColorConverter.ConvertFromString(FindResource("PlateColor").ToString());
+            myColorAnimation.Duration = new Duration(TimeSpan.FromSeconds(0.2));
+            myBrush.BeginAnimation(SolidColorBrush.ColorProperty, myColorAnimation);
+            button.Background = myBrush;
+        }
+
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
             try
             {
+                Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+
                 if ((sender as MenuItem).Header.ToString() == "Edit")
                 {
                     ReadWriteBar bar = (ReadWriteBar)((Grid)((ContextMenu)(sender as MenuItem).Parent).PlacementTarget).Parent;
@@ -141,14 +172,85 @@ namespace Workaholic
                     try
                     {
                         _ReadWriteBar = (ReadWriteBar)((Grid)((ContextMenu)(sender as MenuItem).Parent).PlacementTarget).Parent;
-                        MessageBox.Show(_ReadWriteBar.Id.ToString() + " ReadWrite");
+                        DetailWindow detailWindow = new DetailWindow();
+
+                        int row = 0;
+                        foreach(DailyHours _dailyHours in Database.GetDailyHoursDetail(configuration.AppSettings.Settings["Username"].Value, _ReadWriteBar.Id))
+                        {
+                            RowDefinition rowDefinition = new RowDefinition();
+                            if (_dailyHours.StampType == 1)
+                            {
+                                rowDefinition.Height = new GridLength(25);
+                                Label label = new Label();
+                                label.Content = "WORK";
+                                detailWindow.DetailGrid.RowDefinitions.Add(rowDefinition);
+                                Grid.SetRow(label, row);
+                                Grid.SetColumnSpan(label, 2);
+                                detailWindow.DetailGrid.Children.Add(label);
+                                row++;
+
+                                TextBox textbox = new TextBox();
+                                textbox.Style = (Style)this.Resources["TextBoxTime"];
+                                textbox.Text = TimeSpan.FromHours(_dailyHours.Start).ToString(@"hh\:mm");
+                                textbox.Name = $"Id{_dailyHours.Id.ToString()}";
+                                textbox.IsReadOnly = true;
+                                rowDefinition = new RowDefinition();
+                                rowDefinition.Height = new GridLength(40);
+                                detailWindow.DetailGrid.RowDefinitions.Add(rowDefinition);
+                                Grid.SetRow(textbox, row);
+                                detailWindow.DetailGrid.Children.Add(textbox);
+
+                                textbox = new TextBox();
+                                textbox.Style = (Style)this.Resources["TextBoxTime"];
+                                textbox.Text = TimeSpan.FromHours(_dailyHours.End).ToString(@"hh\:mm");
+                                textbox.Name = $"Id{_dailyHours.Id.ToString()}";
+                                textbox.IsReadOnly = true;
+                                Grid.SetRow(textbox, row);
+                                Grid.SetColumn(textbox, 1);
+                                detailWindow.DetailGrid.Children.Add(textbox);
+                                row++;
+                            }
+                            rowDefinition = new RowDefinition();
+                            if (_dailyHours.StampType == 2)
+                            {
+                                rowDefinition.Height = new GridLength(25);
+                                Label label = new Label();
+                                label.Content = "BREAK";
+                                detailWindow.DetailGrid.RowDefinitions.Add(rowDefinition);
+                                Grid.SetRow(label, row);
+                                Grid.SetColumnSpan(label, 2);
+                                detailWindow.DetailGrid.Children.Add(label);
+                                row++;
+
+                                TextBox textbox = new TextBox();
+                                textbox.Style = (Style)this.Resources["TextBoxTime"];
+                                textbox.Text = TimeSpan.FromHours(_dailyHours.Start).ToString(@"hh\:mm");
+                                textbox.Name = $"Id{_dailyHours.Id.ToString()}";
+                                textbox.IsReadOnly = true;
+                                rowDefinition = new RowDefinition();
+                                rowDefinition.Height = new GridLength(30);
+                                detailWindow.DetailGrid.RowDefinitions.Add(rowDefinition);
+                                Grid.SetRow(textbox, row);
+                                detailWindow.DetailGrid.Children.Add(textbox);
+
+                                textbox = new TextBox();
+                                textbox.Style = (Style)this.Resources["TextBoxTime"];
+                                textbox.Text = TimeSpan.FromHours(_dailyHours.End).ToString(@"hh\:mm");
+                                textbox.Name = $"Id{_dailyHours.Id.ToString()}";
+                                textbox.IsReadOnly = true;
+                                Grid.SetRow(textbox, row);
+                                Grid.SetColumn(textbox, 1);
+                                detailWindow.DetailGrid.Children.Add(textbox);
+                                row++;
+                            }
+                        }
+
+                        detailWindow.ShowDialog();
                     }
-                    catch
+                    catch (Exception ex)
                     {
-                        _ReadOnlyBar = (ReadOnlyBar)((Grid)((ContextMenu)(sender as MenuItem).Parent).PlacementTarget).Parent;
-                        MessageBox.Show(_ReadOnlyBar.Id.ToString() + " ReadOnly");
+                        MessageBox.Show(ex.Message);
                     }
-                    MessageBox.Show((sender as MenuItem).Header.ToString());
                 }
             }
             catch (Exception ex) 

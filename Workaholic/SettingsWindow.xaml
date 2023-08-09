@@ -7,10 +7,14 @@
         mc:Ignorable="d"
         Title="Workaholic - Settings"
         WindowStyle="None"
+        Topmost="True"
         AllowsTransparency="True"
         Background="Transparent"
-        Height="763"
-        Width="1396"
+        ResizeMode="CanResizeWithGrip"
+        Height="560"
+        Width="1030"
+        MinHeight="560"
+        MinWidth="1030"
         WindowStartupLocation="CenterScreen">
     <Window.Resources>
 
@@ -387,7 +391,7 @@
                 </Border>
             </Grid>
 
-            <Border Visibility="Visible">
+            <Border Visibility="Hidden">
                 <Border.Background>
                     <SolidColorBrush Color="{DynamicResource BackgroundColor1}"
                                      Opacity="0.5" />

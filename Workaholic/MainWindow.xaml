@@ -24,7 +24,7 @@
               Margin="2.5, 2.5, 2.5, 2.5"
               VerticalAlignment="Bottom">
             <Button x:Name="Break"
-                    Style="{DynamicResource BlueButton}"
+                    Style="{DynamicResource BreakButton}"
                     Content="BREAK"
                     FontWeight="ExtraBold"
                     HorizontalAlignment="Right"
@@ -95,7 +95,7 @@
                     FontSize="12"
                     VerticalAlignment="Top"
                     HorizontalAlignment="Right"
-                    Margin="0, 0, 25, 0"
+                    Margin="0, 0, 27.5, 0"
                     Click="Minimize_Click" />
             <Button x:Name="Settings"
                     Content="⚙"
@@ -105,7 +105,7 @@
                     FontSize="12"
                     VerticalAlignment="Top"
                     HorizontalAlignment="Right"
-                    Margin="0, 0, 50, 0"
+                    Margin="0, 0, 55, 0"
                     Click="Settings_Click" />
         </Grid>
     </Border>

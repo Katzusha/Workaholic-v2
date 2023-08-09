@@ -74,7 +74,7 @@ namespace Workaholic
 
                 isLoggedOut = true;
 
-                window.ShowDialog();
+                window.Show();
 
                 try
                 {
@@ -378,9 +378,6 @@ namespace Workaholic
         private void Settings_Click(object sender, RoutedEventArgs e)
         {
             SettingsWindow settingswindow = new SettingsWindow();
-
-            settingswindow = Database.GetDailyHours(MainWindow.configuration.AppSettings.Settings["Username"].Value, settingswindow);
-            settingswindow = Database.GetMonthlyHours(MainWindow.configuration.AppSettings.Settings["Username"].Value, settingswindow);
 
             settingswindow.ShowDialog();
 

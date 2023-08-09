@@ -23,12 +23,26 @@
                     Margin="2.5">
                 <Grid>
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
                         <RowDefinition />
                         <RowDefinition Height="40" />
                     </Grid.RowDefinitions>
+                    
+                    <Button x:Name="Close"
+                            Content="✖"
+                            Style="{DynamicResource RedButton}"
+                            Height="25"
+                            Width="25"
+                            FontSize="12"
+                            VerticalAlignment="Top"
+                            HorizontalAlignment="Right"
+                            Margin="2.5"
+                            Click="Close_Click" />
+                    
                     <ScrollViewer VerticalScrollBarVisibility="Auto"
                                   HorizontalScrollBarVisibility="Auto"
-                                  Margin="2.5">
+                                  Margin="2.5"
+                                  Grid.Row="1">
                         <Grid x:Name="DetailGrid">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition />
@@ -39,14 +53,12 @@
                     <Button x:Name="DetailClose"
                             Style="{DynamicResource HyperLinkButton}"
                             Content="SAVE"
-                            Grid.Row="1"
+                            Grid.Row="2"
                             Margin="2.5"
                             Grid.ColumnSpan="2"
                             Click="DetailClose_Click" />
                 </Grid>
             </Border>
-            
-            
         </Grid>
     </Border>
 </Window>

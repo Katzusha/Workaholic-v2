@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="Workaholic - Settings"
         WindowStyle="None"
-        Topmost="True"
+        Topmost="False"
         AllowsTransparency="True"
         Background="Transparent"
         ResizeMode="CanResizeWithGrip"

@@ -187,5 +187,26 @@ namespace StartStopWork
                 return null;
             }
         }
+
+        public static bool UpdateDailyHoursDetail(string username, List<DailyHours> dailyHours)
+        {
+            try
+            {
+                conn.Open();
+                foreach(DailyHours _dailyHours in dailyHours)
+                {
+                    conn.Execute($"UPDATE Stamps SET Start = '{TimeSpan.FromHours(_dailyHours.Start).ToString()}', End = '{TimeSpan.FromHours(_dailyHours.End).ToString()}', ModifiedBy = '{PublicEntitys.Encryption(username)}' WHERE Id = {_dailyHours.Id.ToString()}");
+                }
+                conn.Close();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                conn.Close();
+                PublicEntitys.ShowError(1);
+                MessageBox.Show(ex.Message);
+                return false;
+            }
+        }
     }
 }

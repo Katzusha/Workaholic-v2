@@ -10,6 +10,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media;
 using StartStopWork;
 using Workaholic.Models;
+using System.Windows.Controls.Primitives;
 
 namespace Workaholic
 {
@@ -18,6 +19,7 @@ namespace Workaholic
     /// </summary>
     public partial class App : Application
     {
+
         private void BlueButton_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
             Button button = (Button)sender;
@@ -162,8 +164,95 @@ namespace Workaholic
 
                 if ((sender as MenuItem).Header.ToString() == "Edit")
                 {
-                    ReadWriteBar bar = (ReadWriteBar)((Grid)((ContextMenu)(sender as MenuItem).Parent).PlacementTarget).Parent;
-                    MessageBox.Show(bar.Id.ToString());
+                    ReadWriteBar _ReadWriteBar = new ReadWriteBar();
+                    try
+                    {
+                        _ReadWriteBar = (ReadWriteBar)((Grid)((ContextMenu)(sender as MenuItem).Parent).PlacementTarget).Parent;
+                        DetailWindow detailWindow = new DetailWindow();
+                        detailWindow.DetailClose.Style = (Style)this.Resources["GreenButton"];
+                        detailWindow.DetailClose.Content = "Save";
+
+                        int row = 0;
+                        foreach (DailyHours _dailyHours in Database.GetDailyHoursDetail(configuration.AppSettings.Settings["Username"].Value, _ReadWriteBar.Id))
+                        {
+                            RowDefinition rowDefinition = new RowDefinition();
+                            if (_dailyHours.StampType == 1)
+                            {
+                                rowDefinition.Height = new GridLength(25);
+                                Label label = new Label();
+                                label.Content = "WORK";
+                                label.Name = $"Id{_dailyHours.Id.ToString()}";
+                                detailWindow.DetailGrid.RowDefinitions.Add(rowDefinition);
+                                Grid.SetRow(label, row);
+                                Grid.SetColumnSpan(label, 2);
+                                detailWindow.DetailGrid.Children.Add(label);
+                                row++;
+
+                                TextBox textbox = new TextBox();
+                                textbox.Style = (Style)this.Resources["TextBoxTime"];
+                                textbox.Text = TimeSpan.FromHours(_dailyHours.Start).ToString(@"hh\:mm");
+                                textbox.Name = $"Start";
+                                rowDefinition = new RowDefinition();
+                                rowDefinition.Height = new GridLength(40);
+                                detailWindow.DetailGrid.RowDefinitions.Add(rowDefinition);
+                                Grid.SetRow(textbox, row);
+                                detailWindow.DetailGrid.Children.Add(textbox);
+
+                                textbox = new TextBox();
+                                textbox.Style = (Style)this.Resources["TextBoxTime"];
+                                textbox.Text = TimeSpan.FromHours(_dailyHours.End).ToString(@"hh\:mm");
+                                textbox.Name = $"End";
+                                Grid.SetRow(textbox, row);
+                                Grid.SetColumn(textbox, 1);
+                                detailWindow.DetailGrid.Children.Add(textbox);
+                                row++;
+                            }
+                            rowDefinition = new RowDefinition();
+                            if (_dailyHours.StampType == 2)
+                            {
+                                rowDefinition.Height = new GridLength(25);
+                                Label label = new Label();
+                                label.Content = "BREAK";
+                                label.Name = $"Id{_dailyHours.Id.ToString()}";
+                                detailWindow.DetailGrid.RowDefinitions.Add(rowDefinition);
+                                Grid.SetRow(label, row);
+                                Grid.SetColumnSpan(label, 2);
+                                detailWindow.DetailGrid.Children.Add(label);
+                                row++;
+
+                                TextBox textbox = new TextBox();
+                                textbox.Style = (Style)this.Resources["TextBoxTime"];
+                                textbox.Text = TimeSpan.FromHours(_dailyHours.Start).ToString(@"hh\:mm");
+                                textbox.Name = $"Start";
+                                rowDefinition = new RowDefinition();
+                                rowDefinition.Height = new GridLength(30);
+                                detailWindow.DetailGrid.RowDefinitions.Add(rowDefinition);
+                                Grid.SetRow(textbox, row);
+                                detailWindow.DetailGrid.Children.Add(textbox);
+
+                                textbox = new TextBox();
+                                textbox.Style = (Style)this.Resources["TextBoxTime"];
+                                textbox.Text = TimeSpan.FromHours(_dailyHours.End).ToString(@"hh\:mm");
+                                textbox.Name = $"End";
+                                Grid.SetRow(textbox, row);
+                                Grid.SetColumn(textbox, 1);
+                                detailWindow.DetailGrid.Children.Add(textbox);
+                                row++;
+                            }
+                        }
+
+                        detailWindow.ShowDialog();
+
+                        SettingsWindow window = (SettingsWindow)Window.GetWindow(sender as DependencyObject);
+                        window.RefreshDailyGrid();
+
+
+                        //MessageBox.Show(((SettingsWindow)((Border)((Grid)((Grid)((Border)((ScrollViewer)((Grid)((ReadWriteBar)((Grid).Parent).Parent).Parent).Parent).Parent).Parent).Parent).Parent).ToString());
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
                 }
                 else if ((sender as MenuItem).Header.ToString() == "Details")
                 {
@@ -173,9 +262,11 @@ namespace Workaholic
                     {
                         _ReadWriteBar = (ReadWriteBar)((Grid)((ContextMenu)(sender as MenuItem).Parent).PlacementTarget).Parent;
                         DetailWindow detailWindow = new DetailWindow();
+                        detailWindow.DetailClose.Style = (Style)this.Resources["HyperLinkButton"];
+                        detailWindow.DetailClose.Content = "Close";
 
                         int row = 0;
-                        foreach(DailyHours _dailyHours in Database.GetDailyHoursDetail(configuration.AppSettings.Settings["Username"].Value, _ReadWriteBar.Id))
+                        foreach (DailyHours _dailyHours in Database.GetDailyHoursDetail(configuration.AppSettings.Settings["Username"].Value, _ReadWriteBar.Id))
                         {
                             RowDefinition rowDefinition = new RowDefinition();
                             if (_dailyHours.StampType == 1)

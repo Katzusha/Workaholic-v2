@@ -63,20 +63,14 @@ namespace StartStopWork
         #region Variables
         // Variable for the labels under neath the time lines
         private static string[] Months = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dec" };
+        private static Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
         #endregion
 
         public SettingsWindow()
         {
             InitializeComponent();
 
-            DailyHistory.ColumnDefinitions.Clear();
-            DailyHistory.Children.Clear();
-            MonthlyHistory.ColumnDefinitions.Clear();
-            MonthlyHistory.Children.Clear();
-
             // Open configuration file
-            Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-
             string btnname = configuration.AppSettings.Settings["Align"].Value;
             SurnameInput.Text = configuration.AppSettings.Settings["Surname"].Value;
             FirstnameInput.Text = configuration.AppSettings.Settings["Firstname"].Value;
@@ -98,6 +92,13 @@ namespace StartStopWork
                 }
             }
 
+            RefreshDailyGrid();
+
+            
+        }
+
+        public void RefreshDailyGrid()
+        {
             try
             {
                 int column = 0;
@@ -109,6 +110,8 @@ namespace StartStopWork
                 double worktime = 0;
                 double breaktime = 0;
 
+                DailyHistory.ColumnDefinitions.Clear();
+                DailyHistory.Children.Clear();
 
                 ColumnDefinition col = new ColumnDefinition();
                 col.Width = new GridLength(80);
@@ -238,6 +241,9 @@ namespace StartStopWork
                 double worktime = 0;
                 double breaktime = 0;
 
+                MonthlyHistory.ColumnDefinitions.Clear();
+                MonthlyHistory.Children.Clear();
+
                 foreach (MonthlyHours _monthlyHours in Database.GetMonthlyHours(MainWindow.configuration.AppSettings.Settings["Username"].Value))
                 {
                     if (Int16.Parse(_monthlyHours.Month.ToString()) == coldate)
@@ -250,11 +256,15 @@ namespace StartStopWork
                         {
                             if ((worktime * 0.0625) < breaktime)
                             {
-                                time.Content = TimeSpan.FromHours(worktime - (breaktime - (worktime * 0.0625))).ToString(@"hh\:mm");
+                                int hours = (Int32)TimeSpan.FromHours(worktime - (breaktime - (worktime * 0.0625))).TotalHours;
+                                int minutes = (Int32)TimeSpan.FromHours(worktime - (breaktime - (worktime * 0.0625))).Minutes;
+                                time.Content = $"{hours.ToString()}:{minutes.ToString()}";
                             }
                             else
                             {
-                                time.Content = TimeSpan.FromHours(worktime).ToString(@"hh\:mm");
+                                int hours = (Int32)TimeSpan.FromHours(worktime).TotalHours;
+                                int minutes = (Int32)TimeSpan.FromHours(worktime).Minutes;
+                                time.Content = $"{hours.ToString()}:{minutes.ToString()}";
                             }
 
                             Grid.SetColumn(time, column - 1);
@@ -287,8 +297,9 @@ namespace StartStopWork
 
                         bar.Id = _monthlyHours.Id;
 
-                        bar.ToolTip = $"Of that working hours:" +
-                            $"\n{TimeSpan.FromHours(worktime).ToString(@"dd\.hh\:mm")}";
+                        int hours = (Int32)TimeSpan.FromHours(worktime).TotalHours;
+                        int minutes = (Int32)TimeSpan.FromHours(worktime).Minutes;
+                        bar.ToolTip = $"{hours.ToString()}:{minutes.ToString()}";
 
                         Grid.SetColumn(bar, column);
                         Grid.SetColumn(date, column);
@@ -319,17 +330,41 @@ namespace StartStopWork
 
                         bar.Id = _monthlyHours.Id;
 
+                        //if ((worktime * 0.0625) < breaktime)
+                        //{
+                        //    int breakshours = (Int32)TimeSpan.FromHours((breaktime - (worktime * 0.0625))).TotalHours;
+                        //    int breakminutes = (Int32)TimeSpan.FromHours((breaktime - (worktime * 0.0625))).Minutes;
+                        //    time.Content = $"{hours.ToString()}:{minutes.ToString()}";
+
+                        //    bar.ToolTip = $"Of that breaks:" +
+                        //    $"\n{TimeSpan.FromHours(breaktime).ToString(@"hh\:mm")}" +
+                        //    $"\n\nOf that overdo breaks:" +
+                        //    $"\n{TimeSpan.FromHours((breaktime - (worktime * 0.0625))).ToString(@"hh\:mm")}";
+                        //}
+                        //else
+                        //{
+                        //    bar.ToolTip = $"Of that breaks:" +
+                        //    $"\n{TimeSpan.FromHours(breaktime).ToString(@"hh\:mm")}";
+                        //}
+
                         if ((worktime * 0.0625) < breaktime)
                         {
+                            int breakhours = (Int32)TimeSpan.FromHours(breaktime).TotalHours;
+                            int breakminutes = (Int32)TimeSpan.FromHours(breaktime).Minutes;
+                            int Overdobreakhours = (Int32)TimeSpan.FromHours((breaktime - (worktime * 0.0625))).TotalHours;
+                            int Overdobreakminutes = (Int32)TimeSpan.FromHours((breaktime - (worktime * 0.0625))).Minutes;
+
                             bar.ToolTip = $"Of that breaks:" +
-                            $"\n{TimeSpan.FromHours(breaktime).ToString(@"hh\:mm")}" +
+                            $"\n{breakhours.ToString("00")}:{breakminutes.ToString("00")}" +
                             $"\n\nOf that overdo breaks:" +
-                            $"\n{TimeSpan.FromHours((breaktime - (worktime * 0.0625))).ToString(@"hh\:mm")}";
+                            $"\n{Overdobreakhours.ToString("00")}:{Overdobreakminutes.ToString("00")}";
                         }
                         else
                         {
+                            int breakhours = (Int32)TimeSpan.FromHours(breaktime).TotalHours;
+                            int breakminutes = (Int32)TimeSpan.FromHours(breaktime).Minutes;
                             bar.ToolTip = $"Of that breaks:" +
-                            $"\n{TimeSpan.FromHours(breaktime).ToString(@"hh\:mm")}";
+                            $"\n{breakhours.ToString()}:{breakminutes.ToString()}";
                         }
 
                         Grid.SetColumn(bar, column);
@@ -346,11 +381,15 @@ namespace StartStopWork
                 }
                 if ((worktime * 0.0625) < breaktime)
                 {
-                    time.Content = TimeSpan.FromHours(worktime - (breaktime - (worktime * 0.0625))).ToString(@"hh\:mm");
+                    int hours = (Int32)TimeSpan.FromHours(worktime - (breaktime - (worktime * 0.0625))).TotalHours;
+                    int minutes = (Int32)TimeSpan.FromHours(worktime - (breaktime - (worktime * 0.0625))).Minutes;
+                    time.Content = $"{hours.ToString()}:{minutes.ToString()}";
                 }
                 else
                 {
-                    time.Content = TimeSpan.FromHours(worktime).ToString(@"hh\:mm");
+                    int hours = (Int32)TimeSpan.FromHours(worktime).TotalHours;
+                    int minutes = (Int32)TimeSpan.FromHours(worktime).Minutes;
+                    time.Content = $"{hours.ToString()}:{minutes.ToString()}";
                 }
 
                 Grid.SetColumn(time, column - 1);

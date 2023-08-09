@@ -378,6 +378,7 @@ namespace Workaholic
         private void Settings_Click(object sender, RoutedEventArgs e)
         {
             SettingsWindow settingswindow = new SettingsWindow();
+            settingswindow.Name = "nigger";
 
             settingswindow.ShowDialog();
 

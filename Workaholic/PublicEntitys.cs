@@ -147,7 +147,7 @@ namespace StartStopWork
 
         public static void ShowError(int errortype)
         {
-            ErrorWindow window = new ErrorWindow(1);
+            ErrorWindow window = new ErrorWindow(errortype);
             window.ShowDialog();
         }
     }

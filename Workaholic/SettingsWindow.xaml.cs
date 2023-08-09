@@ -70,31 +70,36 @@ namespace StartStopWork
         {
             InitializeComponent();
 
-            // Open configuration file
-            string btnname = configuration.AppSettings.Settings["Align"].Value;
-            SurnameInput.Text = configuration.AppSettings.Settings["Surname"].Value;
-            FirstnameInput.Text = configuration.AppSettings.Settings["Firstname"].Value;
-            UsernameInput.Text = configuration.AppSettings.Settings["Username"].Value;
-            PasswordInput.Text = configuration.AppSettings.Settings["Password"].Value;
-
-            foreach (Button button in Align.Children)
+            try
             {
-                if (button.Name == (("Align" + btnname)))
+                // Open configuration file
+                string btnname = configuration.AppSettings.Settings["Align"].Value;
+                SurnameInput.Text = configuration.AppSettings.Settings["Surname"].Value;
+                FirstnameInput.Text = configuration.AppSettings.Settings["Firstname"].Value;
+                UsernameInput.Text = configuration.AppSettings.Settings["Username"].Value;
+                PasswordInput.Text = configuration.AppSettings.Settings["Password"].Value;
+
+                foreach (Button button in Align.Children)
                 {
-                    //Animations for buttons background color to transforme it from transparrent to red
-                    SolidColorBrush myBrush = new SolidColorBrush();
-                    ColorAnimation myColorAnimation = new ColorAnimation();
-                    myColorAnimation.From = Color.FromArgb(0, 86, 86, 255);
-                    myColorAnimation.To = (Color)ColorConverter.ConvertFromString(FindResource("BorderColor").ToString());
-                    myColorAnimation.Duration = new Duration(TimeSpan.FromSeconds(1));
-                    myBrush.BeginAnimation(SolidColorBrush.ColorProperty, myColorAnimation);
-                    button.BorderBrush = myBrush;
+                    if (button.Name == (("Align" + btnname)))
+                    {
+                        //Animations for buttons background color to transforme it from transparrent to red
+                        SolidColorBrush myBrush = new SolidColorBrush();
+                        ColorAnimation myColorAnimation = new ColorAnimation();
+                        myColorAnimation.From = Color.FromArgb(0, 86, 86, 255);
+                        myColorAnimation.To = (Color)ColorConverter.ConvertFromString(FindResource("BorderColor").ToString());
+                        myColorAnimation.Duration = new Duration(TimeSpan.FromSeconds(1));
+                        myBrush.BeginAnimation(SolidColorBrush.ColorProperty, myColorAnimation);
+                        button.BorderBrush = myBrush;
+                    }
                 }
+
+                RefreshDailyGrid();
             }
-
-            RefreshDailyGrid();
-
-            
+            catch
+            {
+                PublicEntitys.ShowError(306);
+            }
         }
 
         public void RefreshDailyGrid()
@@ -165,8 +170,6 @@ namespace StartStopWork
                         bar.WorkMargin = _dailyHours.Start;
                         bar.WorkHeight = _dailyHours.Duration;
                         bar.StampType = 1;
-                        //bar.BreakMargin = reader.GetDouble(3);
-                        //bar.BreakHeight = reader.GetDouble(5);
 
                         bar.Id = _dailyHours.Id;
 
@@ -228,7 +231,10 @@ namespace StartStopWork
                 Grid.SetColumn(time, column - 1);
                 DailyHistory.Children.Add(time);
             }
-            catch { }
+            catch 
+            {
+                PublicEntitys.ShowError(500);
+            }
 
             try
             {
@@ -330,23 +336,6 @@ namespace StartStopWork
 
                         bar.Id = _monthlyHours.Id;
 
-                        //if ((worktime * 0.0625) < breaktime)
-                        //{
-                        //    int breakshours = (Int32)TimeSpan.FromHours((breaktime - (worktime * 0.0625))).TotalHours;
-                        //    int breakminutes = (Int32)TimeSpan.FromHours((breaktime - (worktime * 0.0625))).Minutes;
-                        //    time.Content = $"{hours.ToString()}:{minutes.ToString()}";
-
-                        //    bar.ToolTip = $"Of that breaks:" +
-                        //    $"\n{TimeSpan.FromHours(breaktime).ToString(@"hh\:mm")}" +
-                        //    $"\n\nOf that overdo breaks:" +
-                        //    $"\n{TimeSpan.FromHours((breaktime - (worktime * 0.0625))).ToString(@"hh\:mm")}";
-                        //}
-                        //else
-                        //{
-                        //    bar.ToolTip = $"Of that breaks:" +
-                        //    $"\n{TimeSpan.FromHours(breaktime).ToString(@"hh\:mm")}";
-                        //}
-
                         if ((worktime * 0.0625) < breaktime)
                         {
                             int breakhours = (Int32)TimeSpan.FromHours(breaktime).TotalHours;
@@ -395,66 +384,90 @@ namespace StartStopWork
                 Grid.SetColumn(time, column - 1);
                 MonthlyHistory.Children.Add(time);
             }
-            catch { }
+            catch 
+            {
+                PublicEntitys.ShowError(500);
+            }
         }
 
         // Click() events for the buttons
         #region Click()
         private void Close_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
-            Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            configuration.AppSettings.Settings["Firstname"].Value = FirstnameInput.Text;
-            configuration.AppSettings.Settings["Surname"].Value = SurnameInput.Text;
-            configuration.AppSettings.Settings["Username"].Value = UsernameInput.Text;
-            configuration.AppSettings.Settings["Password"].Value = PasswordInput.Text;
-            configuration.Save(ConfigurationSaveMode.Full, true);
-            ConfigurationManager.RefreshSection("appSettings");
+            try
+            {
+                this.Close();
+                Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                configuration.AppSettings.Settings["Firstname"].Value = FirstnameInput.Text;
+                configuration.AppSettings.Settings["Surname"].Value = SurnameInput.Text;
+                configuration.AppSettings.Settings["Username"].Value = UsernameInput.Text;
+                configuration.AppSettings.Settings["Password"].Value = PasswordInput.Text;
+                configuration.Save(ConfigurationSaveMode.Full, true);
+                ConfigurationManager.RefreshSection("appSettings");
+            }
+            catch
+            {
+                PublicEntitys.ShowError(306);
+            }
         }
 
         private void Align_Click(object sender, RoutedEventArgs e)
         {
-            Button btn = (Button)sender;
-
-            foreach (Button child in Align.Children)
+            try
             {
-                child.BorderBrush = Brushes.Transparent;
+                Button btn = (Button)sender;
+
+                foreach (Button child in Align.Children)
+                {
+                    child.BorderBrush = Brushes.Transparent;
+                }
+
+                //Animations for buttons background color to transforme it from transparrent to red
+                SolidColorBrush myBrush = new SolidColorBrush();
+                ColorAnimation myColorAnimation = new ColorAnimation();
+                myColorAnimation.From = Color.FromArgb(0, 86, 86, 255);
+                myColorAnimation.To = Color.FromArgb(255, 86, 86, 255);
+                myColorAnimation.Duration = new Duration(TimeSpan.FromSeconds(0.2));
+                myBrush.BeginAnimation(SolidColorBrush.ColorProperty, myColorAnimation);
+                btn.BorderBrush = myBrush;
+
+                Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                configuration.AppSettings.Settings["Align"].Value = btn.Name.ToString().Replace("Align", "");
+                configuration.Save(ConfigurationSaveMode.Full, true);
+                ConfigurationManager.RefreshSection("appSettings");
             }
-
-            //Animations for buttons background color to transforme it from transparrent to red
-            SolidColorBrush myBrush = new SolidColorBrush();
-            ColorAnimation myColorAnimation = new ColorAnimation();
-            myColorAnimation.From = Color.FromArgb(0, 86, 86, 255);
-            myColorAnimation.To = Color.FromArgb(255, 86, 86, 255);
-            myColorAnimation.Duration = new Duration(TimeSpan.FromSeconds(0.2));
-            myBrush.BeginAnimation(SolidColorBrush.ColorProperty, myColorAnimation);
-            btn.BorderBrush = myBrush;
-
-            Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            configuration.AppSettings.Settings["Align"].Value = btn.Name.ToString().Replace("Align", "");
-            configuration.Save(ConfigurationSaveMode.Full, true);
-            ConfigurationManager.RefreshSection("appSettings");
+            catch
+            {
+                PublicEntitys.ShowError(306);
+            }
         }
 
         private void LogOut_Click(object sender, RoutedEventArgs e)
         {
-            Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            configuration.AppSettings.Settings["Firstname"].Value = "";
-            configuration.AppSettings.Settings["Surname"].Value = "";
-            configuration.AppSettings.Settings["Username"].Value = "";
-            configuration.AppSettings.Settings["Password"].Value = "";
-            configuration.Save(ConfigurationSaveMode.Full, true);
-            ConfigurationManager.RefreshSection("appSettings");
+            try
+            {
+                Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                configuration.AppSettings.Settings["Firstname"].Value = "";
+                configuration.AppSettings.Settings["Surname"].Value = "";
+                configuration.AppSettings.Settings["Username"].Value = "";
+                configuration.AppSettings.Settings["Password"].Value = "";
+                configuration.Save(ConfigurationSaveMode.Full, true);
+                ConfigurationManager.RefreshSection("appSettings");
 
-            Workaholic.MainWindow.isLoggedOut = true;
+                Workaholic.MainWindow.isLoggedOut = true;
 
-            this.Close();
+                this.Close();
+            }
+            catch
+            {
+                PublicEntitys.ShowError(306);
+            }
         }
         #endregion
 
         // Other events
         #region Other events
-            private void Grid_MouseDown(object sender, MouseButtonEventArgs e)
+        private void Grid_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left)
                 this.DragMove();

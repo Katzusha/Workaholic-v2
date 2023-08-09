@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StartStopWork;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -46,25 +47,11 @@ namespace Workaholic
                 _StampType = value;
                 if (_StampType == 1)
                 {
-                    //Animations for buttons background color to transforme it from transparrent to red
-                    SolidColorBrush myBrush = new SolidColorBrush();
-                    ColorAnimation myColorAnimation = new ColorAnimation();
-                    myColorAnimation.From = (Color)ColorConverter.ConvertFromString(FindResource("BorderColor").ToString());
-                    myColorAnimation.To = (Color)ColorConverter.ConvertFromString(FindResource("BorderColor").ToString());
-                    myColorAnimation.Duration = new Duration(TimeSpan.FromSeconds(0.2));
-                    myBrush.BeginAnimation(SolidColorBrush.ColorProperty, myColorAnimation);
-                    Work.Background = myBrush;
+                    Work.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(FindResource("BorderColor").ToString()));
                 }
                 else if (_StampType == 2)
                 {
-                    //Animations for buttons background color to transforme it from transparrent to red
-                    SolidColorBrush myBrush = new SolidColorBrush();
-                    ColorAnimation myColorAnimation = new ColorAnimation();
-                    myColorAnimation.From = (Color)ColorConverter.ConvertFromString(FindResource("BreakColor").ToString());
-                    myColorAnimation.To = (Color)ColorConverter.ConvertFromString(FindResource("BreakColor").ToString());
-                    myColorAnimation.Duration = new Duration(TimeSpan.FromSeconds(0.2));
-                    myBrush.BeginAnimation(SolidColorBrush.ColorProperty, myColorAnimation);
-                    Work.Background = myBrush;
+                    Work.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(FindResource("BreakColor").ToString()));
                 }
             }
         }
@@ -75,7 +62,14 @@ namespace Workaholic
             get { return _id; }
             set
             {
-                _id = value;
+                try
+                {
+                    _id = value;
+                }
+                catch
+                {
+                    PublicEntitys.ShowError(306);
+                }
             }
         }
 
@@ -86,9 +80,16 @@ namespace Workaholic
             get { return _workheight; }
             set
             {
-                _workheight = value;
-                UpdateWorkHeight();
-                NotifyPropertyChanged("WorkHeight");
+                try
+                {
+                    _workheight = value;
+                    UpdateWorkHeight();
+                    NotifyPropertyChanged("WorkHeight");
+                }
+                catch
+                {
+                    PublicEntitys.ShowError(500);
+                }
             }
         }
 
@@ -99,9 +100,17 @@ namespace Workaholic
             get { return _workmargin; }
             set
             {
-                _workmargin = value;
-                UpdateWorkMargin();
-                NotifyPropertyChanged("WorkMargin");
+                try
+                {
+                    _workmargin = value;
+                    UpdateWorkMargin();
+                    NotifyPropertyChanged("WorkMargin");
+                }
+                catch
+                {
+                    PublicEntitys.ShowError(500);
+                }
+                
             }
         }
 
@@ -112,9 +121,17 @@ namespace Workaholic
             get { return maxValue; }
             set
             {
-                maxValue = value;
-                UpdateWorkHeight();
-                NotifyPropertyChanged("MaxValue");
+                try
+                {
+                    maxValue = value;
+                    UpdateWorkHeight();
+                    NotifyPropertyChanged("MaxValue");
+                }
+                catch
+                {
+                    PublicEntitys.ShowError(500);
+                }
+                
             }
         }
 
@@ -124,10 +141,17 @@ namespace Workaholic
             get { return _thisvalue; }
             set
             {
-                _thisvalue = value;
-                //UpdateBreakHeight();
-                UpdateWorkHeight();
-                NotifyPropertyChanged("Value");
+                try
+                {
+                    _thisvalue = value;
+                    UpdateWorkHeight();
+                    NotifyPropertyChanged("Value");
+                }
+                catch
+                {
+                    PublicEntitys.ShowError(500);
+                }
+                
             }
         }
 

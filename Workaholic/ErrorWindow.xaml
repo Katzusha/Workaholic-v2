@@ -21,7 +21,8 @@
 
     <Grid Background="Transparent"
           Visibility="Visible">
-        <Border Background="{DynamicResource BackgroundColor}"
+        <Border x:Name="Border"
+                Background="{DynamicResource BackgroundColor}"
                 BorderBrush="{DynamicResource RedColor}"
                 BorderThickness="2"
                 CornerRadius="5">

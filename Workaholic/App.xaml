@@ -17,7 +17,7 @@
                          Color="#4e4e5e" />
         <Color x:Key="PlateColor1">#4e4e5e</Color>
         <SolidColorBrush x:Key="RedColor"
-                         Color="#c13b44" />
+                         Color="#ff5656" />
         <SolidColorBrush x:Key="GreenColor"
                          Color="#4a944a" />
         <SolidColorBrush x:Key="BreakColor"

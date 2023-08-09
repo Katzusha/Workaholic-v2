@@ -32,35 +32,72 @@ namespace StartStopWork
 
             switch (errortype)
             {
-                // 1-99 WARNINGS
-                #region Connection 1-9
-                case 1:
-                    ErrorHeader.Content = "WARNING";
-                    ErrorHeader.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(FindResource("BreakColor").ToString()));
-                    ErrorMessageOutput.Text = "Please check your internet connection and try again.";
-                    break;
-
-                #endregion
-
-                #region LogIn 10-19
-                case 10:
-                    ErrorHeader.Content = "WARNING";
-                    ErrorHeader.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(FindResource("BreakColor").ToString()));
-                    ErrorMessageOutput.Text = "The username or password are incorrect. Please try again.";
-                    break;
-                #endregion
-
-
-                // 100-199 ERRORS
-                #region Internal errors 100-149
                 case 100:
+                    ErrorHeader.Content = "WARNING";
+                    ErrorHeader.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(FindResource("BreakColor").ToString()));
+                    Border.BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString(FindResource("BreakColor").ToString()));
+                    ErrorMessageOutput.Text = "Wrong username or password. Please try again.";
+                    break;
+                case 306:
                     ErrorHeader.Content = "! ERROR !";
                     ErrorHeader.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(FindResource("RedColor").ToString()));
-                    ErrorMessageOutput.Text = "Something unecspected went wrong. Please contact system support!";
+                    Border.BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString(FindResource("RedColor").ToString()));
+                    ErrorMessageOutput.Text = "Internal error. Please contact system support!";
                     break;
-                    #endregion
-
-
+                case 400:
+                    ErrorHeader.Content = "! ERROR !";
+                    ErrorHeader.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(FindResource("RedColor").ToString()));
+                    Border.BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString(FindResource("RedColor").ToString()));
+                    ErrorMessageOutput.Text = "Please check your internet connection and try again.";
+                    break;
+                case 401:
+                    ErrorHeader.Content = "! ERROR !";
+                    ErrorHeader.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(FindResource("RedColor").ToString()));
+                    Border.BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString(FindResource("RedColor").ToString()));
+                    ErrorMessageOutput.Text = "You do not have permissions for access this file.";
+                    break;
+                case 404:
+                    ErrorHeader.Content = "! ERROR !";
+                    ErrorHeader.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(FindResource("RedColor").ToString()));
+                    Border.BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString(FindResource("RedColor").ToString()));
+                    ErrorMessageOutput.Text = "Request was not found.";
+                    break;
+                case 405:
+                    ErrorHeader.Content = "! ERROR !";
+                    ErrorHeader.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(FindResource("RedColor").ToString()));
+                    Border.BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString(FindResource("RedColor").ToString()));
+                    ErrorMessageOutput.Text = "You do not have permissions for this request.";
+                    break;
+                case 406:
+                    ErrorHeader.Content = "WARNING";
+                    ErrorHeader.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(FindResource("BreakColor").ToString()));
+                    Border.BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString(FindResource("BreakColor").ToString()));
+                    ErrorMessageOutput.Text = "Invalid inputs. Please check them and try again.";
+                    break;
+                case 407:
+                    ErrorHeader.Content = "! ERROR !";
+                    ErrorHeader.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(FindResource("RedColor").ToString()));
+                    Border.BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString(FindResource("RedColor").ToString()));
+                    ErrorMessageOutput.Text = "Wrong connection to the server. Please contact system support.";
+                    break;
+                case 408:
+                    ErrorHeader.Content = "! ERROR !";
+                    ErrorHeader.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(FindResource("RedColor").ToString()));
+                    Border.BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString(FindResource("RedColor").ToString()));
+                    ErrorMessageOutput.Text = "Request has timmed out.";
+                    break;
+                case 409:
+                    ErrorHeader.Content = "WARNING";
+                    ErrorHeader.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(FindResource("BreakColor").ToString()));
+                    Border.BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString(FindResource("BreakColor").ToString()));
+                    ErrorMessageOutput.Text = "Query ended in conflict. Please check your inputs.";
+                    break;
+                case 500:
+                    ErrorHeader.Content = "! ERROR !";
+                    ErrorHeader.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(FindResource("RedColor").ToString()));
+                    Border.BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString(FindResource("RedColor").ToString()));
+                    ErrorMessageOutput.Text = "Database is currupted. Please contact system support!";
+                    break;
             }
 
             Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);

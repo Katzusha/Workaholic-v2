@@ -45,9 +45,16 @@ namespace StartStopWork
             get { return _breakheight; }
             set
             {
-                _breakheight = value;
-                UpdateBreakHeight();
-                NotifyPropertyChanged("BreakHeight");
+                try
+                {
+                    _breakheight = value;
+                    UpdateBreakHeight();
+                    NotifyPropertyChanged("BreakHeight");
+                }
+                catch
+                {
+                    PublicEntitys.ShowError(500);
+                }
             }
         }
 
@@ -58,9 +65,16 @@ namespace StartStopWork
             get { return _breakheight; }
             set
             {
-                _breakmargin = value;
-                UpdateBreakMargin();
-                NotifyPropertyChanged("BreakMargin");
+                try
+                {
+                    _breakmargin = value;
+                    UpdateBreakMargin();
+                    NotifyPropertyChanged("BreakMargin");
+                }
+                catch
+                {
+                    PublicEntitys.ShowError(500);
+                }
             }
         }
 
@@ -71,9 +85,16 @@ namespace StartStopWork
             get { return _workheight; }
             set
             {
-                _workheight = value;
-                UpdateWorkHeight();
-                NotifyPropertyChanged("WorkHeight");
+                try
+                {
+                    _workheight = value;
+                    UpdateWorkHeight();
+                    NotifyPropertyChanged("WorkHeight");
+                }
+                catch
+                {
+                    PublicEntitys.ShowError(500);
+                }
             }
         }
 
@@ -84,9 +105,16 @@ namespace StartStopWork
             get { return _workmargin; }
             set
             {
-                _workmargin = value;
-                UpdateWorkMargin();
-                NotifyPropertyChanged("WorkMargin");
+                try
+                {
+                    _workmargin = value;
+                    UpdateWorkMargin();
+                    NotifyPropertyChanged("WorkMargin");
+                }
+                catch
+                {
+                    PublicEntitys.ShowError(500);
+                }
             }
         }
 
@@ -97,9 +125,16 @@ namespace StartStopWork
             get { return _absenceheight; }
             set
             {
-                _absenceheight = value;
-                UpdateAbsenceHeight();
-                NotifyPropertyChanged("AbsenceHeight");
+                try
+                {
+                    _absenceheight = value;
+                    UpdateAbsenceHeight();
+                    NotifyPropertyChanged("AbsenceHeight");
+                }
+                catch
+                {
+                    PublicEntitys.ShowError(500);
+                }
             }
         }
 
@@ -110,9 +145,16 @@ namespace StartStopWork
             get { return _absencemargin; }
             set
             {
-                _absencemargin = value;
-                UpdateAbsenceMargin();
-                NotifyPropertyChanged("AbsenceMargin");
+                try
+                {
+                    _absencemargin = value;
+                    UpdateAbsenceMargin();
+                    NotifyPropertyChanged("AbsenceMargin");
+                }
+                catch
+                {
+                    PublicEntitys.ShowError(500);
+                }
             }
         }
 
@@ -123,10 +165,17 @@ namespace StartStopWork
             get { return maxValue; }
             set
             {
-                maxValue = value;
-                UpdateBreakHeight();
-                UpdateWorkHeight();
-                NotifyPropertyChanged("MaxValue");
+                try
+                {
+                    maxValue = value;
+                    UpdateBreakHeight();
+                    UpdateWorkHeight();
+                    NotifyPropertyChanged("MaxValue");
+                }
+                catch
+                {
+                    PublicEntitys.ShowError(500);
+                }
             }
         }
 
@@ -136,10 +185,17 @@ namespace StartStopWork
             get { return _thisvalue; }
             set
             {
-                _thisvalue = value;
-                UpdateBreakHeight();
-                UpdateWorkHeight();
-                NotifyPropertyChanged("Value");
+                try
+                {
+                    _thisvalue = value;
+                    UpdateBreakHeight();
+                    UpdateWorkHeight();
+                    NotifyPropertyChanged("Value");
+                }
+                catch
+                {
+                    PublicEntitys.ShowError(500);
+                }
             }
         }
 

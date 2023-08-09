@@ -48,7 +48,7 @@ namespace StartStopWork
                 catch
                 {
                     conn.Close();
-                    PublicEntitys.ShowError(1);
+                    PublicEntitys.ShowError(400);
                     return false;
                 }
 
@@ -83,91 +83,82 @@ namespace StartStopWork
         {
             try
             {
+                conn.Open();
                 try
                 {
-                    conn.Open();
+                    var cmd = new MySqlCommand();
+
+                    switch (StampType)
+                    {
+                        case 1:
+                            cmd = new MySqlCommand($"INSERT INTO Stamps (StampType, Start, Username, ModifiedBy) VALUES(1, '{DateTime.Now.ToString("HH:mm:ss")}', '{PublicEntitys.Encryption(User)}', '{PublicEntitys.Encryption(ModifiedBy)}');", conn);
+                            cmd.ExecuteNonQuery();
+                            cmd = new MySqlCommand($"SELECT Max(Id) FROM Stamps WHERE Username = '{PublicEntitys.Encryption(User)}';", conn);
+                            WorkStampId = (Int32)cmd.ExecuteScalar();
+                            break;
+                        case 2:
+                            cmd = new MySqlCommand($"INSERT INTO Stamps (StampType, Start, WorkStampId, Username, ModifiedBy) " +
+                            $"VALUES(2, '{DateTime.Now.ToString("HH:mm:ss")}', {WorkStampId.ToString()}, '{PublicEntitys.Encryption(User)}', '{PublicEntitys.Encryption(ModifiedBy)}');", conn);
+                            cmd.ExecuteNonQuery();
+                            cmd = new MySqlCommand($"SELECT Max(Id) FROM Stamps WHERE Username = '{PublicEntitys.Encryption(User)}';", conn);
+                            BreakStampId = (Int32)cmd.ExecuteScalar();
+                            cmd.ExecuteNonQuery();
+                            break;
+                        case 3:
+                            cmd = new MySqlCommand($"UPDATE Stamps SET End = '{DateTime.Now.ToString("HH:mm:ss")}' WHERE Id = {BreakStampId}", conn);
+                            cmd.ExecuteNonQuery();
+                            break;
+                        case 4:
+                            cmd = new MySqlCommand($"UPDATE Stamps SET End = '{DateTime.Now.ToString("HH:mm:ss")}' WHERE Id = {WorkStampId}", conn);
+                            cmd.ExecuteNonQuery();
+                            break;
+                    }
+
+                    conn.Close();
+                    return true;
                 }
                 catch
                 {
                     conn.Close();
-                    PublicEntitys.ShowError(1);
+                    PublicEntitys.ShowError(409);
                     return false;
                 }
-
-                var cmd = new MySqlCommand();
-
-                switch (StampType)
-                {
-                    case 1:
-                        cmd = new MySqlCommand($"INSERT INTO Stamps (StampType, Start, Username, ModifiedBy) VALUES(1, '{DateTime.Now.ToString("HH:mm:ss")}', '{PublicEntitys.Encryption(User)}', '{PublicEntitys.Encryption(ModifiedBy)}');", conn);
-                        cmd.ExecuteNonQuery();
-                        cmd = new MySqlCommand($"SELECT Max(Id) FROM Stamps WHERE Username = '{PublicEntitys.Encryption(User)}';", conn);
-                        WorkStampId = (Int32)cmd.ExecuteScalar();
-                        break;
-                    case 2:
-                        cmd = new MySqlCommand($"INSERT INTO Stamps (StampType, Start, WorkStampId, Username, ModifiedBy) " +
-                        $"VALUES(2, '{DateTime.Now.ToString("HH:mm:ss")}', {WorkStampId.ToString()}, '{PublicEntitys.Encryption(User)}', '{PublicEntitys.Encryption(ModifiedBy)}');", conn);
-                        cmd.ExecuteNonQuery();
-                        cmd = new MySqlCommand($"SELECT Max(Id) FROM Stamps WHERE Username = '{PublicEntitys.Encryption(User)}';", conn);
-                        BreakStampId = (Int32)cmd.ExecuteScalar();
-                        cmd.ExecuteNonQuery();
-                        break;
-                    case 3:
-                        cmd = new MySqlCommand($"UPDATE Stamps SET End = '{DateTime.Now.ToString("HH:mm:ss")}' WHERE Id = {BreakStampId}",conn);
-                        cmd.ExecuteNonQuery();
-                        break;
-                    case 4:
-                        cmd = new MySqlCommand($"UPDATE Stamps SET End = '{DateTime.Now.ToString("HH:mm:ss")}' WHERE Id = {WorkStampId}", conn);
-                        cmd.ExecuteNonQuery();
-                        break;
-                }              
-
-                conn.Close();
-                return true;
             }
             catch
             {
                 conn.Close();
-                PublicEntitys.ShowError(1);
+                PublicEntitys.ShowError(400);
                 return false;
             }
         }
 
+        #region DAILY HOURS
         public static List<DailyHours> GetDailyHours(string Username)
         {
             try
             {
                 conn.Open();
-                List<DailyHours> _dailyHours = conn.Query<DailyHours>($"SELECT * FROM DailyHours WHERE Username = '{PublicEntitys.Encryption(Username)}' LIMIT 30").ToList();
-                conn.Close();
-                return _dailyHours;
+                try
+                {
+                    List<DailyHours> _dailyHours = conn.Query<DailyHours>($"SELECT * FROM DailyHours WHERE Username = '{PublicEntitys.Encryption(Username)}' LIMIT 30").ToList(); 
+                    conn.Close();
+                    return _dailyHours;
+                }
+                catch
+                {
+                    PublicEntitys.ShowError(500);
+                    conn.Close();
+                    return null;
+                }
             }
             catch (Exception ex)
             {
                 conn.Close();
                 MessageBox.Show(ex.Message);
-                PublicEntitys.ShowError(1);
+                PublicEntitys.ShowError(400);
                 return null;
             }
-            
-        }
 
-        public static List<MonthlyHours> GetMonthlyHours(string Username)
-        {
-            try
-            {
-                conn.Open();
-                List<MonthlyHours> _monthlyHours = conn.Query<MonthlyHours>($"SELECT * FROM MonthlyHours WHERE Username = '{PublicEntitys.Encryption(Username)}' ORDER BY Year, Month LIMIT 12").ToList();
-                conn.Close();
-                return _monthlyHours;
-            }
-            catch (Exception ex)
-            {
-                conn.Close();
-                PublicEntitys.ShowError(1);
-                MessageBox.Show(ex.Message);
-                return null;
-            }
         }
 
         public static List<DailyHours> GetDailyHoursDetail(string Username, int Id)
@@ -175,14 +166,23 @@ namespace StartStopWork
             try
             {
                 conn.Open();
-                List<DailyHours> _monthlyHours = conn.Query<DailyHours>($"SELECT * FROM DailyHours WHERE Username = '{PublicEntitys.Encryption(Username)}' AND (Id = {Id} OR WorkStampId = {Id}) ORDER BY Date").ToList();
-                conn.Close();
-                return _monthlyHours;
+                try
+                {
+                    List<DailyHours> _monthlyHours = conn.Query<DailyHours>($"SELECT * FROM DailyHours WHERE Username = '{PublicEntitys.Encryption(Username)}' AND (Id = {Id} OR WorkStampId = {Id}) ORDER BY Date").ToList();
+                    conn.Close();
+                    return _monthlyHours;
+                }
+                catch
+                {
+                    PublicEntitys.ShowError(500);
+                    conn.Close();
+                    return null;
+                }
             }
             catch (Exception ex)
             {
                 conn.Close();
-                PublicEntitys.ShowError(1);
+                PublicEntitys.ShowError(400);
                 MessageBox.Show(ex.Message);
                 return null;
             }
@@ -193,20 +193,58 @@ namespace StartStopWork
             try
             {
                 conn.Open();
-                foreach(DailyHours _dailyHours in dailyHours)
+                try
                 {
-                    conn.Execute($"UPDATE Stamps SET Start = '{TimeSpan.FromHours(_dailyHours.Start).ToString()}', End = '{TimeSpan.FromHours(_dailyHours.End).ToString()}', ModifiedBy = '{PublicEntitys.Encryption(username)}' WHERE Id = {_dailyHours.Id.ToString()}");
+                    foreach (DailyHours _dailyHours in dailyHours)
+                    {
+                        conn.Execute($"UPDATE Stamps SET Start = '{TimeSpan.FromHours(_dailyHours.Start).ToString()}', End = '{TimeSpan.FromHours(_dailyHours.End).ToString()}', ModifiedBy = '{PublicEntitys.Encryption(username)}' WHERE Id = {_dailyHours.Id.ToString()}");
+                    }
+                    conn.Close();
+                    return true;
                 }
+                catch
+                {
+                    PublicEntitys.ShowError(409);
+                    conn.Close();
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
                 conn.Close();
-                return true;
+                PublicEntitys.ShowError(400);
+                return false;
+            }
+        }
+        #endregion
+
+        #region
+        public static List<MonthlyHours> GetMonthlyHours(string Username)
+        {
+            try
+            {
+                conn.Open();
+                try
+                {
+                    List<MonthlyHours> _monthlyHours = conn.Query<MonthlyHours>($"SELECT * FROM MonthlyHours WHERE Username = '{PublicEntitys.Encryption(Username)}' ORDER BY Year, Month LIMIT 12").ToList();
+                    conn.Close();
+                    return _monthlyHours;
+                }
+                catch
+                {
+                    PublicEntitys.ShowError(500);
+                    conn.Close();
+                    return null;
+                }
             }
             catch (Exception ex)
             {
                 conn.Close();
                 PublicEntitys.ShowError(1);
                 MessageBox.Show(ex.Message);
-                return false;
+                return null;
             }
         }
+        #endregion
     }
 }

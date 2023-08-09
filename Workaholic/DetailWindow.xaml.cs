@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.ExceptionServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -29,44 +30,69 @@ namespace Workaholic
 
         private void DetailClose_Click(object sender, RoutedEventArgs e)
         {
-            List<DailyHours> dailyHours = new List<DailyHours>();
-            DailyHours _dailyHours = new DailyHours();
-            bool isFirst = true;
-            foreach(object item in DetailGrid.Children)
+            try
             {
-                if (item.GetType().ToString() == "System.Windows.Controls.Label")
+                if(DetailClose.Content == "Save")
                 {
-                    if (isFirst != true)
+                    List<DailyHours> dailyHours = new List<DailyHours>();
+                    DailyHours _dailyHours = new DailyHours();
+                    Regex regex = new Regex(@"\d\d:\d\d");
+                    bool isFirst = true;
+                    bool isCorrectSyntax = true;
+
+                    try
                     {
-                        dailyHours.Add(_dailyHours);
-                        _dailyHours = new DailyHours();
+                        foreach (object item in DetailGrid.Children)
+                        {
+                            if (item.GetType().ToString() == "System.Windows.Controls.Label")
+                            {
+                                if (isFirst != true)
+                                {
+                                    dailyHours.Add(_dailyHours);
+                                    _dailyHours = new DailyHours();
+                                }
+                                Label label = (Label)item;
+                                _dailyHours.Id = Int32.Parse(label.Name.Replace("Id", ""));
+                                isFirst = false;
+                            }
+                            else if (item.GetType().ToString() == "System.Windows.Controls.TextBox")
+                            {
+                                TextBox textbox = (TextBox)item;
+                                TimeSpan timeonly = TimeSpan.Parse(textbox.Text);
+                                if (textbox.Name == "Start")
+                                {
+                                    _dailyHours.Start = (timeonly.TotalMinutes / 60);
+                                }
+                                else if (textbox.Name == "End")
+                                {
+                                    _dailyHours.End = (timeonly.TotalMinutes / 60);
+                                }
+                            }
+                        }
                     }
-                    Label label = (Label)item;
-                    _dailyHours.Id = Int32.Parse(label.Name.Replace("Id", ""));
-                    isFirst = false;
+                    catch
+                    {
+                        PublicEntitys.ShowError(406);
+                        isCorrectSyntax = false;
+                    }
+
+                    dailyHours.Add(_dailyHours);
+                    if (isCorrectSyntax)
+                    {
+                        if (Database.UpdateDailyHoursDetail(PublicEntitys.configuration.AppSettings.Settings["Username"].Value, dailyHours))
+                        {
+                            this.Close();
+                        }
+                    }
                 }
-                else if (item.GetType().ToString() == "System.Windows.Controls.TextBox")
+                else if (DetailClose.Content == "Close")
                 {
-                    TextBox textbox = (TextBox)item;
-                    TimeSpan timeonly = TimeSpan.Parse(textbox.Text);
-                    double time = (timeonly.Hours * 60) + timeonly.Minutes;
-                    if (textbox.Name == "Start")
-                    {
-                        _dailyHours.Start = (time / 60);
-                    }
-                    else if (textbox.Name == "End")
-                    {
-                        _dailyHours.End = (time / 60);
-                    }
+                    this.Close();
                 }
             }
-
-            dailyHours.Add(_dailyHours);
-
-            if (Database.UpdateDailyHoursDetail(PublicEntitys.configuration.AppSettings.Settings["Username"].Value, dailyHours))
+            catch
             {
-
-                this.Close();
+                PublicEntitys.ShowError(306);
             }
         }
 

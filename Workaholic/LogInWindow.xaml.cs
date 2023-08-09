@@ -46,12 +46,12 @@ namespace StartStopWork
                 }
                 else
                 {
-                    PublicEntitys.ShowError(10);
+                    PublicEntitys.ShowError(100);
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                PublicEntitys.ShowError(100);
+                PublicEntitys.ShowError(306);
             }
         }
 

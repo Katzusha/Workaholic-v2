@@ -38,8 +38,11 @@ namespace Workaholic
                     DailyHours _dailyHours = new DailyHours();
                     Regex regex = new Regex(@"\d\d:\d\d");
                     bool isFirst = true;
+                    bool isWork = true;
                     bool isCorrectSyntax = true;
 
+                    double minBreak = 0;
+                    double maxBreak = 0;
                     try
                     {
                         foreach (object item in DetailGrid.Children)
@@ -48,11 +51,32 @@ namespace Workaholic
                             {
                                 if (isFirst != true)
                                 {
-                                    dailyHours.Add(_dailyHours);
-                                    _dailyHours = new DailyHours();
+                                    if (isWork)
+                                    {
+                                        minBreak = _dailyHours.Start;
+                                        maxBreak = _dailyHours.End;
+                                    }
+                                    if (minBreak <= _dailyHours.Start && maxBreak >= _dailyHours.End)
+                                    {
+                                        dailyHours.Add(_dailyHours);
+                                        _dailyHours = new DailyHours();
+                                    }
+                                    else
+                                    {
+                                        throw new Exception("");
+                                    }
                                 }
                                 Label label = (Label)item;
                                 _dailyHours.Id = Int32.Parse(label.Name.Replace("Id", ""));
+                                if (label.Content == "WORK")
+                                {
+                                    isWork = true;
+                                }
+                                else
+                                {
+                                    isWork = false;
+                                }
+
                                 isFirst = false;
                             }
                             else if (item.GetType().ToString() == "System.Windows.Controls.TextBox")
@@ -66,6 +90,10 @@ namespace Workaholic
                                 else if (textbox.Name == "End")
                                 {
                                     _dailyHours.End = (timeonly.TotalMinutes / 60);
+                                    if (_dailyHours.Start > _dailyHours.End)
+                                    {
+                                        throw new Exception("");
+                                    }
                                 }
                             }
                         }

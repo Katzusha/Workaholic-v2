@@ -114,6 +114,7 @@ namespace StartStopWork
                 time.FontSize = 20;
                 double worktime = 0;
                 double breaktime = 0;
+                int Id = 0;
 
                 DailyHistory.ColumnDefinitions.Clear();
                 DailyHistory.Children.Clear();
@@ -172,6 +173,7 @@ namespace StartStopWork
                         bar.StampType = 1;
 
                         bar.Id = _dailyHours.Id;
+                        Id = _dailyHours.Id;
 
                         bar.ToolTip = $"WORK" +
                             $"\nStart: {TimeSpan.FromHours(_dailyHours.Start).ToString(@"hh\:mm")}" +
@@ -201,7 +203,7 @@ namespace StartStopWork
                         bar.WorkHeight = _dailyHours.Duration;
                         bar.StampType = 2;
 
-                        bar.Id = _dailyHours.Id;
+                        bar.Id = Id;
 
                         bar.ToolTip = $"BREAK" +
                             $"\nStart: {TimeSpan.FromHours(_dailyHours.Start).ToString(@"hh\:mm")}" +

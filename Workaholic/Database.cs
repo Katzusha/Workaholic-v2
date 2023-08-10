@@ -62,6 +62,7 @@ namespace StartStopWork
                         configuration.AppSettings.Settings["Surname"].Value = reader.GetString(2);
                         configuration.AppSettings.Settings["Username"].Value = username;
                         configuration.AppSettings.Settings["Password"].Value = password;
+                        configuration.AppSettings.Settings["AuthLevel"].Value = reader.GetString(5);
                         configuration.Save(ConfigurationSaveMode.Full, true);
                         ConfigurationManager.RefreshSection("appSettings");
 
@@ -79,7 +80,7 @@ namespace StartStopWork
             }
         }
 
-        public static bool PostStamp(int StampType, string User, string ModifiedBy)
+        public static bool PostStamp(int StampType, string? Start, string? End, int? PostWorkStampId, string User, string ModifiedBy)
         {
             try
             {
@@ -88,30 +89,52 @@ namespace StartStopWork
                 {
                     var cmd = new MySqlCommand();
 
-                    switch (StampType)
+                    if (Start == null || End == null)
                     {
-                        case 1:
-                            cmd = new MySqlCommand($"INSERT INTO Stamps (StampType, Start, Username, ModifiedBy) VALUES(1, '{DateTime.Now.ToString("HH:mm:ss")}', '{PublicEntitys.Encryption(User)}', '{PublicEntitys.Encryption(ModifiedBy)}');", conn);
-                            cmd.ExecuteNonQuery();
-                            cmd = new MySqlCommand($"SELECT Max(Id) FROM Stamps WHERE Username = '{PublicEntitys.Encryption(User)}';", conn);
-                            WorkStampId = (Int32)cmd.ExecuteScalar();
-                            break;
-                        case 2:
-                            cmd = new MySqlCommand($"INSERT INTO Stamps (StampType, Start, WorkStampId, Username, ModifiedBy) " +
-                            $"VALUES(2, '{DateTime.Now.ToString("HH:mm:ss")}', {WorkStampId.ToString()}, '{PublicEntitys.Encryption(User)}', '{PublicEntitys.Encryption(ModifiedBy)}');", conn);
-                            cmd.ExecuteNonQuery();
-                            cmd = new MySqlCommand($"SELECT Max(Id) FROM Stamps WHERE Username = '{PublicEntitys.Encryption(User)}';", conn);
-                            BreakStampId = (Int32)cmd.ExecuteScalar();
-                            cmd.ExecuteNonQuery();
-                            break;
-                        case 3:
-                            cmd = new MySqlCommand($"UPDATE Stamps SET End = '{DateTime.Now.ToString("HH:mm:ss")}' WHERE Id = {BreakStampId}", conn);
-                            cmd.ExecuteNonQuery();
-                            break;
-                        case 4:
-                            cmd = new MySqlCommand($"UPDATE Stamps SET End = '{DateTime.Now.ToString("HH:mm:ss")}' WHERE Id = {WorkStampId}", conn);
-                            cmd.ExecuteNonQuery();
-                            break;
+                        switch (StampType)
+                        {
+                            case 1:
+                                cmd = new MySqlCommand($"INSERT INTO Stamps (StampType, Start, Username, ModifiedBy) VALUES(1, '{DateTime.Now.ToString("HH:mm:ss")}', '{PublicEntitys.Encryption(User)}', '{PublicEntitys.Encryption(ModifiedBy)}');", conn);
+                                cmd.ExecuteNonQuery();
+                                cmd = new MySqlCommand($"SELECT Max(Id) FROM Stamps WHERE Username = '{PublicEntitys.Encryption(User)}';", conn);
+                                WorkStampId = (Int32)cmd.ExecuteScalar();
+                                break;
+                            case 2:
+                                cmd = new MySqlCommand($"INSERT INTO Stamps (StampType, Start, WorkStampId, Username, ModifiedBy) " +
+                                    $"VALUES(2, '{DateTime.Now.ToString("HH:mm:ss")}', {WorkStampId.ToString()}, '{PublicEntitys.Encryption(User)}', '{PublicEntitys.Encryption(ModifiedBy)}');", conn);
+                                cmd.ExecuteNonQuery();
+                                cmd = new MySqlCommand($"SELECT Max(Id) FROM Stamps WHERE Username = '{PublicEntitys.Encryption(User)}';", conn);
+                                BreakStampId = (Int32)cmd.ExecuteScalar();
+                                cmd.ExecuteNonQuery();
+                                break;
+                            case 3:
+                                cmd = new MySqlCommand($"UPDATE Stamps SET End = '{DateTime.Now.ToString("HH:mm:ss")}' WHERE Id = {BreakStampId}", conn);
+                                cmd.ExecuteNonQuery();
+                                break;
+                            case 4:
+                                cmd = new MySqlCommand($"UPDATE Stamps SET End = '{DateTime.Now.ToString("HH:mm:ss")}' WHERE Id = {WorkStampId}", conn);
+                                cmd.ExecuteNonQuery();
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        switch (StampType)
+                        {
+                            case 2:
+                                cmd = new MySqlCommand($"SELECT CreatedDate FROM Stamps WHERE Id = '{PostWorkStampId.ToString()}';", conn);
+                                DateTime createddate = (DateTime)cmd.ExecuteScalar();
+                                cmd = new MySqlCommand($"INSERT INTO Stamps (StampType, Start, WorkStampId, Username, ModifiedBy, CreatedDate) " +
+                                    $"VALUES(2, '{Start.ToString()}', {PostWorkStampId.ToString()}, '{PublicEntitys.Encryption(User)}', '{PublicEntitys.Encryption(ModifiedBy)}', '{createddate.ToString("yyyy-MM-dd HH:mm:ss")}');", conn);
+                                cmd.ExecuteNonQuery();
+                                cmd = new MySqlCommand($"SELECT Id FROM Stamps WHERE Username = '{PublicEntitys.Encryption(User)}' AND WorkStampId = '{PostWorkStampId.ToString()}' AND Start = '{Start.ToString()}';", conn);
+                                BreakStampId = (Int32)cmd.ExecuteScalar();
+                                break;
+                            case 3:
+                                cmd = new MySqlCommand($"UPDATE Stamps SET End = '{End.ToString()}' WHERE Id = {BreakStampId}", conn);
+                                cmd.ExecuteNonQuery();
+                                break;
+                        }
                     }
 
                     conn.Close();
@@ -192,14 +215,35 @@ namespace StartStopWork
         {
             try
             {
-                conn.Open();
                 try
                 {
                     foreach (DailyHours _dailyHours in dailyHours)
                     {
-                        conn.Execute($"UPDATE Stamps SET Start = '{TimeSpan.FromHours(_dailyHours.Start).ToString()}', End = '{TimeSpan.FromHours(_dailyHours.End).ToString()}', ModifiedBy = '{PublicEntitys.Encryption(username)}' WHERE Id = {_dailyHours.Id.ToString()}");
+                        if (_dailyHours.Id == 0)
+                        {
+                            if (_dailyHours.Start != _dailyHours.End)
+                            {
+                                PostStamp(2, TimeSpan.FromHours(_dailyHours.Start).ToString(@"hh\:mm"), TimeSpan.FromHours(_dailyHours.End).ToString(@"hh\:mm"), Int32.Parse(_dailyHours.Username), username, username);
+
+                                PostStamp(3, TimeSpan.FromHours(_dailyHours.Start).ToString(@"hh\:mm"), TimeSpan.FromHours(_dailyHours.End).ToString(@"hh\:mm"), Int32.Parse(_dailyHours.Username), username, username);
+                            }
+                        }
+                        else
+                        {
+                            if (_dailyHours.Start != _dailyHours.End)
+                            {
+                                conn.Open();
+                                conn.Execute($"UPDATE Stamps SET Start = '{TimeSpan.FromHours(_dailyHours.Start).ToString()}', End = '{TimeSpan.FromHours(_dailyHours.End).ToString()}', ModifiedBy = '{PublicEntitys.Encryption(username)}' WHERE Id = {_dailyHours.Id.ToString()}");
+                                conn.Close();
+                            }
+                            else
+                            {
+                                conn.Open();
+                                conn.Execute($"DELETE FROM Stamps WHERE Id = {_dailyHours.Id.ToString()}");
+                                conn.Close();
+                            }
+                        }
                     }
-                    conn.Close();
                     return true;
                 }
                 catch

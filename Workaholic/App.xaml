@@ -4,6 +4,7 @@
              xmlns:local="clr-namespace:Workaholic"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
+
         <SolidColorBrush x:Key="BackgroundColor"
                          Color="#3e3e4e" />
         <Color x:Key="BackgroundColor1">#3e3e4e</Color>

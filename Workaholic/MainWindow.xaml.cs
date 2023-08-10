@@ -249,7 +249,7 @@ namespace Workaholic
                     WorkTime.Content = (elapsedTime);
                     WorkStopWatch.Stop();
 
-                    Database.PostStamp(1, configuration.AppSettings.Settings["Username"].Value, configuration.AppSettings.Settings["Username"].Value);
+                    Database.PostStamp(1, null, null, null, configuration.AppSettings.Settings["Username"].Value, configuration.AppSettings.Settings["Username"].Value);
 
                     string exualtime = String.Format("{0:00}:{1:00}:{2:00}", ts.Hours, ts.Minutes, ts.Seconds);
                     WorkTime.Content = (exualtime);
@@ -270,7 +270,7 @@ namespace Workaholic
                 {
                     Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
 
-                    if (Database.PostStamp(4, configuration.AppSettings.Settings["Username"].Value, configuration.AppSettings.Settings["Username"].Value))
+                    if (Database.PostStamp(4, null, null, null, configuration.AppSettings.Settings["Username"].Value, configuration.AppSettings.Settings["Username"].Value))
                     {
                         //Animations for buttons background color to transforme it from transparrent to red
                         SolidColorBrush myBrush = new SolidColorBrush();
@@ -312,7 +312,7 @@ namespace Workaholic
                         return;
                     }
 
-                    if (Database.PostStamp(1, configuration.AppSettings.Settings["Username"].Value, configuration.AppSettings.Settings["Username"].Value))
+                    if (Database.PostStamp(1, null, null, null, configuration.AppSettings.Settings["Username"].Value, configuration.AppSettings.Settings["Username"].Value))
                     {
                         //Animations for buttons background color to transforme it from transparrent to red
                         SolidColorBrush myBrush = new SolidColorBrush();
@@ -351,7 +351,7 @@ namespace Workaholic
             {
                 if (isFirstBreakTime)
                 {
-                    if (Database.PostStamp(2, configuration.AppSettings.Settings["Username"].Value, configuration.AppSettings.Settings["Username"].Value))
+                    if (Database.PostStamp(2, null, null, null, configuration.AppSettings.Settings["Username"].Value, configuration.AppSettings.Settings["Username"].Value))
                     {
                         isBreakTime = true;
                         isFirstBreakTime = false;
@@ -366,7 +366,7 @@ namespace Workaholic
                 {
                     if (isBreakTime)
                     {
-                        if (Database.PostStamp(3, configuration.AppSettings.Settings["Username"].Value, configuration.AppSettings.Settings["Username"].Value))
+                        if (Database.PostStamp(3, null, null, null, configuration.AppSettings.Settings["Username"].Value, configuration.AppSettings.Settings["Username"].Value))
                         {
                             BreakStopWatch.Stop();
                             isBreakTime = false;
@@ -376,7 +376,7 @@ namespace Workaholic
                     }
                     else
                     {
-                        if (Database.PostStamp(2, configuration.AppSettings.Settings["Username"].Value, configuration.AppSettings.Settings["Username"].Value))
+                        if (Database.PostStamp(2, null, null, null, configuration.AppSettings.Settings["Username"].Value, configuration.AppSettings.Settings["Username"].Value))
                         {
                             BreakStopWatch.Start();
                             isBreakTime = true;
@@ -407,7 +407,6 @@ namespace Workaholic
             try
             {
                 SettingsWindow settingswindow = new SettingsWindow();
-                settingswindow.Name = "nigger";
 
                 settingswindow.ShowDialog();
 

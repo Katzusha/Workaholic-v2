@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Printing;
 using System.Reflection;
 using System.Reflection.PortableExecutable;
 using System.Security.Cryptography;
@@ -63,7 +64,6 @@ namespace StartStopWork
         #region Variables
         // Variable for the labels under neath the time lines
         private static string[] Months = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dec" };
-        private static Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
         #endregion
 
         public SettingsWindow()
@@ -72,6 +72,9 @@ namespace StartStopWork
 
             try
             {
+
+
+                Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
                 // Open configuration file
                 string btnname = configuration.AppSettings.Settings["Align"].Value;
                 SurnameInput.Text = configuration.AppSettings.Settings["Surname"].Value;
@@ -108,12 +111,14 @@ namespace StartStopWork
             {
                 int column = 0;
                 DateOnly coldate = DateOnly.Parse(DateTime.Now.AddDays(-30).ToString("dd.MM.yyyy"));
+                DateOnly lastdate = DateOnly.Parse(DateTime.Now.AddDays(-30).ToString("MM.dd.yyyy"));
                 Label time = new Label();
                 time.IsHitTestVisible = false;
                 time.VerticalAlignment = VerticalAlignment.Center;
                 time.FontSize = 20;
                 double worktime = 0;
                 double breaktime = 0;
+                bool isFirst = true;
                 int Id = 0;
 
                 DailyHistory.ColumnDefinitions.Clear();
@@ -122,7 +127,7 @@ namespace StartStopWork
                 ColumnDefinition col = new ColumnDefinition();
                 col.Width = new GridLength(80);
                 DailyHistory.ColumnDefinitions.Add(col);
-
+                Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
                 foreach (DailyHours _dailyHours in Database.GetDailyHours(configuration.AppSettings.Settings["Username"].Value))
                 {
                     if (DateOnly.Parse(_dailyHours.Date.ToShortDateString()) == coldate)
@@ -131,7 +136,7 @@ namespace StartStopWork
                     }
                     else
                     {
-                        if (column != 0)
+                        if (isFirst != true)
                         {
                             if ((worktime * 0.0625) < breaktime)
                             {
@@ -157,27 +162,21 @@ namespace StartStopWork
                             worktime = 0;
                             breaktime = 0;
                         }
+                        isFirst = false;
                     }
-
-                    if (_dailyHours.StampType == 1)
+                    while (lastdate < DateOnly.Parse(_dailyHours.Date.ToShortDateString()))
                     {
                         ReadWriteBar bar = new ReadWriteBar();
                         Label date = new Label();
-                        date.Content = _dailyHours.Date.ToString("dd. ") + Months[Int32.Parse(_dailyHours.Date.ToString("MM")) - 1];
+                        date.Content = lastdate.ToString("dd. ") + Months[Int32.Parse(lastdate.ToString("MM")) - 1];
                         date.IsHitTestVisible = true;
 
-                        worktime = worktime + double.Parse(_dailyHours.Duration.ToString());
                         bar.MaxValue = 24;
-                        bar.WorkMargin = _dailyHours.Start;
-                        bar.WorkHeight = _dailyHours.Duration;
+                        bar.WorkMargin = 0;
+                        bar.WorkHeight = 0;
                         bar.StampType = 1;
 
-                        bar.Id = _dailyHours.Id;
-                        Id = _dailyHours.Id;
-
-                        bar.ToolTip = $"WORK" +
-                            $"\nStart: {TimeSpan.FromHours(_dailyHours.Start).ToString(@"hh\:mm")}" +
-                            $"\nEnd: {TimeSpan.FromHours(_dailyHours.End).ToString(@"hh\:mm")}";
+                        bar.Id = 0;
 
                         Grid.SetColumn(bar, column);
                         Grid.SetColumn(date, column);
@@ -186,9 +185,80 @@ namespace StartStopWork
                         DailyHistory.Children.Add(bar);
                         DailyHistory.Children.Add(date);
 
-                        coldate = DateOnly.Parse(_dailyHours.Date.ToShortDateString());
+                        lastdate = lastdate.AddDays(2);
 
                         column++;
+
+                        col = new ColumnDefinition();
+                        col.Width = new GridLength(80);
+                        DailyHistory.ColumnDefinitions.Add(col);
+                    }
+
+                    if (_dailyHours.StampType == 1)
+                    {
+                        if (configuration.AppSettings.Settings["AuthLevel"].Value == "1" || configuration.AppSettings.Settings["AuthLevel"].Value == "2")
+                        {
+                            ReadWriteBar bar = new ReadWriteBar();
+                            Label date = new Label();
+                            date.Content = _dailyHours.Date.ToString("dd. ") + Months[Int32.Parse(_dailyHours.Date.ToString("MM")) - 1];
+                            date.IsHitTestVisible = true;
+
+                            worktime = worktime + double.Parse(_dailyHours.Duration.ToString());
+                            bar.MaxValue = 24;
+                            bar.WorkMargin = _dailyHours.Start;
+                            bar.WorkHeight = _dailyHours.Duration;
+                            bar.StampType = 1;
+
+                            bar.Id = _dailyHours.Id;
+                            Id = _dailyHours.Id;
+
+                            bar.ToolTip = $"WORK" +
+                                $"\nStart: {TimeSpan.FromHours(_dailyHours.Start).ToString(@"hh\:mm")}" +
+                                $"\nEnd: {TimeSpan.FromHours(_dailyHours.End).ToString(@"hh\:mm")}";
+
+                            Grid.SetColumn(bar, column);
+                            Grid.SetColumn(date, column);
+                            Grid.SetRow(date, 1);
+
+                            DailyHistory.Children.Add(bar);
+                            DailyHistory.Children.Add(date);
+
+                            coldate = DateOnly.Parse(_dailyHours.Date.ToShortDateString());
+                            lastdate = DateOnly.Parse(_dailyHours.Date.ToShortDateString()).AddDays(2);
+
+                            column++;
+                        }
+                        else if (configuration.AppSettings.Settings["AuthLevel"].Value == "3")
+                        {
+                            ReadOnlyBar bar = new ReadOnlyBar();
+                            Label date = new Label();
+                            date.Content = _dailyHours.Date.ToString("dd. ") + Months[Int32.Parse(_dailyHours.Date.ToString("MM")) - 1];
+                            date.IsHitTestVisible = true;
+
+                            worktime = worktime + double.Parse(_dailyHours.Duration.ToString());
+                            bar.MaxValue = 24;
+                            bar.WorkMargin = _dailyHours.Start;
+                            bar.WorkHeight = _dailyHours.Duration;
+                            bar.StampType = 1;
+
+                            bar.Id = _dailyHours.Id;
+                            Id = _dailyHours.Id;
+
+                            bar.ToolTip = $"WORK" +
+                                $"\nStart: {TimeSpan.FromHours(_dailyHours.Start).ToString(@"hh\:mm")}" +
+                                $"\nEnd: {TimeSpan.FromHours(_dailyHours.End).ToString(@"hh\:mm")}";
+
+                            Grid.SetColumn(bar, column);
+                            Grid.SetColumn(date, column);
+                            Grid.SetRow(date, 1);
+
+                            DailyHistory.Children.Add(bar);
+                            DailyHistory.Children.Add(date);
+
+                            coldate = DateOnly.Parse(_dailyHours.Date.ToShortDateString());
+
+                            column++;
+                        }
                     }
                     else if (_dailyHours.StampType == 2)
                     {
@@ -217,6 +287,7 @@ namespace StartStopWork
                         DailyHistory.Children.Add(date);
 
                         coldate = DateOnly.Parse(_dailyHours.Date.ToShortDateString());
+                        lastdate = coldate;
 
                         column++;
                     }
@@ -229,9 +300,42 @@ namespace StartStopWork
                 {
                     time.Content = TimeSpan.FromHours(worktime).ToString(@"hh\:mm");
                 }
-
                 Grid.SetColumn(time, column - 1);
-                DailyHistory.Children.Add(time);
+                DailyHistory.Children.Add(time); 
+                col = new ColumnDefinition();
+                col.Width = new GridLength(80);
+                DailyHistory.ColumnDefinitions.Add(col);
+                lastdate = lastdate.AddDays(1);
+
+                while (lastdate < DateOnly.Parse(DateTime.Now.AddDays(1).ToShortDateString()))
+                {
+                    col = new ColumnDefinition();
+                    col.Width = new GridLength(80);
+                    DailyHistory.ColumnDefinitions.Add(col);
+                    ReadWriteBar bar = new ReadWriteBar();
+                    Label date = new Label();
+                    date.Content = lastdate.ToString("dd. ") + Months[Int32.Parse(lastdate.ToString("MM")) - 1];
+                    date.IsHitTestVisible = true;
+
+                    bar.MaxValue = 24;
+                    bar.WorkMargin = 0;
+                    bar.WorkHeight = 0;
+                    bar.StampType = 1;
+
+                    bar.Id = 0;
+                    Id = 0;
+
+                    Grid.SetColumn(bar, column);
+                    Grid.SetColumn(date, column);
+                    Grid.SetRow(date, 1);
+
+                    DailyHistory.Children.Add(bar);
+                    DailyHistory.Children.Add(date);
+
+                    lastdate = lastdate.AddDays(1);
+
+                    column++;
+                }
             }
             catch 
             {

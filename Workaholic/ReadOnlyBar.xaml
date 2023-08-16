@@ -28,7 +28,7 @@
           x:Name="BarSize"
           Style="{DynamicResource ReadOnly}">
         <Border x:Name="Work"
-                Background="{DynamicResource BorderColor}"
+                Background="{DynamicResource PrimaryBrush}"
                 CornerRadius="5"
                 VerticalAlignment="Bottom"
                 Margin="{Binding WorkMargin}"
@@ -39,15 +39,15 @@
                    HorizontalAlignment="Center"
                    Text="{Binding MaxValue}"
                    FontSize="20"
-                   Foreground="{DynamicResource BorderColor}"
+                   Foreground="{DynamicResource PrimaryBrush}"
                    FontWeight="Bold" />
 
-        <Border BorderBrush="{DynamicResource ForegroundColor}"
+        <Border BorderBrush="{DynamicResource ForegroundBrush}"
                 Opacity="0.2"
                 CornerRadius="5"
                 BorderThickness="0, 1, 0, 1" />
 
-        <Border Background="{DynamicResource ForegroundColor}"
+        <Border Background="{DynamicResource ForegroundBrush}"
                 Height="1"
                 Opacity="0.2" />
 
@@ -57,11 +57,11 @@
                 <RowDefinition />
             </Grid.RowDefinitions>
 
-            <Border Background="{DynamicResource ForegroundColor}"
+            <Border Background="{DynamicResource ForegroundBrush}"
                     Height="1"
                     Opacity="0.2"
                     Grid.Row="0" />
-            <Border Background="{DynamicResource ForegroundColor}"
+            <Border Background="{DynamicResource ForegroundBrush}"
                     Height="1"
                     Opacity="0.2"
                     Grid.Row="1" />
@@ -79,19 +79,19 @@
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
 
-            <Border Background="{DynamicResource ForegroundColor}"
+            <Border Background="{DynamicResource ForegroundBrush}"
                     Height="1"
                     Opacity="0.2"
                     Grid.Row="0" />
-            <Border Background="{DynamicResource ForegroundColor}"
+            <Border Background="{DynamicResource ForegroundBrush}"
                     Height="1"
                     Opacity="0.2"
                     Grid.Row="1" />
-            <Border Background="{DynamicResource ForegroundColor}"
+            <Border Background="{DynamicResource ForegroundBrush}"
                     Height="1"
                     Opacity="0.2"
                     Grid.Row="2" />
-            <Border Background="{DynamicResource ForegroundColor}"
+            <Border Background="{DynamicResource ForegroundBrush}"
                     Height="1"
                     Opacity="0.2"
                     Grid.Row="3" />

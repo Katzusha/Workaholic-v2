@@ -29,7 +29,7 @@
             <Setter Property="Cursor"
                     Value="Hand" />
             <Setter Property="Foreground"
-                    Value="{DynamicResource ForegroundColor}" />
+                    Value="{DynamicResource ForegroundBrush}" />
             <Setter Property="FontSize"
                     Value="24px" />
             <Setter Property="HorizontalContentAlignment"
@@ -62,13 +62,13 @@
             <Setter Property="HorizontalContentAlignment"
                     Value="Center" />
             <Setter Property="Background"
-                    Value="{DynamicResource BackgroundColor}" />
+                    Value="{DynamicResource BackgroundBrush}" />
             <Setter Property="Margin"
                     Value="0, 0, 0, 0" />
             <Setter Property="Cursor"
                     Value="Hand" />
             <Setter Property="Foreground"
-                    Value="{DynamicResource ForegroundColor}" />
+                    Value="{DynamicResource ForegroundBrush}" />
             <Setter Property="FontSize"
                     Value="24px" />
             <Setter Property="HorizontalContentAlignment"
@@ -123,7 +123,7 @@
             <Setter Property="VerticalAlignment"
                     Value="Top" />
             <Setter Property="Foreground"
-                    Value="{DynamicResource ForegroundColor}" />
+                    Value="{DynamicResource ForegroundBrush}" />
             <Setter Property="Height"
                     Value="25" />
             <Setter Property="Template">
@@ -133,7 +133,7 @@
                                 CornerRadius="5"
                                 Padding="0">
                             <Border.Background>
-                                <SolidColorBrush Color="{DynamicResource BackgroundColor1}" />
+                                <SolidColorBrush Color="{DynamicResource BackgroundColor}" />
                             </Border.Background>
                             <Border.BorderBrush>
                                 <SolidColorBrush Color="Transparent" />
@@ -149,12 +149,12 @@
             </Setter>
         </Style>
     </Window.Resources>
-    <Border Background="{DynamicResource BackgroundColor}"
+    <Border Background="{DynamicResource BackgroundBrush}"
             CornerRadius="5"
             BorderThickness="1"
-            BorderBrush="{DynamicResource BorderColor}">
+            BorderBrush="{DynamicResource PrimaryBrush}">
         <Grid>
-            <Border Background="{DynamicResource PlateColor}"
+            <Border Background="{DynamicResource PlateBrush}"
                     CornerRadius="5"
                     Margin="2.5">
                 <Grid>

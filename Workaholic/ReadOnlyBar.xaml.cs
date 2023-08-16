@@ -45,13 +45,17 @@ namespace Workaholic
             set
             {
                 _StampType = value;
-                if (_StampType == 1)
+                switch(_StampType)
                 {
-                    Work.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(FindResource("BorderColor").ToString()));
-                }
-                else if (_StampType == 2)
-                {
-                    Work.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(FindResource("BreakColor").ToString()));
+                    case 0:
+                        Work.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(FindResource("AbsenceBrush").ToString()));
+                        break;
+                    case 1:
+                        Work.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(FindResource("WorkBrush").ToString()));
+                        break;
+                    case 2:
+                        Work.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(FindResource("BreakBrush").ToString()));
+                        break;
                 }
             }
         }

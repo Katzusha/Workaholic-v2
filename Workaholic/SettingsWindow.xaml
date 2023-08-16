@@ -11,15 +11,15 @@
         AllowsTransparency="True"
         Background="Transparent"
         ResizeMode="CanResizeWithGrip"
-        Height="560"
-        Width="1030"
+        Height="1080"
+        Width="1920"
         MinHeight="560"
         MinWidth="1030"
         WindowStartupLocation="CenterScreen">
     <Window.Resources>
 
     </Window.Resources>
-    <Border Background="{DynamicResource BackgroundColor}"
+    <Border Background="{DynamicResource BackgroundBrush}"
             CornerRadius="5, 5, 5, 5"
             MouseDown="Grid_MouseDown">
         <Grid>
@@ -44,12 +44,12 @@
                     <RowDefinition Height="2*" />
                 </Grid.RowDefinitions>
 
-                <Border Background="{DynamicResource PlateColor}"
+                <Border Background="{DynamicResource PlateBrush}"
                         Margin="5,15,5,5"
                         CornerRadius="5">
                     <Grid>
                         <Label Content="Position :"
-                               Foreground="{DynamicResource ForegroundColor}"
+                               Foreground="{DynamicResource ForegroundBrush}"
                                FontSize="12"
                                VerticalAlignment="Top"
                                Margin="0,-20,0,0"
@@ -70,72 +70,54 @@
                             </Grid.ColumnDefinitions>
 
                             <Button Click="Align_Click"
-                                    MouseEnter="Align_MouseEnter"
-                                    MouseLeave="Align_MouseLeave"
                                     x:Name="AlignTopLeft"
                                     Style="{DynamicResource GridButton}"
                                     Margin="5, 5, 2, 2"
                                     Grid.Column="0"
                                     Grid.Row="0" />
                             <Button Click="Align_Click"
-                                    MouseEnter="Align_MouseEnter"
-                                    MouseLeave="Align_MouseLeave"
                                     x:Name="AlignTopRight"
                                     Style="{DynamicResource GridButton}"
                                     Margin="2, 5, 5, 2"
                                     Grid.Column="2"
                                     Grid.Row="0" />
                             <Button Click="Align_Click"
-                                    MouseEnter="Align_MouseEnter"
-                                    MouseLeave="Align_MouseLeave"
                                     x:Name="AlignMiddleLeft"
                                     Style="{DynamicResource GridButton}"
                                     Margin="5, 2, 2, 2"
                                     Grid.Column="0"
                                     Grid.Row="1" />
                             <Button Click="Align_Click"
-                                    MouseEnter="Align_MouseEnter"
-                                    MouseLeave="Align_MouseLeave"
                                     x:Name="AlignTopMiddle"
                                     Style="{DynamicResource GridButton}"
                                     Margin="2, 5, 2, 2"
                                     Grid.Column="1"
                                     Grid.Row="0" />
                             <Button Click="Align_Click"
-                                    MouseEnter="Align_MouseEnter"
-                                    MouseLeave="Align_MouseLeave"
                                     x:Name="AlignMiddleMiddle"
                                     Style="{DynamicResource GridButton}"
                                     Margin="2, 2, 2, 2"
                                     Grid.Column="1"
                                     Grid.Row="1" />
                             <Button Click="Align_Click"
-                                    MouseEnter="Align_MouseEnter"
-                                    MouseLeave="Align_MouseLeave"
                                     x:Name="AlignMiddleRight"
                                     Style="{DynamicResource GridButton}"
                                     Margin="2, 2, 5, 2"
                                     Grid.Column="2"
                                     Grid.Row="1" />
                             <Button Click="Align_Click"
-                                    MouseEnter="Align_MouseEnter"
-                                    MouseLeave="Align_MouseLeave"
                                     x:Name="AlignBottomLeft"
                                     Style="{DynamicResource GridButton}"
                                     Margin="5, 2, 2, 5"
                                     Grid.Column="0"
                                     Grid.Row="2" />
                             <Button Click="Align_Click"
-                                    MouseEnter="Align_MouseEnter"
-                                    MouseLeave="Align_MouseLeave"
                                     x:Name="AlignBottomMiddle"
                                     Style="{DynamicResource GridButton}"
                                     Margin="2, 2, 2, 5"
                                     Grid.Column="1"
                                     Grid.Row="2" />
                             <Button Click="Align_Click"
-                                    MouseEnter="Align_MouseEnter"
-                                    MouseLeave="Align_MouseLeave"
                                     x:Name="AlignBottomRight"
                                     Style="{DynamicResource GridButton}"
                                     Margin="2, 2, 5, 5"
@@ -145,7 +127,7 @@
                     </Grid>
                 </Border>
 
-                <Border Background="{DynamicResource PlateColor}"
+                <Border Background="{DynamicResource PlateBrush}"
                         Grid.Column="1"
                         Margin="5"
                         CornerRadius="5">
@@ -208,7 +190,7 @@
                     </ScrollViewer>
                 </Border>
 
-                <Border Background="{DynamicResource PlateColor}"
+                <Border Background="{DynamicResource PlateBrush}"
                         Margin="5,5,5,5"
                         CornerRadius="5"
                         Grid.RowSpan="2"
@@ -221,7 +203,7 @@
                             <RowDefinition Height="50" />
                         </Grid.RowDefinitions>
 
-                        <Border Background="{DynamicResource BackgroundColor}"
+                        <Border Background="{DynamicResource BackgroundBrush}"
                                 Height="250"
                                 Width="250"
                                 CornerRadius="125">
@@ -237,7 +219,7 @@
 
                         <Grid Height="200"
                               Grid.Row="1">
-                            <Border Background="{DynamicResource BackgroundColor}"
+                            <Border Background="{DynamicResource BackgroundBrush}"
                                     Height="25"
                                     CornerRadius="5"
                                     Margin="10, -90, 10, 0" />
@@ -247,13 +229,13 @@
                                      Style="{DynamicResource TextBoxInput}"
                                      Margin="150, -90, 10, 0" />
                             <Label Content="Firstname: "
-                                   Foreground="{DynamicResource ForegroundColor}"
+                                   Foreground="{DynamicResource ForegroundBrush}"
                                    FontSize="12"
                                    Height="25"
                                    HorizontalAlignment="Left"
                                    Margin="10, -90, 0, 0" />
 
-                            <Border Background="{DynamicResource BackgroundColor}"
+                            <Border Background="{DynamicResource BackgroundBrush}"
                                     Height="25"
                                     CornerRadius="5"
                                     Margin="10, -30, 10, 0" />
@@ -263,13 +245,13 @@
                                      Style="{DynamicResource TextBoxInput}"
                                      Margin="150, -30, 10, 0" />
                             <Label Content="Surname :"
-                                   Foreground="{DynamicResource ForegroundColor}"
+                                   Foreground="{DynamicResource ForegroundBrush}"
                                    FontSize="12"
                                    Height="25"
                                    HorizontalAlignment="Left"
                                    Margin="10, -30, 0, 0" />
 
-                            <Border Background="{DynamicResource BackgroundColor}"
+                            <Border Background="{DynamicResource BackgroundBrush}"
                                     Height="25"
                                     CornerRadius="5"
                                     Margin="10, 0, 10, -30" />
@@ -279,13 +261,13 @@
                                      Style="{DynamicResource TextBoxInput}"
                                      Margin="150, 0, 10, -30" />
                             <Label Content="Username :"
-                                   Foreground="{DynamicResource ForegroundColor}"
+                                   Foreground="{DynamicResource ForegroundBrush}"
                                    FontSize="12"
                                    Height="25"
                                    HorizontalAlignment="Left"
                                    Margin="10, 0, 5, -30" />
 
-                            <Border Background="{DynamicResource BackgroundColor}"
+                            <Border Background="{DynamicResource BackgroundBrush}"
                                     Height="25"
                                     CornerRadius="5"
                                     Margin="10, 0, 10, -90" />
@@ -295,7 +277,7 @@
                                      Style="{DynamicResource TextBoxInput}"
                                      Margin="150, 0, 10, -90" />
                             <Label Content="Password :"
-                                   Foreground="{DynamicResource ForegroundColor}"
+                                   Foreground="{DynamicResource ForegroundBrush}"
                                    FontSize="12"
                                    Height="25"
                                    HorizontalAlignment="Left"
@@ -312,7 +294,7 @@
                     </Grid>
                 </Border>
 
-                <Border Background="{DynamicResource PlateColor}"
+                <Border Background="{DynamicResource PlateBrush}"
                         Grid.Row="1"
                         Grid.ColumnSpan="2"
                         Margin="5,5,5,5"
@@ -393,11 +375,11 @@
 
             <Border Visibility="Hidden">
                 <Border.Background>
-                    <SolidColorBrush Color="{DynamicResource BackgroundColor1}"
+                    <SolidColorBrush Color="{DynamicResource BackgroundColor}"
                                      Opacity="0.5" />
                 </Border.Background>
-                <Border Background="{DynamicResource PlateColor}"
-                        BorderBrush="{DynamicResource BorderColor}"
+                <Border Background="{DynamicResource PlateBrush}"
+                        BorderBrush="{DynamicResource PrimaryBrush}"
                         BorderThickness="2"
                         CornerRadius="5"
                         Height="500"

@@ -22,8 +22,8 @@
     <Grid Background="Transparent"
           Visibility="Visible">
         <Border x:Name="Border"
-                Background="{DynamicResource BackgroundColor}"
-                BorderBrush="{DynamicResource RedColor}"
+                Background="{DynamicResource BackgroundBrush}"
+                BorderBrush="{DynamicResource RedBrush}"
                 BorderThickness="2"
                 CornerRadius="5">
 
@@ -35,7 +35,7 @@
                          Text="error description"
                          Background="{x:Null}"
                          BorderBrush="{x:Null}"
-                         Foreground="{DynamicResource ForegroundColor}"
+                         Foreground="{DynamicResource ForegroundBrush}"
                          SelectionBrush="{x:Null}"
                          SelectionTextBrush="{x:Null}"
                          Margin="10,90,10,70"
@@ -65,7 +65,7 @@
                             <Setter Property="AllowDrop"
                                     Value="true" />
                             <Setter Property="Foreground"
-                                    Value="{DynamicResource ForegroundColor}" />
+                                    Value="{DynamicResource ForegroundBrush}" />
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate TargetType="{x:Type TextBox}">
@@ -104,7 +104,7 @@
                 <Label x:Name="ErrorHeader"
                        Content="!ERROR!"
                        FontSize="48px"
-                       Foreground="{DynamicResource RedColor}"
+                       Foreground="{DynamicResource RedBrush}"
                        FontWeight="ExtraBold"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Top"

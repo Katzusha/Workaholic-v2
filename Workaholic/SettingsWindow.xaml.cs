@@ -35,29 +35,7 @@ namespace StartStopWork
         // Animations for the non global buttons
         #region Animations
         // Animation for the buttons Enter() event for the align placement of the main window
-        private void Align_MouseEnter(object sender, MouseEventArgs e)
-        {
-            //Animations for buttons background color to transforme it from transparrent to red
-            SolidColorBrush myBrush = new SolidColorBrush();
-            ColorAnimation myColorAnimation = new ColorAnimation();
-            myColorAnimation.From = Color.FromArgb(255, 62, 62, 78);
-            myColorAnimation.To = Color.FromArgb(255, 95, 95, 115);
-            myColorAnimation.Duration = new Duration(TimeSpan.FromSeconds(0.2));
-            myBrush.BeginAnimation(SolidColorBrush.ColorProperty, myColorAnimation);
-            ((Button)sender).Background = myBrush;
-        }
-        // Animation for the buttons Leave() event for the align placement of the main window
-        private void Align_MouseLeave(object sender, MouseEventArgs e)
-        {
-            //Animations for buttons background color to transforme it from transparrent to red
-            SolidColorBrush myBrush = new SolidColorBrush();
-            ColorAnimation myColorAnimation = new ColorAnimation();
-            myColorAnimation.From = Color.FromArgb(255, 95, 95, 115);
-            myColorAnimation.To = Color.FromArgb(255, 62, 62, 78);
-            myColorAnimation.Duration = new Duration(TimeSpan.FromSeconds(0.2));
-            myBrush.BeginAnimation(SolidColorBrush.ColorProperty, myColorAnimation);
-            ((Button)sender).Background = myBrush;
-        }
+        
         #endregion
 
         // Variables
@@ -90,7 +68,7 @@ namespace StartStopWork
                         SolidColorBrush myBrush = new SolidColorBrush();
                         ColorAnimation myColorAnimation = new ColorAnimation();
                         myColorAnimation.From = Color.FromArgb(0, 86, 86, 255);
-                        myColorAnimation.To = (Color)ColorConverter.ConvertFromString(FindResource("BorderColor").ToString());
+                        myColorAnimation.To = (Color)ColorConverter.ConvertFromString(FindResource("PrimaryColor").ToString());
                         myColorAnimation.Duration = new Duration(TimeSpan.FromSeconds(1));
                         myBrush.BeginAnimation(SolidColorBrush.ColorProperty, myColorAnimation);
                         button.BorderBrush = myBrush;
@@ -169,7 +147,7 @@ namespace StartStopWork
                             bar.MaxValue = 24;
                             bar.WorkMargin = 0;
                             bar.WorkHeight = 0;
-                            bar.StampType = 1;
+                            bar.StampType = 0;
 
                             bar.Id = 0;
 
@@ -314,7 +292,7 @@ namespace StartStopWork
                     bar.MaxValue = 24;
                     bar.WorkMargin = 0;
                     bar.WorkHeight = 0;
-                    bar.StampType = 1;
+                    bar.StampType = 0;
 
                     bar.Id = 0;
                     Id = 0;

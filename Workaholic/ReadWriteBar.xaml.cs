@@ -56,6 +56,9 @@ namespace Workaholic
                     case 2:
                         Work.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(FindResource("BreakBrush").ToString()));
                         break;
+                    case 3:
+                        Work.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(FindResource("PrimaryBrush").ToString()));
+                        break;
                 }
             }
         }

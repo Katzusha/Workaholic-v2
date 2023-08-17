@@ -27,6 +27,8 @@
                          Color="#b27548" />
         <SolidColorBrush x:Key="AbsenceBrush"
                          Color="#c4604e" />
+        <SolidColorBrush x:Key="FreeBrush"
+                         Color="#5656ff" />
 
         <Style TargetType="{x:Type ContextMenu}">
             <Setter Property="SnapsToDevicePixels"

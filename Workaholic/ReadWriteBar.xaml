@@ -35,7 +35,8 @@
                 Margin="{Binding WorkMargin}"
                 Height="{Binding WorkHeight}" />
 
-        <TextBlock VerticalAlignment="Top"
+        <TextBlock x:Name="MaxValueLabel" 
+                   VerticalAlignment="Top"
                    Margin="-30"
                    HorizontalAlignment="Center"
                    Text="{Binding MaxValue}"

@@ -35,8 +35,8 @@ namespace Workaholic
             //Animations for buttons background color to transforme it from transparrent to red
             SolidColorBrush myBrush = new SolidColorBrush();
             ColorAnimation myColorAnimation = new ColorAnimation();
-            myColorAnimation.From = (Color)ColorConverter.ConvertFromString(FindResource("BackgroundColor").ToString());
-            myColorAnimation.To = (Color)ColorConverter.ConvertFromString(FindResource("GreenColor").ToString());
+            myColorAnimation.From = (Color)ColorConverter.ConvertFromString(FindResource("BackgroundBrush").ToString());
+            myColorAnimation.To = (Color)ColorConverter.ConvertFromString(FindResource("GreenBrush").ToString());
             myColorAnimation.Duration = new Duration(TimeSpan.FromSeconds(0.2));
             myBrush.BeginAnimation(SolidColorBrush.ColorProperty, myColorAnimation);
             button.Background = myBrush;
@@ -48,8 +48,8 @@ namespace Workaholic
             //Animations for buttons background color to transforme it from transparrent to red
             SolidColorBrush myBrush = new SolidColorBrush();
             ColorAnimation myColorAnimation = new ColorAnimation();
-            myColorAnimation.From = (Color)ColorConverter.ConvertFromString(FindResource("GreenColor").ToString());
-            myColorAnimation.To = (Color)ColorConverter.ConvertFromString(FindResource("BackgroundColor").ToString());
+            myColorAnimation.From = (Color)ColorConverter.ConvertFromString(FindResource("GreenBrush").ToString());
+            myColorAnimation.To = (Color)ColorConverter.ConvertFromString(FindResource("BackgroundBrush").ToString());
             myColorAnimation.Duration = new Duration(TimeSpan.FromSeconds(0.2));
             myBrush.BeginAnimation(SolidColorBrush.ColorProperty, myColorAnimation);
             button.Background = myBrush;
@@ -62,8 +62,8 @@ namespace Workaholic
             //Animations for buttons background color to transforme it from transparrent to red
             SolidColorBrush myBrush = new SolidColorBrush();
             ColorAnimation myColorAnimation = new ColorAnimation();
-            myColorAnimation.From = (Color)ColorConverter.ConvertFromString(FindResource("PlateColor").ToString());
-            myColorAnimation.To = (Color)ColorConverter.ConvertFromString(FindResource("BackgroundColor").ToString());
+            myColorAnimation.From = (Color)ColorConverter.ConvertFromString(FindResource("PlateBrush").ToString());
+            myColorAnimation.To = (Color)ColorConverter.ConvertFromString(FindResource("BackgroundBrush").ToString());
             myColorAnimation.Duration = new Duration(TimeSpan.FromSeconds(0.2));
             myBrush.BeginAnimation(SolidColorBrush.ColorProperty, myColorAnimation);
             button.Background = myBrush;
@@ -75,8 +75,8 @@ namespace Workaholic
             //Animations for buttons background color to transforme it from transparrent to red
             SolidColorBrush myBrush = new SolidColorBrush();
             ColorAnimation myColorAnimation = new ColorAnimation();
-            myColorAnimation.From = (Color)ColorConverter.ConvertFromString(FindResource("BackgroundColor").ToString());
-            myColorAnimation.To = (Color)ColorConverter.ConvertFromString(FindResource("PlateColor").ToString());
+            myColorAnimation.From = (Color)ColorConverter.ConvertFromString(FindResource("BackgroundBrush").ToString());
+            myColorAnimation.To = (Color)ColorConverter.ConvertFromString(FindResource("PlateBrush").ToString());
             myColorAnimation.Duration = new Duration(TimeSpan.FromSeconds(0.2));
             myBrush.BeginAnimation(SolidColorBrush.ColorProperty, myColorAnimation);
             button.Background = myBrush;

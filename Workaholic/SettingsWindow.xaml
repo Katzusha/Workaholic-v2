@@ -11,8 +11,8 @@
         AllowsTransparency="True"
         Background="Transparent"
         ResizeMode="CanResizeWithGrip"
-        Height="1080"
-        Width="1920"
+        Height="560"
+        Width="1030"
         MinHeight="560"
         MinWidth="1030"
         WindowStartupLocation="CenterScreen">

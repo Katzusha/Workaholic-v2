@@ -163,7 +163,7 @@ namespace StartStopWork
                 conn.Open();
                 try
                 {
-                    List<DailyHours> _dailyHours = conn.Query<DailyHours>($"SELECT * FROM DailyHours WHERE Username = '{PublicEntitys.Encryption(Username)}' LIMIT 30").ToList(); 
+                    List<DailyHours> _dailyHours = conn.Query<DailyHours>($"SELECT * FROM DailyHours WHERE Username = '{PublicEntitys.Encryption(Username)}'").ToList(); 
                     conn.Close();
                     return _dailyHours;
                 }
@@ -270,7 +270,7 @@ namespace StartStopWork
                 conn.Open();
                 try
                 {
-                    List<MonthlyHours> _monthlyHours = conn.Query<MonthlyHours>($"SELECT * FROM MonthlyHours WHERE Username = '{PublicEntitys.Encryption(Username)}' ORDER BY Year, Month LIMIT 12").ToList();
+                    List<MonthlyHours> _monthlyHours = conn.Query<MonthlyHours>($"SELECT * FROM MonthlyHours WHERE Username = '{PublicEntitys.Encryption(Username)}'").ToList();
                     conn.Close();
                     return _monthlyHours;
                 }

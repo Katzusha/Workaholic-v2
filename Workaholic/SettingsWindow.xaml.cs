@@ -67,8 +67,8 @@ namespace StartStopWork
                         //Animations for buttons background color to transforme it from transparrent to red
                         SolidColorBrush myBrush = new SolidColorBrush();
                         ColorAnimation myColorAnimation = new ColorAnimation();
-                        myColorAnimation.From = Color.FromArgb(0, 86, 86, 255);
-                        myColorAnimation.To = (Color)ColorConverter.ConvertFromString(FindResource("PrimaryColor").ToString());
+                        myColorAnimation.From = (Color)ColorConverter.ConvertFromString(FindResource("PlateBrush").ToString());
+                        myColorAnimation.To = (Color)ColorConverter.ConvertFromString(FindResource("PrimaryBrush").ToString());
                         myColorAnimation.Duration = new Duration(TimeSpan.FromSeconds(1));
                         myBrush.BeginAnimation(SolidColorBrush.ColorProperty, myColorAnimation);
                         button.BorderBrush = myBrush;
@@ -87,34 +87,26 @@ namespace StartStopWork
         {
             try
             {
-                int column = 0;
-                DateOnly coldate = DateOnly.Parse(DateTime.Now.ToString("yyyy-MM-dd"));
-                Label time = new Label();
-                time.IsHitTestVisible = false;
-                time.VerticalAlignment = VerticalAlignment.Center;
-                time.FontSize = 20;
-                double worktime = 0;
-                double breaktime = 0;
-                int Id = 0;
-                bool isFirst = false;
-
                 DailyHistory.ColumnDefinitions.Clear();
                 DailyHistory.Children.Clear();
-
-                //ColumnDefinition col = new ColumnDefinition();
-                //col.Width = new GridLength(80);
-                //DailyHistory.ColumnDefinitions.Add(col);
                 Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
 
                 List<DailyHours> DailyHoursList = Database.GetDailyHours(configuration.AppSettings.Settings["Username"].Value);
 
                 int x = 0;
                 int col = 0;
-                for(DateOnly lastdate = DateOnly.Parse(DateTime.Now.AddDays(-30).ToString("yyyy-MM-dd")); lastdate <= DateOnly.Parse(DateTime.Now.ToString("yyyy-MM-dd")); lastdate = lastdate.AddDays(1))
+                for (DateOnly lastdate = DateOnly.Parse(DateTime.Now.AddDays(-45).ToString("yyyy-MM-dd")); lastdate <= DateOnly.Parse(DateTime.Now.ToString("yyyy-MM-dd")); lastdate = lastdate.AddDays(1))
                 {
                     ColumnDefinition _columnDefinition = new ColumnDefinition();
                     _columnDefinition.Width = new GridLength(80);
                     DailyHistory.ColumnDefinitions.Add(_columnDefinition);
+                    Label _date = new Label();
+                    _date.HorizontalContentAlignment = HorizontalAlignment.Center;
+                    _date.Content = $"{lastdate.ToString("dddd")}" +
+                        $"\n{lastdate.Day.ToString()}. {Months[lastdate.Month - 1]}";
+                    Grid.SetRow(_date, 1);
+                    Grid.SetColumn(_date, col);
+                    DailyHistory.Children.Add(_date);
 
                     List<DailyHours> _dailyHoursList = DailyHoursList.FindAll(x => DateOnly.Parse(x.Date.ToString("yyyy-MM-dd")) == lastdate);
 
@@ -130,7 +122,7 @@ namespace StartStopWork
                                 _readOnlyBar.MaxValue = 24;
                                 _readOnlyBar.StampType = 3;
                                 _readOnlyBar.ToolTip = $"{lastdate.ToString("dddd")}" +
-                                    $"\nFree day";
+                                    $"\nWeekend";
                                 Grid.SetColumn(_readOnlyBar, col);
                                 DailyHistory.Children.Add(_readOnlyBar);
                             }
@@ -145,21 +137,17 @@ namespace StartStopWork
                                 _readWriteBar.WorkHeight = _dailyHours.Duration;
                                 _readWriteBar.MaxValue = 24;
                                 _readWriteBar.StampType = _dailyHours.StampType;
-                                
+
                                 switch (_dailyHours.StampType)
                                 {
                                     case 1:
-                                        _readWriteBar.ToolTip = $"{lastdate.ToString("dddd")}" +
-                                            $"\n" +
-                                            $"\nWORK" +
+                                        _readWriteBar.ToolTip = $"{lastdate.ToString("dddd")} - WORK" +
                                             $"\nStart: {TimeSpan.FromHours(_dailyHours.Start).ToString(@"hh\:mm")}" +
                                             $"\nEnd: {TimeSpan.FromHours(_dailyHours.End).ToString(@"hh\:mm")}";
                                         CombineWorkDuration = CombineWorkDuration + _dailyHours.Duration;
                                         break;
                                     case 2:
-                                        _readWriteBar.ToolTip = $"{lastdate.ToString("dddd")}" +
-                                            $"\n" +
-                                            $"\nBREAK" +
+                                        _readWriteBar.ToolTip = $"{lastdate.ToString("dddd")} - BREAK" +
                                             $"\nStart: {TimeSpan.FromHours(_dailyHours.Start).ToString(@"hh\:mm")}" +
                                             $"\nEnd: {TimeSpan.FromHours(_dailyHours.End).ToString(@"hh\:mm")}";
                                         CombineBreakDuration = CombineBreakDuration + _dailyHours.Duration;
@@ -173,7 +161,8 @@ namespace StartStopWork
                             Label _time = new Label();
                             _time.VerticalAlignment = VerticalAlignment.Center;
                             _time.FontSize = 20;
-                            
+                            _time.IsHitTestVisible = false;
+
                             if ((CombineWorkDuration * 0.0625) < CombineBreakDuration)
                             {
                                 _time.Content = TimeSpan.FromHours(CombineWorkDuration - (CombineBreakDuration - (CombineWorkDuration * 0.0625))).ToString(@"hh\:mm");
@@ -203,7 +192,7 @@ namespace StartStopWork
                         {
                             _readWriteBar.StampType = 3;
                             _readWriteBar.ToolTip = $"{lastdate.ToString("dddd")}" +
-                                $"\nDay off";
+                                $"\nWeekend";
 
                             Grid.SetColumn(_readWriteBar, col);
                             DailyHistory.Children.Add(_readWriteBar);
@@ -226,12 +215,6 @@ namespace StartStopWork
                         }
                     }
 
-                    Label _date = new Label();
-                    _date.Content = $"{lastdate.Day.ToString()}. {Months[lastdate.Month - 1]}";
-                    Grid.SetRow(_date, 1);
-                    Grid.SetColumn(_date, col);
-                    DailyHistory.Children.Add(_date);
-
                     col++;
                 }
             }
@@ -242,154 +225,127 @@ namespace StartStopWork
 
             try
             {
-                int column = 0;
-                int coldate = 0;
-
-                Label time = new Label();
-                time.VerticalAlignment = VerticalAlignment.Center;
-                time.FontSize = 20;
-                double worktime = 0;
-                double breaktime = 0;
-
                 MonthlyHistory.ColumnDefinitions.Clear();
                 MonthlyHistory.Children.Clear();
+                Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
 
-                foreach (MonthlyHours _monthlyHours in Database.GetMonthlyHours(MainWindow.configuration.AppSettings.Settings["Username"].Value))
+                List<MonthlyHours> MonthlyHoursList = Database.GetMonthlyHours(configuration.AppSettings.Settings["Username"].Value);
+
+                int x = 0;
+                int col = 0;
+                for (DateOnly lastdate = DateOnly.Parse(DateTime.Now.AddMonths(-24).ToString("yyyy-MM-dd")); lastdate.ToString("yyyy-MM") != DateTime.Now.AddMonths(1).ToString("yyyy-MM"); lastdate = lastdate.AddMonths(1))
                 {
-                    if (Int16.Parse(_monthlyHours.Month.ToString()) == coldate)
+                    ColumnDefinition _columnDefinition = new ColumnDefinition();
+                    _columnDefinition.Width = new GridLength(80);
+                    MonthlyHistory.ColumnDefinitions.Add(_columnDefinition);
+
+                    Label _date = new Label();
+                    _date.HorizontalContentAlignment = HorizontalAlignment.Center;
+                    _date.Content = $"{lastdate.ToString("MMMM")}";
+                    Grid.SetRow(_date, 1);
+                    Grid.SetColumn(_date, col);
+                    MonthlyHistory.Children.Add(_date);
+
+                    List<MonthlyHours> _monthlyHoursList = MonthlyHoursList.FindAll(x => x.Month == lastdate.Month && x.Year == lastdate.Year);
+
+                    if (_monthlyHoursList.Count > 0)
                     {
-                        column--;
-                    }
-                    else
-                    {
-                        if (column != 0)
+                        double worktime = 0;
+                        double breaktime = 0;
+                        foreach (MonthlyHours _monthlyHours in _monthlyHoursList)
                         {
-                            if ((worktime * 0.0625) < breaktime)
+                            ReadOnlyBar _readOnlyBar = new ReadOnlyBar();
+                            _readOnlyBar.Id = _monthlyHours.Id;
+                            _readOnlyBar.WorkHeight = _monthlyHours.Duration;
+                            _readOnlyBar.MaxValue = 800;
+                            _readOnlyBar.StampType = _monthlyHours.StampType;
+
+                            switch (_monthlyHours.StampType)
                             {
-                                int hours = (Int32)TimeSpan.FromHours(worktime - (breaktime - (worktime * 0.0625))).TotalHours;
-                                int minutes = (Int32)TimeSpan.FromHours(worktime - (breaktime - (worktime * 0.0625))).Minutes;
-                                time.Content = $"{hours.ToString()}:{minutes.ToString()}";
-                            }
-                            else
-                            {
-                                int hours = (Int32)TimeSpan.FromHours(worktime).TotalHours;
-                                int minutes = (Int32)TimeSpan.FromHours(worktime).Minutes;
-                                time.Content = $"{hours.ToString()}:{minutes.ToString()}";
+                                case 1:
+                                    _readOnlyBar.ToolTip = $"{lastdate.ToString("MMMM")} - WORK" +
+                                        $"\nWorking hours: {TimeSpan.FromHours(_monthlyHours.Duration).TotalHours.ToString()}:{(TimeSpan.FromHours(_monthlyHours.Duration).TotalMinutes - (TimeSpan.FromHours(_monthlyHours.Duration).TotalHours * 60)).ToString("00")}";
+                                    worktime = worktime + _monthlyHours.Duration;
+                                    break;
+                                case 2:
+                                    _readOnlyBar.ToolTip = $"{lastdate.ToString("MMMM")} - BREAK" +
+                                        $"\nOf that breaks: {TimeSpan.FromHours(_monthlyHours.Duration).ToString(@"hh\:mm")}";
+                                    breaktime = breaktime + _monthlyHours.Duration;
+
+                                    if ((worktime * 0.0625) < breaktime)
+                                    {
+                                        int breakhours = (Int32)TimeSpan.FromHours(breaktime).TotalHours;
+                                        int breakminutes = (Int32)TimeSpan.FromHours(breaktime).Minutes;
+                                        int Overdobreakhours = (Int32)TimeSpan.FromHours((breaktime - (worktime * 0.0625))).TotalHours;
+                                        int Overdobreakminutes = (Int32)TimeSpan.FromHours((breaktime - (worktime * 0.0625))).Minutes;
+
+                                        _readOnlyBar.ToolTip = $"Of that breaks:" +
+                                        $"\n{breakhours.ToString("00")}:{breakminutes.ToString("00")}" +
+                                        $"\n\nOf that overdo breaks:" +
+                                        $"\n{Overdobreakhours.ToString("00")}:{Overdobreakminutes.ToString("00")}";
+                                    }
+                                    else
+                                    {
+                                        int breakhours = (Int32)TimeSpan.FromHours(breaktime).TotalHours;
+                                        int breakminutes = (Int32)TimeSpan.FromHours(breaktime).Minutes;
+                                        _readOnlyBar.ToolTip = $"Of that breaks:" +
+                                        $"\n{breakhours.ToString()}:{breakminutes.ToString()}";
+                                    }
+                                    break;
                             }
 
-                            Grid.SetColumn(time, column - 1);
-                            MonthlyHistory.Children.Add(time);
-
-                            time = new Label();
-                            time.FontSize = 20;
-                            time.VerticalAlignment = VerticalAlignment.Center;
-                            time.Content = "";
-                            worktime = 0;
-                            breaktime = 0;
+                            Grid.SetColumn(_readOnlyBar, col);
+                            MonthlyHistory.Children.Add(_readOnlyBar);
                         }
-                    }
 
-                    if (_monthlyHours.StampType == 1)
-                    {
-                        ReadOnlyBar bar = new ReadOnlyBar();
-                        ColumnDefinition col = new ColumnDefinition();
-                        Label date = new Label();
-                        col.Width = new GridLength(80);
-                        MonthlyHistory.ColumnDefinitions.Add(col);
-                        date.Content = Months[Int32.Parse(_monthlyHours.Month.ToString()) - 1];
-                        date.IsHitTestVisible = true;
-
-                        worktime = worktime + double.Parse(_monthlyHours.Duration.ToString());
-                        bar.MaxValue = 160;
-                        bar.WorkMargin = 0;
-                        bar.WorkHeight = _monthlyHours.Duration;
-                        bar.StampType = 1;
-
-                        bar.Id = _monthlyHours.Id;
-
-                        int hours = (Int32)TimeSpan.FromHours(worktime).TotalHours;
-                        int minutes = (Int32)TimeSpan.FromHours(worktime).Minutes;
-                        bar.ToolTip = $"{hours.ToString()}:{minutes.ToString()}";
-
-                        Grid.SetColumn(bar, column);
-                        Grid.SetColumn(date, column);
-                        Grid.SetRow(date, 1);
-
-                        MonthlyHistory.Children.Add(bar);
-                        MonthlyHistory.Children.Add(date);
-
-                        coldate = Int16.Parse(_monthlyHours.Month.ToString());
-
-                        column++;
-                    }
-                    else if (_monthlyHours.StampType == 2)
-                    {
-                        ReadOnlyBar bar = new ReadOnlyBar();
-                        ColumnDefinition col = new ColumnDefinition();
-                        Label date = new Label();
-                        col.Width = new GridLength(80);
-                        MonthlyHistory.ColumnDefinitions.Add(col);
-                        date.Content = Months[Int32.Parse(_monthlyHours.Month.ToString()) - 1];
-                        date.IsHitTestVisible = true;
-
-                        breaktime = breaktime + double.Parse(_monthlyHours.Duration.ToString());
-                        bar.MaxValue = 160;
-                        bar.WorkMargin = 0;
-                        bar.WorkHeight = _monthlyHours.Duration;
-                        bar.StampType = 2;
-
-                        bar.Id = _monthlyHours.Id;
+                        Label _time = new Label();
+                        _time.VerticalAlignment = VerticalAlignment.Center;
+                        _time.FontSize = 20;
+                        _time.IsHitTestVisible = false;
 
                         if ((worktime * 0.0625) < breaktime)
                         {
-                            int breakhours = (Int32)TimeSpan.FromHours(breaktime).TotalHours;
-                            int breakminutes = (Int32)TimeSpan.FromHours(breaktime).Minutes;
-                            int Overdobreakhours = (Int32)TimeSpan.FromHours((breaktime - (worktime * 0.0625))).TotalHours;
-                            int Overdobreakminutes = (Int32)TimeSpan.FromHours((breaktime - (worktime * 0.0625))).Minutes;
-
-                            bar.ToolTip = $"Of that breaks:" +
-                            $"\n{breakhours.ToString("00")}:{breakminutes.ToString("00")}" +
-                            $"\n\nOf that overdo breaks:" +
-                            $"\n{Overdobreakhours.ToString("00")}:{Overdobreakminutes.ToString("00")}";
+                            int hours = (Int32)TimeSpan.FromHours(worktime - (breaktime - (worktime * 0.0625))).TotalHours;
+                            int minutes = (Int32)TimeSpan.FromHours(worktime - (breaktime - (worktime * 0.0625))).Minutes;
+                            _time.Content = $"{hours.ToString()}:{minutes.ToString("00")}";
                         }
                         else
                         {
-                            int breakhours = (Int32)TimeSpan.FromHours(breaktime).TotalHours;
-                            int breakminutes = (Int32)TimeSpan.FromHours(breaktime).Minutes;
-                            bar.ToolTip = $"Of that breaks:" +
-                            $"\n{breakhours.ToString()}:{breakminutes.ToString()}";
+                            _time.Content = $"{TimeSpan.FromHours(worktime).TotalHours.ToString()}:{(TimeSpan.FromHours(worktime).TotalMinutes - (TimeSpan.FromHours(worktime).TotalHours * 60)).ToString("00")}";
                         }
 
-                        Grid.SetColumn(bar, column);
-                        Grid.SetColumn(date, column);
-                        Grid.SetRow(date, 1);
-
-                        MonthlyHistory.Children.Add(bar);
-                        MonthlyHistory.Children.Add(date);
-
-                        coldate = Int16.Parse(_monthlyHours.Month.ToString());
-
-                        column++;
+                        Grid.SetColumn(_time, col);
+                        MonthlyHistory.Children.Add(_time);
                     }
-                }
-                if ((worktime * 0.0625) < breaktime)
-                {
-                    int hours = (Int32)TimeSpan.FromHours(worktime - (breaktime - (worktime * 0.0625))).TotalHours;
-                    int minutes = (Int32)TimeSpan.FromHours(worktime - (breaktime - (worktime * 0.0625))).Minutes;
-                    time.Content = $"{hours.ToString()}:{minutes.ToString()}";
-                }
-                else
-                {
-                    int hours = (Int32)TimeSpan.FromHours(worktime).TotalHours;
-                    int minutes = (Int32)TimeSpan.FromHours(worktime).Minutes;
-                    time.Content = $"{hours.ToString()}:{minutes.ToString()}";
-                }
+                    else
+                    {
+                        ReadOnlyBar _readOnlyBar = new ReadOnlyBar();
+                        _readOnlyBar.Id = 0;
+                        _readOnlyBar.WorkMargin = 0;
+                        _readOnlyBar.WorkHeight = 800;
+                        _readOnlyBar.MaxValue = 160;
 
-                Grid.SetColumn(time, column - 1);
-                MonthlyHistory.Children.Add(time);
+                        _readOnlyBar.StampType = 0;
+                        _readOnlyBar.ToolTip = $"{lastdate.ToString("MMMM")}" +
+                            $"\nUn-planned absence";
+
+                        Grid.SetColumn(_readOnlyBar, col);
+                        MonthlyHistory.Children.Add(_readOnlyBar);
+
+                        Label _time = new Label();
+                        _time.VerticalAlignment = VerticalAlignment.Center;
+                        _time.FontSize = 20;
+                        _time.Content = TimeSpan.FromHours(0).ToString(@"hh\:mm");
+                        Grid.SetColumn(_time, col);
+                        MonthlyHistory.Children.Add(_time);
+                    }
+
+                    col++;
+                }
             }
-            catch 
+            catch (Exception ex)
             {
+                MessageBox.Show(ex.Message);
                 PublicEntitys.ShowError(500);
             }
         }
@@ -429,8 +385,8 @@ namespace StartStopWork
                 //Animations for buttons background color to transforme it from transparrent to red
                 SolidColorBrush myBrush = new SolidColorBrush();
                 ColorAnimation myColorAnimation = new ColorAnimation();
-                myColorAnimation.From = Color.FromArgb(0, 86, 86, 255);
-                myColorAnimation.To = Color.FromArgb(255, 86, 86, 255);
+                myColorAnimation.From = (Color)ColorConverter.ConvertFromString(FindResource("PlateBrush").ToString());
+                myColorAnimation.To = (Color)ColorConverter.ConvertFromString(FindResource("PrimaryBrush").ToString());
                 myColorAnimation.Duration = new Duration(TimeSpan.FromSeconds(0.2));
                 myBrush.BeginAnimation(SolidColorBrush.ColorProperty, myColorAnimation);
                 btn.BorderBrush = myBrush;

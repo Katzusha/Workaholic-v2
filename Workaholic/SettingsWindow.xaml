@@ -7,14 +7,14 @@
         mc:Ignorable="d"
         Title="Workaholic - Settings"
         WindowStyle="None"
-        Topmost="True"
+        Topmost="False"
         AllowsTransparency="True"
         Background="Transparent"
         ResizeMode="CanResizeWithGrip"
-        Height="560"
-        Width="1030"
-        MinHeight="560"
-        MinWidth="1030"
+        Height="1080"
+        Width="1920"
+        MinHeight="800"
+        MinWidth="1300"
         WindowStartupLocation="CenterScreen">
     <Window.Resources>
 
@@ -36,99 +36,15 @@
             <Grid Margin="0,30,0,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
-                    <ColumnDefinition Width="2*" />
                     <ColumnDefinition Width="300" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition />
-                    <RowDefinition Height="2*" />
+                    <RowDefinition Height="3*" />
                 </Grid.RowDefinitions>
 
                 <Border Background="{DynamicResource PlateBrush}"
-                        Margin="5,15,5,5"
-                        CornerRadius="5">
-                    <Grid>
-                        <Label Content="Position :"
-                               Foreground="{DynamicResource ForegroundBrush}"
-                               FontSize="12"
-                               VerticalAlignment="Top"
-                               Margin="0,-20,0,0"
-                               Height="26"
-                               Grid.Column="1"
-                               Width="58" />
-
-                        <Grid x:Name="Align">
-                            <Grid.RowDefinitions>
-                                <RowDefinition />
-                                <RowDefinition />
-                                <RowDefinition />
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition />
-                                <ColumnDefinition />
-                                <ColumnDefinition />
-                            </Grid.ColumnDefinitions>
-
-                            <Button Click="Align_Click"
-                                    x:Name="AlignTopLeft"
-                                    Style="{DynamicResource GridButton}"
-                                    Margin="5, 5, 2, 2"
-                                    Grid.Column="0"
-                                    Grid.Row="0" />
-                            <Button Click="Align_Click"
-                                    x:Name="AlignTopRight"
-                                    Style="{DynamicResource GridButton}"
-                                    Margin="2, 5, 5, 2"
-                                    Grid.Column="2"
-                                    Grid.Row="0" />
-                            <Button Click="Align_Click"
-                                    x:Name="AlignMiddleLeft"
-                                    Style="{DynamicResource GridButton}"
-                                    Margin="5, 2, 2, 2"
-                                    Grid.Column="0"
-                                    Grid.Row="1" />
-                            <Button Click="Align_Click"
-                                    x:Name="AlignTopMiddle"
-                                    Style="{DynamicResource GridButton}"
-                                    Margin="2, 5, 2, 2"
-                                    Grid.Column="1"
-                                    Grid.Row="0" />
-                            <Button Click="Align_Click"
-                                    x:Name="AlignMiddleMiddle"
-                                    Style="{DynamicResource GridButton}"
-                                    Margin="2, 2, 2, 2"
-                                    Grid.Column="1"
-                                    Grid.Row="1" />
-                            <Button Click="Align_Click"
-                                    x:Name="AlignMiddleRight"
-                                    Style="{DynamicResource GridButton}"
-                                    Margin="2, 2, 5, 2"
-                                    Grid.Column="2"
-                                    Grid.Row="1" />
-                            <Button Click="Align_Click"
-                                    x:Name="AlignBottomLeft"
-                                    Style="{DynamicResource GridButton}"
-                                    Margin="5, 2, 2, 5"
-                                    Grid.Column="0"
-                                    Grid.Row="2" />
-                            <Button Click="Align_Click"
-                                    x:Name="AlignBottomMiddle"
-                                    Style="{DynamicResource GridButton}"
-                                    Margin="2, 2, 2, 5"
-                                    Grid.Column="1"
-                                    Grid.Row="2" />
-                            <Button Click="Align_Click"
-                                    x:Name="AlignBottomRight"
-                                    Style="{DynamicResource GridButton}"
-                                    Margin="2, 2, 5, 5"
-                                    Grid.Column="2"
-                                    Grid.Row="2" />
-                        </Grid>
-                    </Grid>
-                </Border>
-
-                <Border Background="{DynamicResource PlateBrush}"
-                        Grid.Column="1"
+                        Grid.Column="0"
                         Margin="5"
                         CornerRadius="5">
                     <ScrollViewer VerticalScrollBarVisibility="Disabled"
@@ -153,150 +69,194 @@
                                 <RowDefinition />
                                 <RowDefinition Height="25" />
                             </Grid.RowDefinitions>
-
-                            <Label Content="Month"
-                                   Grid.Row="1" />
-                            <local:Bar MaxValue="100"
-                                       BreakHeight="10"
-                                       Grid.Column="0" />
-                            <local:Bar MaxValue="100"
-                                       BreakHeight="250"
-                                       Grid.Column="01" />
-                            <local:Bar MaxValue="100"
-                                       BreakHeight="100"
-                                       Grid.Column="02" />
-                            <local:Bar MaxValue="100"
-                                       BreakHeight="100"
-                                       Grid.Column="03" />
-                            <local:Bar MaxValue="100"
-                                       BreakHeight="15"
-                                       Grid.Column="04" />
-                            <local:Bar MaxValue="100"
-                                       BreakHeight="100"
-                                       Grid.Column="05" />
-                            <local:Bar MaxValue="100"
-                                       BreakHeight="30"
-                                       Grid.Column="06" />
-                            <local:Bar MaxValue="100"
-                                       BreakHeight="10"
-                                       Grid.Column="07" />
-                            <local:Bar MaxValue="100"
-                                       BreakHeight="100"
-                                       Grid.Column="08" />
-                            <local:Bar MaxValue="100"
-                                       BreakHeight="100"
-                                       Grid.Column="09" />
                         </Grid>
                     </ScrollViewer>
                 </Border>
 
-                <Border Background="{DynamicResource PlateBrush}"
-                        Margin="5,5,5,5"
-                        CornerRadius="5"
-                        Grid.RowSpan="2"
-                        Grid.Column="2"
-                        Grid.Row="0">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="300" />
-                            <RowDefinition />
-                            <RowDefinition Height="50" />
-                        </Grid.RowDefinitions>
+                <Grid Grid.RowSpan="2"
+                      Grid.Column="2"
+                      Grid.Row="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="200" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Border Background="{DynamicResource PlateBrush}"
+                            Margin="5,5,5,5"
+                            CornerRadius="5">
+                        <Grid>
 
-                        <Border Background="{DynamicResource BackgroundBrush}"
-                                Height="250"
-                                Width="250"
-                                CornerRadius="125">
-                            <Button x:Name="ChangePicture"
-                                    Content="Change picture"
-                                    Style="{DynamicResource HyperLinkButton}"
-                                    Height="20"
-                                    FontSize="12"
-                                    Width="100"
-                                    VerticalAlignment="Bottom"
-                                    Margin="0, 0, 0, -25" />
-                        </Border>
+                            <Grid x:Name="Align">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
 
-                        <Grid Height="200"
-                              Grid.Row="1">
-                            <Border Background="{DynamicResource BackgroundBrush}"
-                                    Height="25"
-                                    CornerRadius="5"
-                                    Margin="10, -90, 10, 0" />
-                            <TextBox x:Name="FirstnameInput"
-                                     IsReadOnly="True"
-                                     Text="xxxxxxxxx"
-                                     Style="{DynamicResource TextBoxInput}"
-                                     Margin="150, -90, 10, 0" />
-                            <Label Content="Firstname: "
-                                   Foreground="{DynamicResource ForegroundBrush}"
-                                   FontSize="12"
-                                   Height="25"
-                                   HorizontalAlignment="Left"
-                                   Margin="10, -90, 0, 0" />
-
-                            <Border Background="{DynamicResource BackgroundBrush}"
-                                    Height="25"
-                                    CornerRadius="5"
-                                    Margin="10, -30, 10, 0" />
-                            <TextBox x:Name="SurnameInput"
-                                     IsReadOnly="True"
-                                     Text="xxxxxxxxx"
-                                     Style="{DynamicResource TextBoxInput}"
-                                     Margin="150, -30, 10, 0" />
-                            <Label Content="Surname :"
-                                   Foreground="{DynamicResource ForegroundBrush}"
-                                   FontSize="12"
-                                   Height="25"
-                                   HorizontalAlignment="Left"
-                                   Margin="10, -30, 0, 0" />
-
-                            <Border Background="{DynamicResource BackgroundBrush}"
-                                    Height="25"
-                                    CornerRadius="5"
-                                    Margin="10, 0, 10, -30" />
-                            <TextBox x:Name="UsernameInput"
-                                     Text="xxxxxxxxx"
-                                     IsReadOnly="True"
-                                     Style="{DynamicResource TextBoxInput}"
-                                     Margin="150, 0, 10, -30" />
-                            <Label Content="Username :"
-                                   Foreground="{DynamicResource ForegroundBrush}"
-                                   FontSize="12"
-                                   Height="25"
-                                   HorizontalAlignment="Left"
-                                   Margin="10, 0, 5, -30" />
-
-                            <Border Background="{DynamicResource BackgroundBrush}"
-                                    Height="25"
-                                    CornerRadius="5"
-                                    Margin="10, 0, 10, -90" />
-                            <TextBox x:Name="PasswordInput"
-                                     Text="xxxxxxxxx"
-                                     IsReadOnly="True"
-                                     Style="{DynamicResource TextBoxInput}"
-                                     Margin="150, 0, 10, -90" />
-                            <Label Content="Password :"
-                                   Foreground="{DynamicResource ForegroundBrush}"
-                                   FontSize="12"
-                                   Height="25"
-                                   HorizontalAlignment="Left"
-                                   Margin="10, 0, 0, -90" />
+                                <Button Click="Align_Click"
+                                        x:Name="AlignTopLeft"
+                                        Style="{DynamicResource GridButton}"
+                                        Margin="5, 5, 2, 2"
+                                        Grid.Column="0"
+                                        Grid.Row="0" />
+                                <Button Click="Align_Click"
+                                        x:Name="AlignTopRight"
+                                        Style="{DynamicResource GridButton}"
+                                        Margin="2, 5, 5, 2"
+                                        Grid.Column="2"
+                                        Grid.Row="0" />
+                                <Button Click="Align_Click"
+                                        x:Name="AlignMiddleLeft"
+                                        Style="{DynamicResource GridButton}"
+                                        Margin="5, 2, 2, 2"
+                                        Grid.Column="0"
+                                        Grid.Row="1" />
+                                <Button Click="Align_Click"
+                                        x:Name="AlignTopMiddle"
+                                        Style="{DynamicResource GridButton}"
+                                        Margin="2, 5, 2, 2"
+                                        Grid.Column="1"
+                                        Grid.Row="0" />
+                                <Button Click="Align_Click"
+                                        x:Name="AlignMiddleMiddle"
+                                        Style="{DynamicResource GridButton}"
+                                        Margin="2, 2, 2, 2"
+                                        Grid.Column="1"
+                                        Grid.Row="1" />
+                                <Button Click="Align_Click"
+                                        x:Name="AlignMiddleRight"
+                                        Style="{DynamicResource GridButton}"
+                                        Margin="2, 2, 5, 2"
+                                        Grid.Column="2"
+                                        Grid.Row="1" />
+                                <Button Click="Align_Click"
+                                        x:Name="AlignBottomLeft"
+                                        Style="{DynamicResource GridButton}"
+                                        Margin="5, 2, 2, 5"
+                                        Grid.Column="0"
+                                        Grid.Row="2" />
+                                <Button Click="Align_Click"
+                                        x:Name="AlignBottomMiddle"
+                                        Style="{DynamicResource GridButton}"
+                                        Margin="2, 2, 2, 5"
+                                        Grid.Column="1"
+                                        Grid.Row="2" />
+                                <Button Click="Align_Click"
+                                        x:Name="AlignBottomRight"
+                                        Style="{DynamicResource GridButton}"
+                                        Margin="2, 2, 5, 5"
+                                        Grid.Column="2"
+                                        Grid.Row="2" />
+                            </Grid>
                         </Grid>
+                    </Border>
 
-                        <Button x:Name="LogOut"
-                                Style="{DynamicResource RedButton}"
-                                Grid.Row="2"
-                                Content="Log out"
-                                FontSize="14"
-                                Margin="2.5"
-                                Click="LogOut_Click" />
-                    </Grid>
-                </Border>
+                    <Border Background="{DynamicResource PlateBrush}"
+                            Margin="5,5,5,5"
+                            Grid.Row="1"
+                            CornerRadius="5">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="300" />
+                                <RowDefinition />
+                                <RowDefinition Height="50" />
+                            </Grid.RowDefinitions>
+
+                            <Border Background="{DynamicResource BackgroundBrush}"
+                                    Height="250"
+                                    Width="250"
+                                    CornerRadius="125">
+                                <Button x:Name="ChangePicture"
+                                        Content="Change picture"
+                                        Style="{DynamicResource HyperLinkButton}"
+                                        Height="20"
+                                        FontSize="12"
+                                        Width="100"
+                                        VerticalAlignment="Bottom"
+                                        Margin="0, 0, 0, -25" />
+                            </Border>
+
+                            <Grid Height="200"
+                                  Grid.Row="1">
+                                <Border Background="{DynamicResource BackgroundBrush}"
+                                        Height="25"
+                                        CornerRadius="5"
+                                        Margin="10, -90, 10, 0" />
+                                <TextBox x:Name="FirstnameInput"
+                                         IsReadOnly="True"
+                                         Text="xxxxxxxxx"
+                                         Margin="150, -90, 10, 0" />
+                                <Label Content="Firstname: "
+                                       Foreground="{DynamicResource ForegroundBrush}"
+                                       FontSize="12"
+                                       Height="25"
+                                       HorizontalAlignment="Left"
+                                       Margin="10, -90, 0, 0" />
+
+                                <Border Background="{DynamicResource BackgroundBrush}"
+                                        Height="25"
+                                        CornerRadius="5"
+                                        Margin="10, -30, 10, 0" />
+                                <TextBox x:Name="SurnameInput"
+                                         IsReadOnly="True"
+                                         Text="xxxxxxxxx"
+                                         Margin="150, -30, 10, 0" />
+                                <Label Content="Surname :"
+                                       Foreground="{DynamicResource ForegroundBrush}"
+                                       FontSize="12"
+                                       Height="25"
+                                       HorizontalAlignment="Left"
+                                       Margin="10, -30, 0, 0" />
+
+                                <Border Background="{DynamicResource BackgroundBrush}"
+                                        Height="25"
+                                        CornerRadius="5"
+                                        Margin="10, 0, 10, -30" />
+                                <TextBox x:Name="UsernameInput"
+                                         Text="xxxxxxxxx"
+                                         IsReadOnly="True"
+                                         Margin="150, 0, 10, -30" />
+                                <Label Content="Username :"
+                                       Foreground="{DynamicResource ForegroundBrush}"
+                                       FontSize="12"
+                                       Height="25"
+                                       HorizontalAlignment="Left"
+                                       Margin="10, 0, 5, -30" />
+
+                                <Border Background="{DynamicResource BackgroundBrush}"
+                                        Height="25"
+                                        CornerRadius="5"
+                                        Margin="10, 0, 10, -90" />
+                                <TextBox x:Name="PasswordInput"
+                                         Text="xxxxxxxxx"
+                                         IsReadOnly="True"
+                                         Margin="150, 0, 10, -90" />
+                                <Label Content="Password :"
+                                       Foreground="{DynamicResource ForegroundBrush}"
+                                       FontSize="12"
+                                       Height="25"
+                                       HorizontalAlignment="Left"
+                                       Margin="10, 0, 0, -90" />
+                            </Grid>
+
+                            <Button x:Name="LogOut"
+                                    Style="{DynamicResource RedButton}"
+                                    Grid.Row="2"
+                                    Content="Log out"
+                                    FontSize="14"
+                                    Margin="2.5"
+                                    Click="LogOut_Click" />
+                        </Grid>
+                    </Border>
+                </Grid>
 
                 <Border Background="{DynamicResource PlateBrush}"
                         Grid.Row="1"
-                        Grid.ColumnSpan="2"
+                        Grid.ColumnSpan="1"
                         Margin="5,5,5,5"
                         CornerRadius="5">
                     <ScrollViewer VerticalScrollBarVisibility="Disabled"
@@ -310,7 +270,7 @@
                               FlowDirection="LeftToRight">
                             <Grid.RowDefinitions>
                                 <RowDefinition />
-                                <RowDefinition Height="30" />
+                                <RowDefinition Height="42" />
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="80" />
@@ -327,47 +287,6 @@
                                 <ColumnDefinition Width="80" />
                                 <ColumnDefinition Width="80" />
                             </Grid.ColumnDefinitions>
-                            <local:Bar MaxValue="20"
-                                       BreakHeight="10"
-                                       Grid.Column="0" />
-                            <local:Bar MaxValue="20"
-                                       BreakHeight="10"
-                                       Grid.Column="01" />
-                            <local:Bar MaxValue="20"
-                                       BreakHeight="10"
-                                       Grid.Column="02" />
-                            <local:Bar MaxValue="20"
-                                       BreakHeight="10"
-                                       Grid.Column="03" />
-                            <local:Bar MaxValue="20"
-                                       BreakHeight="10"
-                                       Grid.Column="04" />
-                            <local:Bar MaxValue="20"
-                                       BreakHeight="10"
-                                       Grid.Column="05" />
-                            <local:Bar MaxValue="20"
-                                       BreakHeight="18"
-                                       Grid.Column="06" />
-                            <local:Bar MaxValue="20"
-                                       BreakHeight="10"
-                                       Grid.Column="07" />
-                            <local:Bar MaxValue="20"
-                                       BreakHeight="10"
-                                       Grid.Column="08" />
-                            <local:Bar MaxValue="20"
-                                       BreakHeight="20"
-                                       Grid.Column="09" />
-                            <local:Bar MaxValue="20"
-                                       BreakHeight="10"
-                                       Grid.Column="10" />
-                            <local:Bar MaxValue="20"
-                                       BreakHeight="10"
-                                       Grid.Column="11" />
-                            <local:Bar MaxValue="20"
-                                       BreakHeight="10"
-                                       Grid.Column="12" />
-                            <Label Content="02/07"
-                                   Grid.Row="1" />
                         </Grid>
                     </ScrollViewer>
                 </Border>

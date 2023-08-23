@@ -293,12 +293,12 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="ToolTip">
                         <Border Name="Border"
-                                BorderThickness="0, 0, 1, 1"
+                                BorderThickness="2"
                                 CornerRadius="5"
                                 Width="{TemplateBinding Width}"
                                 Height="{TemplateBinding Height}"
                                 Background="{DynamicResource PlateBrush}"
-                                BorderBrush="{DynamicResource BackgroundBrush}">
+                                BorderBrush="{DynamicResource PrimaryBrush}">
                             <ContentPresenter Margin="4"
                                               HorizontalAlignment="Left"
                                               VerticalAlignment="Top" />
@@ -565,14 +565,15 @@
                     Value="Center" />
         </Style>
 
-        <Style x:Key="TextBoxInput"
-               TargetType="{x:Type TextBox}">
+        <Style TargetType="{x:Type TextBox}">
             <Setter Property="Foreground"
                     Value="{DynamicResource ForegroundBrush}" />
             <Setter Property="Background"
                     Value="{DynamicResource BackgroundBrush}" />
             <Setter Property="Height"
                     Value="25" />
+            <Setter Property="Margin"
+                    Value="2.5" />
             <Setter Property="FontSize"
                     Value="12" />
             <Setter Property="VerticalContentAlignment"
@@ -581,63 +582,10 @@
                     Value="Center" />
             <Setter Property="Cursor"
                     Value="IBeam" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type TextBoxBase}">
-                        <Border Name="Border"
-                                CornerRadius="5"
-                                Padding="0">
-                            <Border.Background>
-                                <SolidColorBrush Color="{DynamicResource BackgroundColor1}" />
-                            </Border.Background>
-                            <Border.BorderBrush>
-                                <SolidColorBrush Color="Transparent" />
-                            </Border.BorderBrush>
-                            <ScrollViewer Margin="20, 0, 20, 0"
-                                          x:Name="PART_ContentHost"
-                                          MinHeight="30"
-                                          HorizontalAlignment="Center"
-                                          VerticalAlignment="Top"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <Style x:Key="TextBoxTime"
-               TargetType="{x:Type TextBox}">
-            <Setter Property="SnapsToDevicePixels"
-                    Value="True" />
-            <Setter Property="OverridesDefaultStyle"
-                    Value="True" />
-            <Setter Property="KeyboardNavigation.TabNavigation"
-                    Value="None" />
-            <Setter Property="FocusVisualStyle"
-                    Value="{x:Null}" />
-            <Setter Property="MinWidth"
-                    Value="0" />
-            <Setter Property="Margin"
-                    Value="2.5" />
-            <Setter Property="Cursor"
-                    Value="IBeam" />
-            <Setter Property="MinHeight"
-                    Value="0" />
-            <Setter Property="AllowDrop"
-                    Value="False" />
-            <Setter Property="FontSize"
-                    Value="12px" />
             <Setter Property="FontWeight"
                     Value="Bold" />
-            <Setter Property="HorizontalContentAlignment"
-                    Value="center" />
-            <Setter Property="VerticalContentAlignment"
-                    Value="Center" />
-            <Setter Property="VerticalAlignment"
-                    Value="Top" />
-            <Setter Property="Foreground"
+            <Setter Property="CaretBrush"
                     Value="{DynamicResource ForegroundBrush}" />
-            <Setter Property="Height"
-                    Value="25" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type TextBoxBase}">
@@ -652,9 +600,9 @@
                             </Border.BorderBrush>
                             <ScrollViewer Margin="0, 0, 0, 0"
                                           x:Name="PART_ContentHost"
-                                          Height="30"
-                                          VerticalAlignment="Center"
-                                          HorizontalAlignment="Center" />
+                                          MinHeight="25"
+                                          HorizontalAlignment="Center"
+                                          VerticalAlignment="Top" />
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>

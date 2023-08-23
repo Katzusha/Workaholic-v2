@@ -6,12 +6,15 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Workaholic.Models;
 
 namespace StartStopWork
 {
     internal class PublicEntitys
     {
         public static Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+        public static List<DailyHours> dailyHours = new List<DailyHours>();
+        public static List<MonthlyHours> monthlyHours = new List<MonthlyHours>();
 
         public static string EncryptString(string plainText, byte[] key, byte[] iv)
         {
@@ -149,6 +152,16 @@ namespace StartStopWork
         {
             ErrorWindow window = new ErrorWindow(errortype);
             window.ShowDialog();
+        }
+
+        public static void UpdateDailyHours()
+        {
+            dailyHours = Database.GetDailyHours(configuration.AppSettings.Settings["Username"].Value);
+        }
+
+        public static void UpdateMonthlyHours()
+        {
+            monthlyHours = Database.GetMonthlyHours(configuration.AppSettings.Settings["Username"].Value);
         }
     }
 }

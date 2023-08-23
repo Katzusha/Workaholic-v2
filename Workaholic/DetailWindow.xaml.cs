@@ -94,7 +94,7 @@ namespace Workaholic
             {
                 case 1:
                     ReadWriteBar _ReadWriteBar = (ReadWriteBar)((Grid)((ContextMenu)(sender as MenuItem).Parent).PlacementTarget).Parent;
-                    DetailClose.Style = (Style)this.Resources["GreenButton"];
+                    DetailClose.Style = (Style)Resources["GreenButton"];
                     DetailClose.Content = "Save";
                     foreach (DailyHours _dailyHours in Database.GetDailyHoursDetail(configuration.AppSettings.Settings["Username"].Value, _ReadWriteBar.Id))
                     {
@@ -114,7 +114,6 @@ namespace Workaholic
                                 row++;
 
                                 TextBox textbox = new TextBox();
-                                textbox.Style = (Style)this.Resources["TextBoxTime"];
                                 textbox.Text = TimeSpan.FromHours(_dailyHours.Start).ToString(@"hh\:mm");
                                 textbox.Name = $"Start";
                                 rowDefinition = new RowDefinition();
@@ -124,7 +123,6 @@ namespace Workaholic
                                 DetailGrid.Children.Add(textbox);
 
                                 textbox = new TextBox();
-                                textbox.Style = (Style)this.Resources["TextBoxTime"];
                                 textbox.Text = TimeSpan.FromHours(_dailyHours.End).ToString(@"hh\:mm");
                                 textbox.Name = $"End";
                                 Grid.SetRow(textbox, row);
@@ -146,7 +144,6 @@ namespace Workaholic
                                 row++;
 
                                 TextBox textbox = new TextBox();
-                                textbox.Style = (Style)this.Resources["TextBoxTime"];
                                 textbox.Text = TimeSpan.FromHours(_dailyHours.Start).ToString(@"hh\:mm");
                                 textbox.Name = $"Start";
                                 rowDefinition = new RowDefinition();
@@ -156,7 +153,6 @@ namespace Workaholic
                                 DetailGrid.Children.Add(textbox);
 
                                 textbox = new TextBox();
-                                textbox.Style = (Style)this.Resources["TextBoxTime"];
                                 textbox.Text = TimeSpan.FromHours(_dailyHours.End).ToString(@"hh\:mm");
                                 textbox.Name = $"End";
                                 Grid.SetRow(textbox, row);
@@ -207,7 +203,6 @@ namespace Workaholic
                                     row++;
 
                                     TextBox textbox = new TextBox();
-                                    textbox.Style = (Style)this.Resources["TextBoxTime"];
                                     textbox.Text = TimeSpan.FromHours(_dailyHours.Start).ToString(@"hh\:mm");
                                     textbox.Name = $"Id{_dailyHours.Id.ToString()}";
                                     textbox.IsReadOnly = true;
@@ -218,7 +213,6 @@ namespace Workaholic
                                     DetailGrid.Children.Add(textbox);
 
                                     textbox = new TextBox();
-                                    textbox.Style = (Style)this.Resources["TextBoxTime"];
                                     textbox.Text = TimeSpan.FromHours(_dailyHours.End).ToString(@"hh\:mm");
                                     textbox.Name = $"Id{_dailyHours.Id.ToString()}";
                                     textbox.IsReadOnly = true;
@@ -240,7 +234,6 @@ namespace Workaholic
                                     row++;
 
                                     TextBox textbox = new TextBox();
-                                    textbox.Style = (Style)this.Resources["TextBoxTime"];
                                     textbox.Text = TimeSpan.FromHours(_dailyHours.Start).ToString(@"hh\:mm");
                                     textbox.Name = $"Id{_dailyHours.Id.ToString()}";
                                     textbox.IsReadOnly = true;
@@ -251,7 +244,6 @@ namespace Workaholic
                                     DetailGrid.Children.Add(textbox);
 
                                     textbox = new TextBox();
-                                    textbox.Style = (Style)this.Resources["TextBoxTime"];
                                     textbox.Text = TimeSpan.FromHours(_dailyHours.End).ToString(@"hh\:mm");
                                     textbox.Name = $"Id{_dailyHours.Id.ToString()}";
                                     textbox.IsReadOnly = true;
@@ -288,7 +280,6 @@ namespace Workaholic
                                     row++;
 
                                     TextBox textbox = new TextBox();
-                                    textbox.Style = (Style)this.Resources["TextBoxTime"];
                                     textbox.Text = TimeSpan.FromHours(_dailyHours.Start).ToString(@"hh\:mm");
                                     textbox.Name = $"Id{_dailyHours.Id.ToString()}";
                                     textbox.IsReadOnly = true;
@@ -299,7 +290,6 @@ namespace Workaholic
                                     DetailGrid.Children.Add(textbox);
 
                                     textbox = new TextBox();
-                                    textbox.Style = (Style)this.Resources["TextBoxTime"];
                                     textbox.Text = TimeSpan.FromHours(_dailyHours.End).ToString(@"hh\:mm");
                                     textbox.Name = $"Id{_dailyHours.Id.ToString()}";
                                     textbox.IsReadOnly = true;
@@ -321,7 +311,6 @@ namespace Workaholic
                                     row++;
 
                                     TextBox textbox = new TextBox();
-                                    textbox.Style = (Style)this.Resources["TextBoxTime"];
                                     textbox.Text = TimeSpan.FromHours(_dailyHours.Start).ToString(@"hh\:mm");
                                     textbox.Name = $"Id{_dailyHours.Id.ToString()}";
                                     textbox.IsReadOnly = true;
@@ -332,7 +321,6 @@ namespace Workaholic
                                     DetailGrid.Children.Add(textbox);
 
                                     textbox = new TextBox();
-                                    textbox.Style = (Style)this.Resources["TextBoxTime"];
                                     textbox.Text = TimeSpan.FromHours(_dailyHours.End).ToString(@"hh\:mm");
                                     textbox.Name = $"Id{_dailyHours.Id.ToString()}";
                                     textbox.IsReadOnly = true;
@@ -369,7 +357,6 @@ namespace Workaholic
             row++;
 
             TextBox textbox = new TextBox();
-            textbox.Style = (Style)this.Resources["TextBoxTime"];
             textbox.Name = $"Start";
             rowDefinition = new RowDefinition();
             rowDefinition.Height = new GridLength(30);
@@ -378,7 +365,6 @@ namespace Workaholic
             DetailGrid.Children.Add(textbox);
 
             textbox = new TextBox();
-            textbox.Style = (Style)this.Resources["TextBoxTime"];
             textbox.Name = $"End";
             Grid.SetRow(textbox, row);
             Grid.SetColumn(textbox, 1);

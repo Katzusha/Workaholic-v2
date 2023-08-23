@@ -14,7 +14,8 @@
             <Setter Property="ContextMenu">
                 <Setter.Value>
                     <ContextMenu>
-                        <MenuItem Header="Edit" />
+                        <MenuItem Header="Edit work ethic" />
+                        <MenuItem Header="Create work ethic" />
                         <Separator Style="{DynamicResource Separator}" />
                         <MenuItem Header="Details" />
                     </ContextMenu>

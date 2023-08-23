@@ -15,9 +15,6 @@
         AllowsTransparency="True"
         Background="Transparent"
         Topmost="True">
-    <Window.Resources>
-
-    </Window.Resources>
 
     <Grid Background="Transparent"
           Visibility="Visible">

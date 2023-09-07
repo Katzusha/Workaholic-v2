@@ -33,6 +33,26 @@
                     HorizontalAlignment="Right"
                     Margin="2.5"
                     Click="Close_Click" />
+            <Button x:Name="Minimize"
+                    Content="🗕"
+                    Style="{DynamicResource BlueButton}"
+                    Height="25"
+                    Width="25"
+                    FontSize="12"
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="Right"
+                    Margin="0, 2.5, 57.5, 0"
+                    Click="Minimize_Click" />
+            <Button x:Name="Settings"
+                    Content="🔳"
+                    Style="{DynamicResource BlueButton}"
+                    Height="25"
+                    Width="25"
+                    FontSize="12"
+                    VerticalAlignment="Top"
+                    Margin="0, 2.5, 30, 0"
+                    HorizontalAlignment="Right"
+                    Click="Maximize_Click" />
             <Grid Margin="0,30,0,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
@@ -49,8 +69,7 @@
                         CornerRadius="5">
                     <ScrollViewer VerticalScrollBarVisibility="Disabled"
                                   HorizontalScrollBarVisibility="Visible"
-                                  FlowDirection="RightToLeft"
-                                  HorizontalAlignment="Left">
+                                  FlowDirection="RightToLeft">
                         <Grid x:Name="MonthlyHistory"
                               FlowDirection="LeftToRight">
                             <Grid.ColumnDefinitions>
@@ -259,36 +278,68 @@
                         Grid.ColumnSpan="1"
                         Margin="5,5,5,5"
                         CornerRadius="5">
-                    <ScrollViewer VerticalScrollBarVisibility="Disabled"
-                                  HorizontalScrollBarVisibility="Visible"
-                                  FlowDirection="RightToLeft"
-                                  Margin="0"
-                                  Grid.RowSpan="4"
-                                  HorizontalAlignment="Left">
-                        <Grid x:Name="DailyHistory"
-                              Margin="0, 0, 0, 0"
-                              FlowDirection="LeftToRight">
-                            <Grid.RowDefinitions>
-                                <RowDefinition />
-                                <RowDefinition Height="42" />
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="80" />
-                                <ColumnDefinition Width="80" />
-                                <ColumnDefinition Width="80" />
-                                <ColumnDefinition Width="80" />
-                                <ColumnDefinition Width="80" />
-                                <ColumnDefinition Width="80" />
-                                <ColumnDefinition Width="80" />
-                                <ColumnDefinition Width="80" />
-                                <ColumnDefinition Width="80" />
-                                <ColumnDefinition Width="80" />
-                                <ColumnDefinition Width="80" />
-                                <ColumnDefinition Width="80" />
-                                <ColumnDefinition Width="80" />
-                            </Grid.ColumnDefinitions>
-                        </Grid>
-                    </ScrollViewer>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="40" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+
+                        <Button x:Name="PreviusMonth"
+                                Style="{DynamicResource GridButton}" 
+                                Width="50"
+                                HorizontalAlignment="Left"
+                                Content="◀"
+                                Margin="2.5"
+                                FontSize="12"
+                                Click="PreviusMonth_Click" />
+
+                        <Label x:Name="MonthAndYear"
+                               Content="Month, Year" 
+                               FontSize="16"
+                               HorizontalAlignment="Left"
+                               Margin="55, 0, 0, 0"
+                               Width="245"/>
+
+                        <Button x:Name="NextMonth"
+                                Style="{DynamicResource GridButton}"
+                                Width="50"
+                                Height="35"
+                                Margin="300, 2.5, 2.5, 2.5"
+                                HorizontalAlignment="Left"
+                                Content="▶"
+                                FontSize="12"
+                                Click="NextMonth_Click" />
+                        <ScrollViewer VerticalScrollBarVisibility="Disabled"
+                                      HorizontalScrollBarVisibility="Visible"
+                                      FlowDirection="RightToLeft"
+                                      Margin="0"
+                                      Grid.RowSpan="4"
+                                      Grid.Row="1">
+                            <Grid x:Name="DailyHistory"
+                                  Margin="0, 0, 0, 0"
+                                  FlowDirection="LeftToRight">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition Height="42" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="80" />
+                                    <ColumnDefinition Width="80" />
+                                    <ColumnDefinition Width="80" />
+                                    <ColumnDefinition Width="80" />
+                                    <ColumnDefinition Width="80" />
+                                    <ColumnDefinition Width="80" />
+                                    <ColumnDefinition Width="80" />
+                                    <ColumnDefinition Width="80" />
+                                    <ColumnDefinition Width="80" />
+                                    <ColumnDefinition Width="80" />
+                                    <ColumnDefinition Width="80" />
+                                    <ColumnDefinition Width="80" />
+                                    <ColumnDefinition Width="80" />
+                                </Grid.ColumnDefinitions>
+                            </Grid>
+                        </ScrollViewer>
+                    </Grid>
                 </Border>
             </Grid>
 

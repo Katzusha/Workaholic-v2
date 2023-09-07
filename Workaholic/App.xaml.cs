@@ -184,7 +184,7 @@ namespace Workaholic
         {
             
 
-            if ((sender as MenuItem).Header.ToString() == "Edit")
+            if ((sender as MenuItem).Header.ToString().Contains("Edit"))
             {
                 ReadWriteBar _ReadWriteBar = new ReadWriteBar();
                 try
@@ -201,7 +201,7 @@ namespace Workaholic
                     PublicEntitys.ShowError(306);
                 }
             }
-            else if ((sender as MenuItem).Header.ToString() == "Details")
+            else if ((sender as MenuItem).Header.ToString().Contains("Details"))
             {
                 try
                 {

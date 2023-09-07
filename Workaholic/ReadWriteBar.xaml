@@ -6,16 +6,15 @@
              xmlns:local="clr-namespace:Workaholic"
              mc:Ignorable="d"
              d:DesignHeight="450"
-             MaxWidth="80"
-             Width="80">
+             MinWidth="80">
     <UserControl.Resources>
         <Style x:Key="ReadWrite"
                TargetType="Grid">
             <Setter Property="ContextMenu">
                 <Setter.Value>
                     <ContextMenu>
-                        <MenuItem Header="Edit work ethic" />
-                        <MenuItem Header="Create work ethic" />
+                        <MenuItem Header="Edit work-shift" />
+                        <MenuItem Header="Create work-shift" />
                         <Separator Style="{DynamicResource Separator}" />
                         <MenuItem Header="Details" />
                     </ContextMenu>

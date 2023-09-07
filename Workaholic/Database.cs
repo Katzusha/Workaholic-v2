@@ -290,5 +290,34 @@ namespace StartStopWork
             }
         }
         #endregion
+
+        #region
+        public static List<DaysOff> GetDaysOff(string Username)
+        {
+            try
+            {
+                conn.Open();
+                try
+                {
+                    List<DaysOff> _monthlyHours = conn.Query<DaysOff>($"SELECT * FROM DaysOff WHERE Username = '{PublicEntitys.Encryption(Username)}' AND Start < '{DateOnly.Parse(DateTime.Now.AddDays(7).ToString("yyyy-MM-dd")).ToString("yyyy-MM-dd")}'").ToList();
+                    conn.Close();
+                    return _monthlyHours;
+                }
+                catch
+                {
+                    PublicEntitys.ShowError(500);
+                    conn.Close();
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                conn.Close();
+                PublicEntitys.ShowError(1);
+                MessageBox.Show(ex.Message);
+                return null;
+            }
+        }
+        #endregion
     }
 }

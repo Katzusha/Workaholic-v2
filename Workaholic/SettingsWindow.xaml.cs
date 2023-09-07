@@ -4,11 +4,13 @@ using MySqlX.XDevAPI.Relational;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Printing;
 using System.Reflection;
 using System.Reflection.PortableExecutable;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,6 +19,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
@@ -35,18 +38,23 @@ namespace StartStopWork
         // Animations for the non global buttons
         #region Animations
         // Animation for the buttons Enter() event for the align placement of the main window
-        
+
         #endregion
 
         // Variables
         #region Variables
         // Variable for the labels under neath the time lines
         private static string[] Months = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dec" };
+        private static int Year = DateTime.Now.Year;
+        private static int Month = DateTime.Now.Month;
         #endregion
 
         public SettingsWindow()
         {
             InitializeComponent();
+
+            this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight - 10;
+            this.MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth - 10;
 
             try
             {
@@ -87,18 +95,24 @@ namespace StartStopWork
         {
             try
             {
+                MonthAndYear.Content = $"{CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(Month)}, {Year.ToString()}";
+
                 DailyHistory.ColumnDefinitions.Clear();
                 DailyHistory.Children.Clear();
                 Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
 
                 List<DailyHours> DailyHoursList = Database.GetDailyHours(configuration.AppSettings.Settings["Username"].Value);
+                List<DaysOff> DaysOffList = Database.GetDaysOff(configuration.AppSettings.Settings["Username"].Value);
 
                 int x = 0;
                 int col = 0;
-                for (DateOnly lastdate = DateOnly.Parse(DateTime.Now.AddDays(-45).ToString("yyyy-MM-dd")); lastdate <= DateOnly.Parse(DateTime.Now.ToString("yyyy-MM-dd")); lastdate = lastdate.AddDays(1))
+                DateOnly endDate = new DateOnly(Year, Month, DateTime.DaysInMonth(Year, Month));
+                DateOnly startDate = new DateOnly(Year, Month, 1);
+                for (DateOnly lastdate = startDate; lastdate <= endDate; lastdate = lastdate.AddDays(1))
                 {
                     ColumnDefinition _columnDefinition = new ColumnDefinition();
-                    _columnDefinition.Width = new GridLength(80);
+                    _columnDefinition.MinWidth = 80;
+                    //_columnDefinition.Width = new GridLength(80);
                     DailyHistory.ColumnDefinitions.Add(_columnDefinition);
                     Label _date = new Label();
                     _date.HorizontalContentAlignment = HorizontalAlignment.Center;
@@ -123,6 +137,18 @@ namespace StartStopWork
                                 _readOnlyBar.StampType = 3;
                                 _readOnlyBar.ToolTip = $"{lastdate.ToString("dddd")}" +
                                     $"\nWeekend";
+                                Grid.SetColumn(_readOnlyBar, col);
+                                DailyHistory.Children.Add(_readOnlyBar);
+                            }
+                            else if (DaysOffList.Any(x => DateOnly.Parse(x.Start.ToString("yyyy-MM-dd")) <= lastdate && lastdate <= DateOnly.Parse(x.End.ToString("yyyy-MM-dd"))))
+                            {
+                                ReadOnlyBar _readOnlyBar = new ReadOnlyBar();
+                                _readOnlyBar.WorkMargin = 0;
+                                _readOnlyBar.WorkHeight = 24;
+                                _readOnlyBar.MaxValue = 24;
+                                _readOnlyBar.StampType = 3;
+                                _readOnlyBar.ToolTip = $"{lastdate.ToString("dddd")}" +
+                                    $"\nDay off";
                                 Grid.SetColumn(_readOnlyBar, col);
                                 DailyHistory.Children.Add(_readOnlyBar);
                             }
@@ -182,29 +208,29 @@ namespace StartStopWork
                     }
                     else
                     {
-                        ReadWriteBar _readWriteBar = new ReadWriteBar();
-                        _readWriteBar.Id = 0;
-                        _readWriteBar.WorkMargin = 0;
-                        _readWriteBar.WorkHeight = 24;
-                        _readWriteBar.MaxValue = 24;
+                        ReadOnlyBar _readOnlyBar = new ReadOnlyBar();
+                        _readOnlyBar.Id = 0;
+                        _readOnlyBar.WorkMargin = 0;
+                        _readOnlyBar.WorkHeight = 24;
+                        _readOnlyBar.MaxValue = 24;
 
                         if (lastdate.ToString("dddd") == "Saturday" || lastdate.ToString("dddd") == "Sunday")
                         {
-                            _readWriteBar.StampType = 3;
-                            _readWriteBar.ToolTip = $"{lastdate.ToString("dddd")}" +
+                            _readOnlyBar.StampType = 3;
+                            _readOnlyBar.ToolTip = $"{lastdate.ToString("dddd")}" +
                                 $"\nWeekend";
 
-                            Grid.SetColumn(_readWriteBar, col);
-                            DailyHistory.Children.Add(_readWriteBar);
+                            Grid.SetColumn(_readOnlyBar, col);
+                            DailyHistory.Children.Add(_readOnlyBar);
                         }
                         else
                         {
-                            _readWriteBar.StampType = 0;
-                            _readWriteBar.ToolTip = $"{lastdate.ToString("dddd")}" +
+                            _readOnlyBar.StampType = 0;
+                            _readOnlyBar.ToolTip = $"{lastdate.ToString("dddd")}" +
                                 $"\nUn-planned absence";
 
-                            Grid.SetColumn(_readWriteBar, col);
-                            DailyHistory.Children.Add(_readWriteBar);
+                            Grid.SetColumn(_readOnlyBar, col);
+                            DailyHistory.Children.Add(_readOnlyBar);
 
                             Label _time = new Label();
                             _time.VerticalAlignment = VerticalAlignment.Center;
@@ -233,10 +259,12 @@ namespace StartStopWork
 
                 int x = 0;
                 int col = 0;
-                for (DateOnly lastdate = DateOnly.Parse(DateTime.Now.AddMonths(-24).ToString("yyyy-MM-dd")); lastdate.ToString("yyyy-MM") != DateTime.Now.AddMonths(1).ToString("yyyy-MM"); lastdate = lastdate.AddMonths(1))
+                for (DateOnly lastdate = DateOnly.Parse(DateTime.Now.AddMonths(-23).ToString("yyyy-MM-dd")); lastdate.ToString("yyyy-MM") != DateTime.Now.AddMonths(1).ToString("yyyy-MM"); lastdate = lastdate.AddMonths(1))
                 {
+                    int NumberOfDays = DateTime.DaysInMonth(lastdate.Year, lastdate.Month);
+
                     ColumnDefinition _columnDefinition = new ColumnDefinition();
-                    _columnDefinition.Width = new GridLength(80);
+                    _columnDefinition.MinWidth = 100;
                     MonthlyHistory.ColumnDefinitions.Add(_columnDefinition);
 
                     Label _date = new Label();
@@ -257,7 +285,7 @@ namespace StartStopWork
                             ReadOnlyBar _readOnlyBar = new ReadOnlyBar();
                             _readOnlyBar.Id = _monthlyHours.Id;
                             _readOnlyBar.WorkHeight = _monthlyHours.Duration;
-                            _readOnlyBar.MaxValue = 800;
+                            _readOnlyBar.MaxValue = NumberOfDays * 8;
                             _readOnlyBar.StampType = _monthlyHours.StampType;
 
                             switch (_monthlyHours.StampType)
@@ -322,7 +350,7 @@ namespace StartStopWork
                         ReadOnlyBar _readOnlyBar = new ReadOnlyBar();
                         _readOnlyBar.Id = 0;
                         _readOnlyBar.WorkMargin = 0;
-                        _readOnlyBar.WorkHeight = 800;
+                        _readOnlyBar.WorkHeight = NumberOfDays * 8;
                         _readOnlyBar.MaxValue = 160;
 
                         _readOnlyBar.StampType = 0;
@@ -434,5 +462,45 @@ namespace StartStopWork
         }
         #endregion
 
+        private void Minimize_Click(object sender, RoutedEventArgs e)
+        {
+            this.WindowState = WindowState.Minimized;
+        }
+
+        private void Maximize_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.WindowState == WindowState.Maximized)
+            {
+                this.WindowState = WindowState.Normal;
+            }
+            else
+            {
+                this.WindowState = WindowState.Maximized;
+            }
+        }
+
+        private void PreviusMonth_Click(object sender, RoutedEventArgs e)
+        {
+            Month--;
+            if (Month == 0)
+            {
+                Year--;
+                Month = 12;
+            }
+
+            RefreshDailyGrid();
+        }
+
+        private void NextMonth_Click(object sender, RoutedEventArgs e)
+        {
+            Month++;
+            if (Month == 13)
+            {
+                Year++;
+                Month = 1;
+            }
+
+            RefreshDailyGrid();
+        }
     }
 }

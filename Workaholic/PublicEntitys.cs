@@ -156,7 +156,7 @@ namespace StartStopWork
 
         public static void UpdateDailyHours()
         {
-            dailyHours = Database.GetDailyHours(configuration.AppSettings.Settings["Username"].Value);
+            //dailyHours = Database.GetDailyHours(configuration.AppSettings.Settings["Username"].Value, Year, Month);
         }
 
         public static void UpdateMonthlyHours()

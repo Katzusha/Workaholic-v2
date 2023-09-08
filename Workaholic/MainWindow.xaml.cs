@@ -408,7 +408,7 @@ namespace Workaholic
             {
                 SettingsWindow settingswindow = new SettingsWindow();
 
-                settingswindow.ShowDialog();
+                settingswindow.Show();
 
                 if (isLoggedOut)
                 {

@@ -25,9 +25,9 @@
         <SolidColorBrush x:Key="RedBrush"
                          Color="#ff5656" />
         <SolidColorBrush x:Key="GreenBrush"
-                         Color="#4a944a" />
+                         Color="#6cbc72" />
         <SolidColorBrush x:Key="WorkBrush"
-                         Color="#4a944a" />
+                         Color="#6cbc72" />
         <SolidColorBrush x:Key="BreakBrush"
                          Color="#b27548" />
         <SolidColorBrush x:Key="AbsenceBrush"
@@ -334,7 +334,7 @@
             <Setter Property="FontSize"
                     Value="12" />
             <Setter Property="HorizontalAlignment"
-                    Value="Center" />
+                    Value="Stretch" />
             <Setter Property="HorizontalContentAlignment"
                     Value="Center" />
         </Style>

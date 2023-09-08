@@ -156,14 +156,14 @@ namespace StartStopWork
         }
 
         #region DAILY HOURS
-        public static List<DailyHours> GetDailyHours(string Username)
+        public static List<DailyHours> GetDailyHours(string Username, int Year, int Month)
         {
             try
             {
                 conn.Open();
                 try
                 {
-                    List<DailyHours> _dailyHours = conn.Query<DailyHours>($"SELECT * FROM DailyHours WHERE Username = '{PublicEntitys.Encryption(Username)}'").ToList(); 
+                    List<DailyHours> _dailyHours = conn.Query<DailyHours>($"SELECT * FROM DailyHours WHERE Username = '{PublicEntitys.Encryption(Username)}' and YEAR(Date) = {Year.ToString()} and MONTH(Date) = {Month.ToString()}").ToList(); 
                     conn.Close();
                     return _dailyHours;
                 }

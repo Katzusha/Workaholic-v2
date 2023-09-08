@@ -16,9 +16,6 @@
         MinHeight="800"
         MinWidth="1300"
         WindowStartupLocation="CenterScreen">
-    <Window.Resources>
-
-    </Window.Resources>
     <Border Background="{DynamicResource BackgroundBrush}"
             CornerRadius="5, 5, 5, 5"
             MouseDown="Grid_MouseDown">
@@ -86,7 +83,7 @@
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
                                 <RowDefinition />
-                                <RowDefinition Height="25" />
+                                <RowDefinition Height="42" />
                             </Grid.RowDefinitions>
                         </Grid>
                     </ScrollViewer>

@@ -101,7 +101,7 @@ namespace StartStopWork
                 DailyHistory.Children.Clear();
                 Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
 
-                List<DailyHours> DailyHoursList = Database.GetDailyHours(configuration.AppSettings.Settings["Username"].Value);
+                List<DailyHours> DailyHoursList = Database.GetDailyHours(configuration.AppSettings.Settings["Username"].Value, Year, Month);
                 List<DaysOff> DaysOffList = Database.GetDaysOff(configuration.AppSettings.Settings["Username"].Value);
 
                 int x = 0;
@@ -146,9 +146,19 @@ namespace StartStopWork
                                 _readOnlyBar.WorkMargin = 0;
                                 _readOnlyBar.WorkHeight = 24;
                                 _readOnlyBar.MaxValue = 24;
-                                _readOnlyBar.StampType = 3;
+                                _readOnlyBar.StampType = 4;
                                 _readOnlyBar.ToolTip = $"{lastdate.ToString("dddd")}" +
                                     $"\nDay off";
+                                Grid.SetColumn(_readOnlyBar, col);
+                                DailyHistory.Children.Add(_readOnlyBar);
+                            }
+                            else if (lastdate >= DateOnly.Parse(DateTime.Now.ToString()))
+                            {
+                                ReadOnlyBar _readOnlyBar = new ReadOnlyBar();
+                                _readOnlyBar.WorkMargin = 0;
+                                _readOnlyBar.WorkHeight = 24;
+                                _readOnlyBar.MaxValue = 24;
+                                _readOnlyBar.StampType = -1;
                                 Grid.SetColumn(_readOnlyBar, col);
                                 DailyHistory.Children.Add(_readOnlyBar);
                             }
@@ -203,7 +213,88 @@ namespace StartStopWork
                         }
                         else if (configuration.AppSettings.Settings["AuthLevel"].Value == "3")
                         {
+                            if (lastdate.ToString("dddd") == "Saturday" || lastdate.ToString("dddd") == "Sunday")
+                            {
+                                ReadOnlyBar _readOnlyBar = new ReadOnlyBar();
+                                _readOnlyBar.WorkMargin = 0;
+                                _readOnlyBar.WorkHeight = 24;
+                                _readOnlyBar.MaxValue = 24;
+                                _readOnlyBar.StampType = 3;
+                                _readOnlyBar.ToolTip = $"{lastdate.ToString("dddd")}" +
+                                    $"\nWeekend";
+                                Grid.SetColumn(_readOnlyBar, col);
+                                DailyHistory.Children.Add(_readOnlyBar);
+                            }
+                            else if (DaysOffList.Any(x => DateOnly.Parse(x.Start.ToString("yyyy-MM-dd")) <= lastdate && lastdate <= DateOnly.Parse(x.End.ToString("yyyy-MM-dd"))))
+                            {
+                                ReadOnlyBar _readOnlyBar = new ReadOnlyBar();
+                                _readOnlyBar.WorkMargin = 0;
+                                _readOnlyBar.WorkHeight = 24;
+                                _readOnlyBar.MaxValue = 24;
+                                _readOnlyBar.StampType = 4;
+                                _readOnlyBar.ToolTip = $"{lastdate.ToString("dddd")}" +
+                                    $"\nDay off";
+                                Grid.SetColumn(_readOnlyBar, col);
+                                DailyHistory.Children.Add(_readOnlyBar);
+                            }
+                            else if (lastdate >= DateOnly.Parse(DateTime.Now.ToString("yyyy-MM-dd")))
+                            {
+                                ReadOnlyBar _readOnlyBar = new ReadOnlyBar();
+                                _readOnlyBar.WorkMargin = 0;
+                                _readOnlyBar.WorkHeight = 24;
+                                _readOnlyBar.MaxValue = 24;
+                                _readOnlyBar.StampType = -1;
+                                Grid.SetColumn(_readOnlyBar, col);
+                                DailyHistory.Children.Add(_readOnlyBar);
+                            }
 
+                            double CombineWorkDuration = 0;
+                            double CombineBreakDuration = 0;
+                            foreach (DailyHours _dailyHours in _dailyHoursList)
+                            {
+                                ReadOnlyBar _readOnlyBar = new ReadOnlyBar();
+                                _readOnlyBar.Id = _dailyHours.Id;
+                                _readOnlyBar.WorkMargin = _dailyHours.Start;
+                                _readOnlyBar.WorkHeight = _dailyHours.Duration;
+                                _readOnlyBar.MaxValue = 24;
+                                _readOnlyBar.StampType = _dailyHours.StampType;
+
+                                switch (_dailyHours.StampType)
+                                {
+                                    case 1:
+                                        _readOnlyBar.ToolTip = $"{lastdate.ToString("dddd")} - WORK" +
+                                            $"\nStart: {TimeSpan.FromHours(_dailyHours.Start).ToString(@"hh\:mm")}" +
+                                            $"\nEnd: {TimeSpan.FromHours(_dailyHours.End).ToString(@"hh\:mm")}";
+                                        CombineWorkDuration = CombineWorkDuration + _dailyHours.Duration;
+                                        break;
+                                    case 2:
+                                        _readOnlyBar.ToolTip = $"{lastdate.ToString("dddd")} - BREAK" +
+                                            $"\nStart: {TimeSpan.FromHours(_dailyHours.Start).ToString(@"hh\:mm")}" +
+                                            $"\nEnd: {TimeSpan.FromHours(_dailyHours.End).ToString(@"hh\:mm")}";
+                                        CombineBreakDuration = CombineBreakDuration + _dailyHours.Duration;
+                                        break;
+                                }
+
+                                Grid.SetColumn(_readOnlyBar, col);
+                                DailyHistory.Children.Add(_readOnlyBar);
+                            }
+
+                            Label _time = new Label();
+                            _time.VerticalAlignment = VerticalAlignment.Center;
+                            _time.FontSize = 20;
+                            _time.IsHitTestVisible = false;
+
+                            if ((CombineWorkDuration * 0.0625) < CombineBreakDuration)
+                            {
+                                _time.Content = TimeSpan.FromHours(CombineWorkDuration - (CombineBreakDuration - (CombineWorkDuration * 0.0625))).ToString(@"hh\:mm");
+                            }
+                            else
+                            {
+                                _time.Content = TimeSpan.FromHours(CombineWorkDuration).ToString(@"hh\:mm");
+                            }
+
+                            Grid.SetColumn(_time, col);
+                            DailyHistory.Children.Add(_time);
                         }
                     }
                     else
@@ -219,6 +310,22 @@ namespace StartStopWork
                             _readOnlyBar.StampType = 3;
                             _readOnlyBar.ToolTip = $"{lastdate.ToString("dddd")}" +
                                 $"\nWeekend";
+
+                            Grid.SetColumn(_readOnlyBar, col);
+                            DailyHistory.Children.Add(_readOnlyBar);
+                        }
+                        else if (DaysOffList.Any(x => DateOnly.Parse(x.Start.ToString("yyyy-MM-dd")) <= lastdate && lastdate <= DateOnly.Parse(x.End.ToString("yyyy-MM-dd"))))
+                        {
+                            _readOnlyBar.StampType = 3;
+                            _readOnlyBar.ToolTip = $"{lastdate.ToString("dddd")}" +
+                                $"\nDay off";
+
+                            Grid.SetColumn(_readOnlyBar, col);
+                            DailyHistory.Children.Add(_readOnlyBar);
+                        }
+                        else if (lastdate >= DateOnly.Parse(DateTime.Now.ToString("yyyy-MM-dd")))
+                        {
+                            _readOnlyBar.StampType = -1;
 
                             Grid.SetColumn(_readOnlyBar, col);
                             DailyHistory.Children.Add(_readOnlyBar);
@@ -268,8 +375,8 @@ namespace StartStopWork
                     MonthlyHistory.ColumnDefinitions.Add(_columnDefinition);
 
                     Label _date = new Label();
-                    _date.HorizontalContentAlignment = HorizontalAlignment.Center;
-                    _date.Content = $"{lastdate.ToString("MMMM")}";
+                    //_date.HorizontalContentAlignment = HorizontalAlignment.Center;
+                    _date.Content = $"{lastdate.ToString("MMMM")}\n{lastdate.ToString("yyyy")}";
                     Grid.SetRow(_date, 1);
                     Grid.SetColumn(_date, col);
                     MonthlyHistory.Children.Add(_date);

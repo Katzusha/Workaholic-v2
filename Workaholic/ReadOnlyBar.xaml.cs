@@ -47,6 +47,9 @@ namespace Workaholic
                 _StampType = value;
                 switch(_StampType)
                 {
+                    case -1:
+                        Work.Background = Brushes.Transparent;
+                        break;
                     case 0:
                         Work.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(FindResource("AbsenceBrush").ToString()));
                         break;
@@ -55,6 +58,12 @@ namespace Workaholic
                         break;
                     case 2:
                         Work.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(FindResource("BreakBrush").ToString()));
+                        break;
+                    case 3:
+                        Work.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(FindResource("PrimaryBrush").ToString()));
+                        break;
+                    case 4:
+                        Work.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(FindResource("FreeBrush").ToString()));
                         break;
                 }
             }

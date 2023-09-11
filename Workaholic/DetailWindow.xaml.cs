@@ -55,7 +55,7 @@ namespace Workaholic
             button.Background = myBrush;
         }
 
-        private void HyperLinkButton_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        private void LabelButton_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
             Button button = (Button)sender;
 
@@ -68,7 +68,7 @@ namespace Workaholic
             myBrush.BeginAnimation(SolidColorBrush.ColorProperty, myColorAnimation);
             button.Background = myBrush;
         }
-        private void HyperLinkButton_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        private void LabelButton_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
             Button button = (Button)sender;
 
@@ -171,7 +171,7 @@ namespace Workaholic
                     rowDefinition.Height = new GridLength(25);
                     DetailGrid.RowDefinitions.Add(rowDefinition);
                     Button btn = new Button();
-                    btn.Style = (Style)this.Resources["HyperLinkButton"];
+                    btn.Style = (Style)this.Resources["LabelButton"];
                     btn.Content = "New stamp";
                     btn.Margin = new Thickness(0, 0, 0, -15);
                     btn.Click += new RoutedEventHandler(CreateNewStamp);
@@ -184,7 +184,7 @@ namespace Workaholic
                     try
                     {
                         _ReadWriteBar = (ReadWriteBar)((Grid)((ContextMenu)(sender as MenuItem).Parent).PlacementTarget).Parent;
-                        DetailClose.Style = (Style)this.Resources["HyperLinkButton"];
+                        DetailClose.Style = (Style)this.Resources["LabelButton"];
                         DetailClose.Content = "Close";
                         foreach (DailyHours _dailyHours in Database.GetDailyHoursDetail(configuration.AppSettings.Settings["Username"].Value, _ReadWriteBar.Id))
                         {
@@ -261,7 +261,7 @@ namespace Workaholic
                     catch
                     {
                         ReadOnlyBar _ReadOnlyBar = (ReadOnlyBar)((Grid)((ContextMenu)(sender as MenuItem).Parent).PlacementTarget).Parent;
-                        DetailClose.Style = (Style)this.Resources["HyperLinkButton"];
+                        DetailClose.Style = (Style)this.Resources["LabelButton"];
                         DetailClose.Content = "Close";
                         foreach (DailyHours _dailyHours in Database.GetDailyHoursDetail(configuration.AppSettings.Settings["Username"].Value, _ReadOnlyBar.Id))
                         {

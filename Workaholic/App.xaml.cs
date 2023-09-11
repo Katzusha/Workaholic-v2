@@ -22,7 +22,7 @@ namespace Workaholic
     public partial class App : Application
     {
 
-        private void BlueButton_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        private void HotButton_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
             Button button = (Button)sender;
 
@@ -35,7 +35,7 @@ namespace Workaholic
             myBrush.BeginAnimation(SolidColorBrush.ColorProperty, myColorAnimation);
             button.Background = myBrush;
         }
-        private void BlueButton_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        private void HotButton_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
             Button button = (Button)sender;
 
@@ -103,7 +103,7 @@ namespace Workaholic
             button.Background = myBrush;
         }
 
-        private void HyperLinkButton_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        private void LabelButton_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
             Button button = (Button)sender;
 
@@ -116,7 +116,7 @@ namespace Workaholic
             myBrush.BeginAnimation(SolidColorBrush.ColorProperty, myColorAnimation);
             button.Background = myBrush;
         }
-        private void HyperLinkButton_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        private void LabelButton_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
             Button button = (Button)sender;
 

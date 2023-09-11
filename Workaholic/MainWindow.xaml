@@ -89,7 +89,7 @@
 
             <Button x:Name="Minimize"
                     Content="🗕"
-                    Style="{DynamicResource BlueButton}"
+                    Style="{DynamicResource HotButton}"
                     Height="25"
                     Width="25"
                     FontSize="12"
@@ -99,7 +99,7 @@
                     Click="Minimize_Click" />
             <Button x:Name="Settings"
                     Content="⚙"
-                    Style="{DynamicResource BlueButton}"
+                    Style="{DynamicResource HotButton}"
                     Height="25"
                     Width="25"
                     FontSize="12"

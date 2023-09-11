@@ -41,8 +41,6 @@ namespace StartStopWork
                 if (Database.LogIn(UsernameInput.Text, PasswordInput.Text))
                 {
                     this.Close();
-
-                    MainWindow.isLoggedOut = false;
                 }
                 else
                 {

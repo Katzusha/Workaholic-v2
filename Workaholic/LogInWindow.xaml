@@ -11,11 +11,17 @@
         WindowStyle="None"
         AllowsTransparency="True"
         Background="Transparent"
-        Height="650"
+        Height="732"
         Width="400"
         WindowStartupLocation="CenterScreen">
     <Grid>
-        <Border Background="#a1777b">
+        <Border Background="#a1777b"
+                CornerRadius="5">
+            <Border.Effect>
+                <BlurEffect Radius="10"
+                            RenderingBias="Quality"
+                            KernelType="Gaussian" />
+            </Border.Effect>
             <Border Background="#785e62"
                     CornerRadius="1000"
                     Height="600"
@@ -28,13 +34,14 @@
                         Width="450"
                         VerticalAlignment="Center"
                         HorizontalAlignment="Center">
-                    <Border Background="#f5eef4"
-                            CornerRadius="1000"
+                    <Border CornerRadius="1000"
                             Height="300"
                             Width="300"
                             VerticalAlignment="Center"
                             HorizontalAlignment="Center">
-
+                        <Border.Background>
+                            <ImageBrush ImageSource="/Images/Logo.png" />
+                        </Border.Background>
                     </Border>
                 </Border>
             </Border>
@@ -59,10 +66,13 @@
                         Margin="2.5"
                         Click="Close_Click" />
 
-                <Border Background="{DynamicResource PlateBrush}"
-                        Height="200"
+                <Border Height="200"
                         Margin="25, 25, 25, 25"
                         CornerRadius="5">
+                    <Border.Background>
+                        <SolidColorBrush Color="{DynamicResource PlateColor}"
+                                         Opacity="0.5" />
+                    </Border.Background>
                     <Grid>
 
                         <Border Background="{DynamicResource BackgroundBrush}"
@@ -76,7 +86,7 @@
                                HorizontalAlignment="Left"
                                Margin="10, -30, 0, 0" />
                         <TextBox x:Name="UsernameInput"
-                                 Margin="150, -30, 10, 0" />
+                                 Margin="100, -30, 10, 0" />
 
                         <Border Background="{DynamicResource BackgroundBrush}"
                                 Height="25"
@@ -89,7 +99,7 @@
                                HorizontalAlignment="Left"
                                Margin="10, 0, 0, -30" />
                         <TextBox x:Name="PasswordInput"
-                                 Margin="150, 0, 10, -30" />
+                                 Margin="100, 0, 10, -30" />
 
                         <Button x:Name="LogIn"
                                 Style="{DynamicResource GreenButton}"
@@ -102,7 +112,7 @@
                                 Click="LogIn_Click" />
 
                         <Button x:Name="Register"
-                                Style="{DynamicResource HyperLinkButton}"
+                                Style="{DynamicResource LabelButton}"
                                 FontSize="14"
                                 Width="75"
                                 Height="25"

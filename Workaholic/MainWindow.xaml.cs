@@ -31,8 +31,6 @@ namespace Workaholic
         public bool isFirstBreakTime;
         public static bool isLoggedOut;
 
-        public static Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             var desktopWorkingArea = System.Windows.SystemParameters.WorkArea;
@@ -68,22 +66,27 @@ namespace Workaholic
 
                 isLoggedOut = false;
 
-                if (PublicEntitys.configuration.AppSettings.Settings["Username"].Value == "")
-                {
-                    this.Hide();
-
-                    LogInWindow window = new LogInWindow();
-
-                    isLoggedOut = true;
-
-                    window.Show();
-
-                    this.Show();
-                }
+                CheckLogIn();
             }
             catch
             {
                 PublicEntitys.ShowError(306);
+            }
+        }
+
+        public void CheckLogIn()
+        {
+            if (PublicEntitys.configuration.AppSettings.Settings["Username"].Value == "")
+            {
+                this.Hide();
+
+                LogInWindow window = new LogInWindow();
+
+                isLoggedOut = true;
+
+                window.ShowDialog();
+
+                this.Show();
             }
         }
 
@@ -249,7 +252,7 @@ namespace Workaholic
                     WorkTime.Content = (elapsedTime);
                     WorkStopWatch.Stop();
 
-                    Database.PostStamp(1, null, null, null, configuration.AppSettings.Settings["Username"].Value, configuration.AppSettings.Settings["Username"].Value);
+                    Database.PostStamp(1, null, null, null, PublicEntitys.configuration.AppSettings.Settings["Username"].Value);
 
                     string exualtime = String.Format("{0:00}:{1:00}:{2:00}", ts.Hours, ts.Minutes, ts.Seconds);
                     WorkTime.Content = (exualtime);
@@ -270,7 +273,7 @@ namespace Workaholic
                 {
                     Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
 
-                    if (Database.PostStamp(4, null, null, null, configuration.AppSettings.Settings["Username"].Value, configuration.AppSettings.Settings["Username"].Value))
+                    if (Database.PostStamp(4, null, null, null, configuration.AppSettings.Settings["Username"].Value))
                     {
                         //Animations for buttons background color to transforme it from transparrent to red
                         SolidColorBrush myBrush = new SolidColorBrush();
@@ -312,7 +315,7 @@ namespace Workaholic
                         return;
                     }
 
-                    if (Database.PostStamp(1, null, null, null, configuration.AppSettings.Settings["Username"].Value, configuration.AppSettings.Settings["Username"].Value))
+                    if (Database.PostStamp(1, null, null, null, configuration.AppSettings.Settings["Username"].Value))
                     {
                         //Animations for buttons background color to transforme it from transparrent to red
                         SolidColorBrush myBrush = new SolidColorBrush();
@@ -351,7 +354,7 @@ namespace Workaholic
             {
                 if (isFirstBreakTime)
                 {
-                    if (Database.PostStamp(2, null, null, null, configuration.AppSettings.Settings["Username"].Value, configuration.AppSettings.Settings["Username"].Value))
+                    if (Database.PostStamp(2, null, null, null, PublicEntitys.configuration.AppSettings.Settings["Username"].Value))
                     {
                         isBreakTime = true;
                         isFirstBreakTime = false;
@@ -366,7 +369,7 @@ namespace Workaholic
                 {
                     if (isBreakTime)
                     {
-                        if (Database.PostStamp(3, null, null, null, configuration.AppSettings.Settings["Username"].Value, configuration.AppSettings.Settings["Username"].Value))
+                        if (Database.PostStamp(3, null, null, null, PublicEntitys.configuration.AppSettings.Settings["Username"].Value))
                         {
                             BreakStopWatch.Stop();
                             isBreakTime = false;
@@ -376,7 +379,7 @@ namespace Workaholic
                     }
                     else
                     {
-                        if (Database.PostStamp(2, null, null, null, configuration.AppSettings.Settings["Username"].Value, configuration.AppSettings.Settings["Username"].Value))
+                        if (Database.PostStamp(2, null, null, null, PublicEntitys.configuration.AppSettings.Settings["Username"].Value))
                         {
                             BreakStopWatch.Start();
                             isBreakTime = true;
@@ -408,21 +411,11 @@ namespace Workaholic
             {
                 SettingsWindow settingswindow = new SettingsWindow();
 
-                settingswindow.Show();
-
-                if (isLoggedOut)
-                {
-                    this.Hide();
-
-                    LogInWindow loginwindow = new LogInWindow();
-                    loginwindow.ShowDialog();
-
-                    this.Show();
-
-                    isLoggedOut = false;
-                }
+                settingswindow.ShowDialog();
 
                 SetPosition();
+
+                CheckLogIn();
             }
             catch
             {

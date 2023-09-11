@@ -21,7 +21,6 @@
         </Style>
     </UserControl.Resources>
 
-
     <Grid SizeChanged="Grid_SizeChanged"
           Margin="2.5, 30, 2.5, 0"
           x:Name="BarSize"

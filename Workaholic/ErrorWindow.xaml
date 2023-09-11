@@ -115,7 +115,7 @@
                             Height="50"
                             Content="OK"
                             Click="okbutton_Click"
-                            Style="{DynamicResource BlueButton}" />
+                            Style="{DynamicResource HotButton}" />
 
                 </Grid>
             </Grid>

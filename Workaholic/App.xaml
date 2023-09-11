@@ -5,11 +5,6 @@
              StartupUri="MainWindow.xaml">
     <Application.Resources>
 
-        <Style TargetType="{x:Type Window}">
-            <Setter Property="FontFamily"
-                    Value="Segoe Print" />
-        </Style>
-
         <SolidColorBrush x:Key="BackgroundBrush"
                          Color="#4f4649" />
         <Color x:Key="BackgroundColor">#4f4649</Color>
@@ -33,7 +28,9 @@
         <SolidColorBrush x:Key="AbsenceBrush"
                          Color="#c4604e" />
         <SolidColorBrush x:Key="FreeBrush"
-                         Color="#5656ff" />
+                         Color="#966b6e" />
+        <SolidColorBrush x:Key="WeekendBrush"
+                         Color="#ca9094" />
 
         <Style TargetType="{x:Type ContextMenu}">
             <Setter Property="SnapsToDevicePixels"
@@ -379,12 +376,12 @@
             </Setter>
         </Style>
 
-        <Style x:Key="HyperLinkButton"
+        <Style x:Key="LabelButton"
                TargetType="{x:Type Button}">
             <EventSetter Event="MouseEnter"
-                         Handler="HyperLinkButton_MouseEnter" />
+                         Handler="LabelButton_MouseEnter" />
             <EventSetter Event="MouseLeave"
-                         Handler="HyperLinkButton_MouseLeave" />
+                         Handler="LabelButton_MouseLeave" />
             <Setter Property="HorizontalContentAlignment"
                     Value="Center" />
             <Setter Property="Background"
@@ -418,12 +415,12 @@
                     Value="Center" />
         </Style>
 
-        <Style x:Key="BlueButton"
+        <Style x:Key="HotButton"
                TargetType="{x:Type Button}">
             <EventSetter Event="MouseEnter"
-                         Handler="BlueButton_MouseEnter" />
+                         Handler="HotButton_MouseEnter" />
             <EventSetter Event="MouseLeave"
-                         Handler="BlueButton_MouseLeave" />
+                         Handler="HotButton_MouseLeave" />
             <Setter Property="HorizontalContentAlignment"
                     Value="Center" />
             <Setter Property="Background"

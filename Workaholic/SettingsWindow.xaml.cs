@@ -58,21 +58,16 @@ namespace StartStopWork
 
             try
             {
-
-
-                Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-                // Open configuration file
-                string btnname = configuration.AppSettings.Settings["Align"].Value;
-                SurnameInput.Text = configuration.AppSettings.Settings["Surname"].Value;
-                FirstnameInput.Text = configuration.AppSettings.Settings["Firstname"].Value;
-                UsernameInput.Text = configuration.AppSettings.Settings["Username"].Value;
-                PasswordInput.Text = configuration.AppSettings.Settings["Password"].Value;
+                string btnname = PublicEntitys.configuration.AppSettings.Settings["Align"].Value;
+                SurnameInput.Text = PublicEntitys.configuration.AppSettings.Settings["Surname"].Value;
+                FirstnameInput.Text = PublicEntitys.configuration.AppSettings.Settings["Firstname"].Value;
+                UsernameInput.Text = PublicEntitys.configuration.AppSettings.Settings["Username"].Value;
+                PasswordInput.Text = PublicEntitys.configuration.AppSettings.Settings["Password"].Value;
 
                 foreach (Button button in Align.Children)
                 {
                     if (button.Name == (("Align" + btnname)))
                     {
-                        //Animations for buttons background color to transforme it from transparrent to red
                         SolidColorBrush myBrush = new SolidColorBrush();
                         ColorAnimation myColorAnimation = new ColorAnimation();
                         myColorAnimation.From = (Color)ColorConverter.ConvertFromString(FindResource("PlateBrush").ToString());
@@ -99,10 +94,9 @@ namespace StartStopWork
 
                 DailyHistory.ColumnDefinitions.Clear();
                 DailyHistory.Children.Clear();
-                Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
 
-                List<DailyHours> DailyHoursList = Database.GetDailyHours(configuration.AppSettings.Settings["Username"].Value, Year, Month);
-                List<DaysOff> DaysOffList = Database.GetDaysOff(configuration.AppSettings.Settings["Username"].Value);
+                List<DailyHours> DailyHoursList = Database.GetDailyHours(PublicEntitys.configuration.AppSettings.Settings["Username"].Value, Year, Month);
+                List<DaysOff> DaysOffList = Database.GetDaysOff(PublicEntitys.configuration.AppSettings.Settings["Username"].Value);
 
                 int x = 0;
                 int col = 0;
@@ -112,7 +106,6 @@ namespace StartStopWork
                 {
                     ColumnDefinition _columnDefinition = new ColumnDefinition();
                     _columnDefinition.MinWidth = 80;
-                    //_columnDefinition.Width = new GridLength(80);
                     DailyHistory.ColumnDefinitions.Add(_columnDefinition);
                     Label _date = new Label();
                     _date.HorizontalContentAlignment = HorizontalAlignment.Center;
@@ -126,7 +119,7 @@ namespace StartStopWork
 
                     if (_dailyHoursList.Count > 0)
                     {
-                        if (configuration.AppSettings.Settings["AuthLevel"].Value == "1" || configuration.AppSettings.Settings["AuthLevel"].Value == "2")
+                        if (PublicEntitys.configuration.AppSettings.Settings["AuthLevel"].Value == "1" || PublicEntitys.configuration.AppSettings.Settings["AuthLevel"].Value == "2")
                         {
                             if (lastdate.ToString("dddd") == "Saturday" || lastdate.ToString("dddd") == "Sunday")
                             {
@@ -211,7 +204,7 @@ namespace StartStopWork
                             Grid.SetColumn(_time, col);
                             DailyHistory.Children.Add(_time);
                         }
-                        else if (configuration.AppSettings.Settings["AuthLevel"].Value == "3")
+                        else if (PublicEntitys.configuration.AppSettings.Settings["AuthLevel"].Value == "3")
                         {
                             if (lastdate.ToString("dddd") == "Saturday" || lastdate.ToString("dddd") == "Sunday")
                             {
@@ -316,7 +309,7 @@ namespace StartStopWork
                         }
                         else if (DaysOffList.Any(x => DateOnly.Parse(x.Start.ToString("yyyy-MM-dd")) <= lastdate && lastdate <= DateOnly.Parse(x.End.ToString("yyyy-MM-dd"))))
                         {
-                            _readOnlyBar.StampType = 3;
+                            _readOnlyBar.StampType = 4;
                             _readOnlyBar.ToolTip = $"{lastdate.ToString("dddd")}" +
                                 $"\nDay off";
 
@@ -360,9 +353,8 @@ namespace StartStopWork
             {
                 MonthlyHistory.ColumnDefinitions.Clear();
                 MonthlyHistory.Children.Clear();
-                Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
 
-                List<MonthlyHours> MonthlyHoursList = Database.GetMonthlyHours(configuration.AppSettings.Settings["Username"].Value);
+                List<MonthlyHours> MonthlyHoursList = Database.GetMonthlyHours(PublicEntitys.configuration.AppSettings.Settings["Username"].Value);
 
                 int x = 0;
                 int col = 0;
@@ -375,7 +367,6 @@ namespace StartStopWork
                     MonthlyHistory.ColumnDefinitions.Add(_columnDefinition);
 
                     Label _date = new Label();
-                    //_date.HorizontalContentAlignment = HorizontalAlignment.Center;
                     _date.Content = $"{lastdate.ToString("MMMM")}\n{lastdate.ToString("yyyy")}";
                     Grid.SetRow(_date, 1);
                     Grid.SetColumn(_date, col);
@@ -492,13 +483,6 @@ namespace StartStopWork
             try
             {
                 this.Close();
-                Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-                configuration.AppSettings.Settings["Firstname"].Value = FirstnameInput.Text;
-                configuration.AppSettings.Settings["Surname"].Value = SurnameInput.Text;
-                configuration.AppSettings.Settings["Username"].Value = UsernameInput.Text;
-                configuration.AppSettings.Settings["Password"].Value = PasswordInput.Text;
-                configuration.Save(ConfigurationSaveMode.Full, true);
-                ConfigurationManager.RefreshSection("appSettings");
             }
             catch
             {
@@ -526,9 +510,8 @@ namespace StartStopWork
                 myBrush.BeginAnimation(SolidColorBrush.ColorProperty, myColorAnimation);
                 btn.BorderBrush = myBrush;
 
-                Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-                configuration.AppSettings.Settings["Align"].Value = btn.Name.ToString().Replace("Align", "");
-                configuration.Save(ConfigurationSaveMode.Full, true);
+                PublicEntitys.configuration.AppSettings.Settings["Align"].Value = btn.Name.ToString().Replace("Align", "");
+                PublicEntitys.configuration.Save(ConfigurationSaveMode.Full, true);
                 ConfigurationManager.RefreshSection("appSettings");
             }
             catch
@@ -541,15 +524,12 @@ namespace StartStopWork
         {
             try
             {
-                Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-                configuration.AppSettings.Settings["Firstname"].Value = "";
-                configuration.AppSettings.Settings["Surname"].Value = "";
-                configuration.AppSettings.Settings["Username"].Value = "";
-                configuration.AppSettings.Settings["Password"].Value = "";
-                configuration.Save(ConfigurationSaveMode.Full, true);
+                PublicEntitys.configuration.AppSettings.Settings["Firstname"].Value = "";
+                PublicEntitys.configuration.AppSettings.Settings["Surname"].Value = "";
+                PublicEntitys.configuration.AppSettings.Settings["Username"].Value = "";
+                PublicEntitys.configuration.AppSettings.Settings["Password"].Value = "";
+                PublicEntitys.configuration.Save(ConfigurationSaveMode.Full, true);
                 ConfigurationManager.RefreshSection("appSettings");
-
-                Workaholic.MainWindow.isLoggedOut = true;
 
                 this.Close();
             }

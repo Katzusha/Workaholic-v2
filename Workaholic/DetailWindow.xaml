@@ -14,12 +14,12 @@
         Width="250"
         WindowStartupLocation="CenterScreen">
     <Window.Resources>
-        <Style x:Key="HyperLinkButton"
+        <Style x:Key="LabelButton"
                TargetType="{x:Type Button}">
             <EventSetter Event="MouseEnter"
-                         Handler="HyperLinkButton_MouseEnter" />
+                         Handler="LabelButton_MouseEnter" />
             <EventSetter Event="MouseLeave"
-                         Handler="HyperLinkButton_MouseLeave" />
+                         Handler="LabelButton_MouseLeave" />
             <Setter Property="HorizontalContentAlignment"
                     Value="Center" />
             <Setter Property="Background"
@@ -131,7 +131,7 @@
                         </Grid>
                     </ScrollViewer>
                     <Button x:Name="DetailClose"
-                            Style="{DynamicResource HyperLinkButton}"
+                            Style="{DynamicResource LabelButton}"
                             Content="SAVE"
                             Grid.Row="2"
                             Margin="2.5"

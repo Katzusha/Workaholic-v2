@@ -32,7 +32,7 @@
                     Click="Close_Click" />
             <Button x:Name="Minimize"
                     Content="🗕"
-                    Style="{DynamicResource BlueButton}"
+                    Style="{DynamicResource HotButton}"
                     Height="25"
                     Width="25"
                     FontSize="12"
@@ -42,7 +42,7 @@
                     Click="Minimize_Click" />
             <Button x:Name="Settings"
                     Content="🔳"
-                    Style="{DynamicResource BlueButton}"
+                    Style="{DynamicResource HotButton}"
                     Height="25"
                     Width="25"
                     FontSize="12"
@@ -94,7 +94,8 @@
                       Grid.Row="0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="200" />
-                        <RowDefinition />
+                        <RowDefinition Height="2*"/>
+                        <RowDefinition Height="4*"/>
                     </Grid.RowDefinitions>
                     <Border Background="{DynamicResource PlateBrush}"
                             Margin="5,5,5,5"
@@ -173,7 +174,7 @@
 
                     <Border Background="{DynamicResource PlateBrush}"
                             Margin="5,5,5,5"
-                            Grid.Row="1"
+                            Grid.Row="2"
                             CornerRadius="5">
                         <Grid>
                             <Grid.RowDefinitions>
@@ -182,13 +183,15 @@
                                 <RowDefinition Height="50" />
                             </Grid.RowDefinitions>
 
-                            <Border Background="{DynamicResource BackgroundBrush}"
-                                    Height="250"
+                            <Border Height="250"
                                     Width="250"
                                     CornerRadius="125">
+                                <Border.Background>
+                                    <ImageBrush ImageSource="/Images/Logo.png" />
+                                </Border.Background>
                                 <Button x:Name="ChangePicture"
                                         Content="Change picture"
-                                        Style="{DynamicResource HyperLinkButton}"
+                                        Style="{DynamicResource LabelButton}"
                                         Height="20"
                                         FontSize="12"
                                         Width="100"
@@ -282,7 +285,7 @@
                         </Grid.RowDefinitions>
 
                         <Button x:Name="PreviusMonth"
-                                Style="{DynamicResource GridButton}" 
+                                Style="{DynamicResource GridButton}"
                                 Width="50"
                                 HorizontalAlignment="Left"
                                 Content="◀"
@@ -291,11 +294,11 @@
                                 Click="PreviusMonth_Click" />
 
                         <Label x:Name="MonthAndYear"
-                               Content="Month, Year" 
+                               Content="Month, Year"
                                FontSize="16"
                                HorizontalAlignment="Left"
                                Margin="55, 0, 0, 0"
-                               Width="245"/>
+                               Width="245" />
 
                         <Button x:Name="NextMonth"
                                 Style="{DynamicResource GridButton}"
